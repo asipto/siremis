@@ -46,7 +46,7 @@ class BizDataSql
     public function addMainTable($mainTable)
     {
         $this->_mainTable = "$mainTable";
-		$this->_tableJoins = " $mainTable T0 ";
+		$this->_tableJoins = " `$mainTable` T0 ";
     }
 
     /**
@@ -234,7 +234,7 @@ class BizDataSql
             // ... INNER JOIN xtable TX ON TX.column2 = T0.column
             // WHERE ... Tx.column1 = 'PrtTableColumnValue'
             $mytable_col = $this->getTableColumn(null, $assoc["Column"]);   // this table's alias.column
-            $xtable = $assoc->getQuoted($assoc["XTable"]);    // xtable's name
+            $xtable = '`' . $assoc["XTable"] . '`';    // xtable's name
             $column1 = $assoc["XColumn1"]; // xtable column1
             $column2 = $assoc["XColumn2"]; // xtable column2
             $xalias = "TX";
