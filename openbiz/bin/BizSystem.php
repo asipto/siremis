@@ -443,7 +443,7 @@ class BizSystem
         $dbInfo = BizSystem::instance()->getConfiguration()->getDatabaseInfo($rDBName);
 		if(strtoupper($dbInfo["Driver"])=="PDO_MYSQL") {
 			$value = trim(trim($identifier), "`");
-			return "`".$value."`";
+			return $value;
 		}
 		return $identifier;
     }
