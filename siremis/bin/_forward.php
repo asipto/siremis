@@ -65,7 +65,7 @@ if ($url) {
     $module_name = $DEFAULT_MODULE;
     $view_name = $DEFAULT_VIEW;
     $profile = BizSystem::getUserProfile();
-    if ($profile['roleStartpage'][0]) {
+    if (isset($profile['roleStartpage']) && isset($profile['roleStartpage'][0])) {
         $DEFAULT_URL = APP_INDEX . $profile['roleStartpage'][0];
     }
     header("Location: $DEFAULT_URL");
