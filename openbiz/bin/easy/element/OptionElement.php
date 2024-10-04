@@ -117,7 +117,9 @@ class OptionElement extends InputElement
                 foreach($xmlArr["SELECTION"][$tag] as $node)
                 {
                     $list[$i]['val'] = $node["ATTRIBUTES"]["VALUE"];
-                    $list[$i]['pic'] = $node["ATTRIBUTES"]["PICTURE"];
+					if(isset($node["ATTRIBUTES"]["PICTURE"])) {
+						$list[$i]['pic'] = $node["ATTRIBUTES"]["PICTURE"];
+					}
                     if ($node["ATTRIBUTES"]["TEXT"])
                     {
                         $list[$i]['txt'] = $node["ATTRIBUTES"]["TEXT"];                        
