@@ -107,6 +107,7 @@ class securityFilter extends MetaIterator
     protected $m_Mode = 'DISABLED';
     protected $m_Rules = null;
     protected $m_ErrorMessage = null;
+	protected $m_Package = null;
 
 
     /**
@@ -157,7 +158,7 @@ class securityFilter extends MetaIterator
      */
     public function processRules()
     {
-        if(is_array($this->m_Rules->m_var))
+        if(isset($this->m_Rules->m_var) && is_array($this->m_Rules->m_var))
         {
             foreach($this->m_Rules->m_var as $name=>$obj)
             {
