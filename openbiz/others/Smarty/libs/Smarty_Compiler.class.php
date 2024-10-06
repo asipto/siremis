@@ -1523,7 +1523,10 @@ class Smarty_Compiler extends Smarty {
      */
     function _parse_attrs($tag_args)
     {
-
+        $attrs = array();
+		if(!isset($tag_args)) {
+			return $attrs;
+		}
         /* Tokenize tag attributes. */
         preg_match_all('~(?:' . $this->_obj_call_regexp . '|' . $this->_qstr_regexp . ' | (?>[^"\'=\s]+)
                          )+ |
@@ -1531,7 +1534,6 @@ class Smarty_Compiler extends Smarty {
                         ~x', $tag_args, $match);
         $tokens       = $match[0];
 
-        $attrs = array();
         /* Parse state:
             0 - expecting attribute name
             1 - expecting '='
