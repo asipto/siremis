@@ -8,6 +8,8 @@
 *.so
 *.dylib
 
+siregmis
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -23,3 +25,10 @@ go.work.sum
 
 # env file
 .env
+
+# vi swaps
+.*.swp
+.*.swo
+
+# Tmp files
+.fuse_hidde*
