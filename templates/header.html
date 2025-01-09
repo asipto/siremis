@@ -31,6 +31,7 @@
     <!-- Custom styles -->    
   </head>
   <body>
+  {{ if $.Context.AuthOK }}
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <a class="navbar-brand" href="{{ $.Config.URLDir }}/{{ $.Config.DefaultAction }}/{{ $.Config.DefaultSchema }}">SIREGIS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +49,7 @@
     </ul>    
   </div>
   </nav>
+  {{ end }}
 
 <main role="main" class="container">
 

@@ -16,8 +16,10 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
 )
 
 const siregisVersion = "1.00"
@@ -55,11 +57,19 @@ type SIPUser struct {
 	Ha1b     string
 }
 
+type GMViewContext struct {
+	AuthOK       bool
+	SchemaName   string
+	IdField      GMSchemaField
+	IdFieldValue any
+}
+
 type GMViewData struct {
-	Config GMConfig
-	Schema GMSchema
-	Fields []GMSchemaField
-	Values []any
+	Config  GMConfig
+	Schema  GMSchema
+	Context GMViewContext
+	Fields  []GMSchemaField
+	Values  []any
 }
 
 type GMDBField struct {
@@ -71,6 +81,8 @@ type GMDBField struct {
 var GMConfigV = GMConfig{}
 
 var GMFuncMap = make(map[string]any)
+
+var GMSessions = map[string]GMSession{}
 
 func GMFuncHA1(params []any) string {
 	if len(params) != 3 {
@@ -94,10 +106,8 @@ func GMFuncHA1B(params []any) string {
 }
 
 func dbConn() (db *sql.DB) {
-	log.Println("Database: " + GMConfigV.DBData.Host + " (" + GMConfigV.DBData.Host +
+	log.Println("Database: " + GMConfigV.DBData.Database + " (" + GMConfigV.DBData.Host +
 		":" + GMConfigV.DBData.Port + ")")
-	log.Println("Database host: " + GMConfigV.DBData.Host)
-	log.Println("Database port: " + GMConfigV.DBData.Port)
 	db, err := sql.Open(GMConfigV.DBData.Driver, GMConfigV.DBData.Username+":"+
 		GMConfigV.DBData.Password+"@"+GMConfigV.DBData.Protocol+
 		"("+GMConfigV.DBData.Host+":"+GMConfigV.DBData.Port+")/"+
@@ -111,6 +121,10 @@ func dbConn() (db *sql.DB) {
 var tmpl = template.Must(template.ParseGlob("templates/*"))
 
 func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
 	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
@@ -178,8 +192,10 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 		dbRes = append(dbRes, dbRow)
 	}
 
+	GMAuthRefresh(w, r)
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = true
 	viewData.Schema = schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
@@ -192,8 +208,14 @@ func GMSchemaFieldDisplayBoolVal(v *GMSchemaFieldDisplay, field string) bool {
 	return bool(f.Bool())
 }
 
-func GMView(w http.ResponseWriter, r *http.Request, schemaName string, sId string,
+func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId string,
 	sDisplayField string, sTemplate string) {
+
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+
 	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
@@ -269,8 +291,10 @@ func GMView(w http.ResponseWriter, r *http.Request, schemaName string, sId strin
 		dbRes = append(dbRes, dbRow)
 	}
 
+	GMAuthRefresh(w, r)
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = true
 	viewData.Schema = schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
@@ -278,10 +302,14 @@ func GMView(w http.ResponseWriter, r *http.Request, schemaName string, sId strin
 }
 
 func GMShow(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	GMView(w, r, schemaName, sId, "Show", "show")
+	GMFormView(w, r, schemaName, sId, "Show", "show")
 }
 
 func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
 	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
@@ -306,14 +334,20 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 		}
 	}
 
+	GMAuthRefresh(w, r)
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = true
 	viewData.Schema = schemaV
 	viewData.Fields = selFields
 	tmpl.ExecuteTemplate(w, "new", viewData)
 }
 
 func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
 	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
@@ -388,14 +422,19 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 		panic(err.Error())
 	}
 	insForm.Exec(dbVals...)
-	http.Redirect(w, r, GMConfigV.URLDir+"/"+GMConfigV.DefaultAction+"/"+schemaName, http.StatusMovedPermanently)
+	GMAuthRefresh(w, r)
+	GMSMenuPage(w, r, schemaName)
 }
 
 func GMEdit(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	GMView(w, r, schemaName, sId, "Edit", "edit")
+	GMFormView(w, r, schemaName, sId, "Edit", "edit")
 }
 
 func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
 	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
@@ -484,14 +523,19 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	}
 	insForm.Exec(dbVals...)
 
-	http.Redirect(w, r, GMConfigV.URLDir+"/"+GMConfigV.DefaultAction+"/"+schemaName, http.StatusMovedPermanently)
+	GMAuthRefresh(w, r)
+	GMFormView(w, r, schemaName, sId, "Show", "show")
 }
 
 func GMDelete(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	GMView(w, r, schemaName, sId, "Show", "delete")
+	GMFormView(w, r, schemaName, sId, "Show", "delete")
 }
 
 func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
 	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
@@ -528,7 +572,231 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 		panic(err.Error())
 	}
 	delForm.Exec(vId)
-	http.Redirect(w, r, GMConfigV.URLDir+"/"+GMConfigV.DefaultAction+"/"+schemaName, http.StatusMovedPermanently)
+	GMAuthRefresh(w, r)
+	GMSMenuPage(w, r, schemaName)
+}
+
+func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	authok := false
+
+	for _, v := range GMConfigV.Access {
+		if v.Username == username {
+			if v.Password == password {
+				authok = true
+				break
+			}
+		}
+	}
+
+	if !authok {
+		return -1
+	}
+
+	sessionToken := uuid.NewString()
+	expiresAt := time.Now().Add(300 * time.Second)
+
+	GMSessions[sessionToken] = GMSession{
+		username: username,
+		expiry:   expiresAt,
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   sessionToken,
+		Expires: expiresAt,
+		Path:    "/",
+	})
+
+	return 0
+}
+
+func GMLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+	res := GMLoginCheck(w, r)
+
+	if res < 0 {
+		// w.WriteHeader(http.StatusUnauthorized)
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = true
+	tmpl.ExecuteTemplate(w, "main", viewData)
+}
+
+func GMSessionAuthCheck(w http.ResponseWriter, r *http.Request) int {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// w.WriteHeader(http.StatusUnauthorized)
+			return -1
+		}
+		// w.WriteHeader(http.StatusBadRequest)
+		return -2
+	}
+	sessionToken := c.Value
+
+	userSession, exists := GMSessions[sessionToken]
+	if !exists {
+		// w.WriteHeader(http.StatusUnauthorized)
+		return -3
+	}
+	if userSession.IsExpired() {
+		delete(GMSessions, sessionToken)
+		// w.WriteHeader(http.StatusUnauthorized)
+		return -4
+	}
+	return 0
+}
+
+func GMSessionAuthActive(w http.ResponseWriter, r *http.Request) bool {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			return false
+		}
+		return false
+	}
+	sessionToken := c.Value
+
+	userSession, exists := GMSessions[sessionToken]
+	if !exists {
+		return false
+	}
+	if userSession.IsExpired() {
+		delete(GMSessions, sessionToken)
+		return false
+	}
+	return true
+}
+
+func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// w.WriteHeader(http.StatusUnauthorized)
+			return -1
+		}
+		// w.WriteHeader(http.StatusBadRequest)
+		return -2
+	}
+	sessionToken := c.Value
+
+	userSession, exists := GMSessions[sessionToken]
+	if !exists {
+		// w.WriteHeader(http.StatusUnauthorized)
+		return -3
+	}
+	if userSession.IsExpired() {
+		delete(GMSessions, sessionToken)
+		// w.WriteHeader(http.StatusUnauthorized)
+		return -4
+	}
+
+	if userSession.expiry.Before(time.Now().Add(-60 * time.Second)) {
+		// not yet close to expire
+		return 1
+	}
+
+	newSessionToken := uuid.NewString()
+	expiresAt := time.Now().Add(300 * time.Second)
+
+	GMSessions[newSessionToken] = GMSession{
+		username: userSession.username,
+		expiry:   expiresAt,
+	}
+
+	delete(GMSessions, sessionToken)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   newSessionToken,
+		Expires: expiresAt,
+		Path:    "/",
+	})
+
+	return 0
+}
+
+func GMLogout(w http.ResponseWriter, r *http.Request) int {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// w.WriteHeader(http.StatusUnauthorized)
+			return -1
+		}
+		// w.WriteHeader(http.StatusBadRequest)
+		return -2
+	}
+	sessionToken := c.Value
+
+	delete(GMSessions, sessionToken)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   "",
+		Expires: time.Now(),
+	})
+
+	return 0
+}
+
+func GMViewPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
+
+	tmpl.ExecuteTemplate(w, sTemplate, viewData)
+}
+
+func GMViewAuthPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
+	if !viewData.Context.AuthOK {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+
+	tmpl.ExecuteTemplate(w, sTemplate, viewData)
+}
+
+func GMViewGuestPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+
+	tmpl.ExecuteTemplate(w, sTemplate, viewData)
+}
+
+func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
+	if !viewData.Context.AuthOK {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+	viewData.Context.SchemaName = schemaName
+
+	tmpl.ExecuteTemplate(w, "smenu", viewData)
+}
+
+func GMDoAction(w http.ResponseWriter, r *http.Request, sAction string) {
+	if sAction == "login" {
+		GMLogin(w, r)
+	} else if sAction == "logout" {
+		GMLogout(w, r)
+	} else {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
 }
 
 func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
@@ -564,6 +832,10 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if tURL[2] == "list" {
 		GMList(w, r, tURL[3])
+	} else if tURL[2] == "view" {
+		GMViewPage(w, r, tURL[3])
+	} else if tURL[2] == "do" {
+		GMDoAction(w, r, tURL[3])
 	} else if tURL[2] == "new" {
 		GMNew(w, r, tURL[3])
 	} else if tURL[2] == "insert" {

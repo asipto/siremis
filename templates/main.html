@@ -1,0 +1,15 @@
+{{ define "main" }}
+  {{ template "header" . }}
+    <div class="container">
+        <h2>Main Menu</h2>
+        <ul>
+          <li>
+            <a href="{{ $.Config.URLDir }}/list/{{ $.Config.DefaultSchema }}">List</span></a>
+          </li>
+          <li>
+            <a href="{{ $.Config.URLDir }}/new/{{ $.Config.DefaultSchema }}">New</a>
+          </li>
+        </ul>
+    </div>
+  {{ template "footer" . }}
+{{ end }}

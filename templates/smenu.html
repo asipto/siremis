@@ -1,0 +1,15 @@
+{{ define "smenu" }}
+  {{ template "header" . }}
+    <div class="container">
+        <h2>{{ $.Context.SchemaName }} Menu</h2>
+        <ul>
+          <li>
+            <a href="{{ $.Config.URLDir }}/list/{{ $.Context.SchemaName }}">{{ $.Context.SchemaName }} = List</span></a>
+          </li>
+          <li>
+            <a href="{{ $.Config.URLDir }}/new/{{ $.Context.SchemaName }}">{{ $.Context.SchemaName }} - New</a>
+          </li>
+        </ul>
+    </div>
+  {{ template "footer" . }}
+{{ end }}
