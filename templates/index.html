@@ -1,0 +1,52 @@
+{{ define "index" }}
+{{ template "header" }}
+<div class="container">
+  <h2>SIP User List</h2>
+
+  <p>
+      <a href="/new" class="btn btn-primary">New SIP User</a>
+  </p>
+  <table id="tabledata" class="display" style="width: 100%">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Domain</th>
+        <th>Password</th>
+        <th>HA1</th>
+        <th>HA1B</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Domain</th>
+        <th>Password</th>
+        <th>HA1</th>
+        <th>HA1B</th>
+        <th></th>
+      </tr>
+    </tfoot>
+    <tbody>
+      {{ range . }}
+      <tr>
+        <td>{{ .Id }}</td>
+        <td>{{ .Username }}</td>
+        <td>{{ .Domain }}</td>
+        <td>{{ .Password }}</td>
+        <td>{{ .Ha1 }}</td>
+        <td>{{ .Ha1b }}</td>
+        <td>
+          <a href="/show?id={{ .Id }}" class="btn btn-primary">View</a>
+          <a href="/edit?id={{ .Id }}" class="btn btn-primary">Edit</a>
+          <a href="/delete?id={{ .Id }}" class="btn btn-danger">Delete</a>
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</div>
+{{ template "footer" }}
+{{ end }}

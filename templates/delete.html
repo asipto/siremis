@@ -1,0 +1,12 @@
+{{ define "delete" }}
+  {{ template "header" . }}
+    <div class="container">
+        <h2>Delete {{ $.Schema.Title }}</h2>
+        {{ range $i, $v := $.Fields }}
+        <p><strong>{{ $v.Title }}:</strong> {{ index (index $.Values 0) $i }}</p>
+        {{ end }}
+        <br /> 
+        <a href="{{ $.Config.URLDir }}/remove/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Do Remove</a></p>
+    </div>
+  {{ template "footer" . }}
+{{ end }}

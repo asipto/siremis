@@ -1,0 +1,16 @@
+{{ define "new" }}
+  {{ template "header" . }}
+    <div class="container col-{{ len $.Fields}}">
+        <h2>New SIP User</h2>  
+        <form method="POST" action="{{ $.Config.URLDir }}/insert/{{ $.Schema.Name }}">
+          {{ range $.Fields }}
+          <div class="form-group">
+              <label>{{ .Title }}</label>
+              <input type="text" name="{{ .Name }}" class="form-control"/>
+          </div>
+          {{ end }}
+          <input type="submit" value="Save" class="btn btn-primary"/>
+        </form>
+    </div> 
+  {{ template "footer" . }}
+{{ end }}

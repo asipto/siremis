@@ -1,0 +1,16 @@
+{{ define "edit" }}
+  {{ template "header" . }}
+    <div class="container col-5">
+        <h2>Edit SIP User</h2>  
+        <form method="POST" action="{{ $.Config.URLDir }}/update/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}">
+          {{ range $i, $v := $.Fields }}
+          <div class="form-group">
+              <label><strong>{{ $v.Title }}</strong></label>
+              <input type="text" name="{{ $v.Name }}" value="{{ index (index $.Values 0) $i }}" class="form-control" />
+          </div>
+          {{ end }}
+          <input type="submit" value="Save" class="btn btn-primary" />
+        </form><br />
+    </div>  
+  {{ template "footer" . }}
+{{ end }}

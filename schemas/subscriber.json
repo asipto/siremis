@@ -1,0 +1,105 @@
+{
+	"Name": "subscriber",
+	"Title": "Subscriber",
+	"Table": "subscriber",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Display": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Username",
+			"Column": "username",
+			"Name": "username",
+			"Type": "str",
+			"Display": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Domain",
+			"Column": "domain",
+			"Name": "domain",
+			"Type": "str",
+			"Display": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Password",
+			"Column": "password",
+			"Name": "password",
+			"Type": "str",
+			"Display": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": false,
+				"Filter": false
+			}
+		},
+		{
+			"Title": "HA1",
+			"Column": "ha1",
+			"Name": "ha1",
+			"Type": "str",
+			"Display": {
+				"List": false,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": false
+			},
+			"ValueInsert": {
+				"Func": "ha1",
+				"Params": ["username", "domain", "password"]
+			},
+			"ValueEdit": {
+				"Func": "ha1",
+				"Params": ["username", "domain", "password"]
+			}
+		},
+		{
+			"Title": "HA1B",
+			"Column": "ha1b",
+			"Name": "ha1b",
+			"Type": "str",
+			"Display": {
+				"List": false,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": false
+			},
+			"ValueInsert": {
+				"Func": "ha1b",
+				"Params": ["username", "domain", "password"]
+			},
+			"ValueEdit": {
+				"Func": "ha1b",
+				"Params": ["username", "domain", "password"]
+			}
+		}
+	]
+}

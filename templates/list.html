@@ -1,0 +1,43 @@
+{{ define "list" }}
+{{ template "header" . }}
+<div class="container">
+  <h2>{{ $.Schema.Title }} List</h2>
+
+  <p>
+      <a href="{{ $.Config.URLDir }}/new/{{ $.Schema.Name }}" class="btn btn-primary">New {{ $.Schema.Title }}</a>
+  </p>
+  <table id="tabledata" class="display" style="width: 100%">
+    <thead>
+      <tr>
+        {{ range $.Fields }}
+        <th>{{ .Title }}</th>
+        {{ end }}
+        <th></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        {{ range $.Fields }}
+        <th>{{ .Title }}</th>
+        {{ end }}
+        <th></th>
+      </tr>
+    </tfoot>
+    <tbody>
+      {{ range $.Values }}
+      <tr>
+        {{ range . }}
+        <td>{{ . }}</td>
+        {{ end }}
+        <td>
+          <a href="{{ $.Config.URLDir }}/show/{{ $.Schema.Name }}/{{ index . 0 }}" class="btn btn-primary">View</a>
+          <a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ index . 0 }}" class="btn btn-primary">Edit</a>
+          <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ index . 0 }}" class="btn btn-danger">Delete</a>
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</div>
+{{ template "footer" . }}
+{{ end }}
