@@ -49,12 +49,19 @@ var GMCLIOptionsV = GMCLIOptions{
 	version:     false,
 }
 
+type GMAlert struct {
+	Active bool
+	Type   string
+	Text   string
+}
+
 type GMViewContext struct {
 	AuthOK       bool
 	SchemaName   string
 	SchemaTitle  string
 	IdField      GMSchemaField
 	IdFieldValue any
+	Alert        GMAlert
 }
 
 type GMViewData struct {
@@ -76,6 +83,8 @@ var GMConfigV = GMConfig{}
 var GMFuncMap = make(map[string]any)
 
 var GMSessions = map[string]GMSession{}
+
+var tmpl = template.Must(template.ParseGlob("templates/*"))
 
 func GMFuncHA1(params []any) string {
 	if len(params) != 3 {
@@ -111,24 +120,53 @@ func dbConn() (db *sql.DB) {
 	return db
 }
 
-var tmpl = template.Must(template.ParseGlob("templates/*"))
+func GMGetSchema(w http.ResponseWriter, r *http.Request, schemaName string) (*GMSchema, bool) {
+	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
+	schemaBytes, err := os.ReadFile(schemaFile)
+	if err != nil {
+		log.Printf("unavailable schema file %s\n", schemaFile)
+		GMAlertView(w, r, "", "",
+			"Unavailable schema file for: "+schemaName)
+		return nil, false
+	}
+	var schemaV = GMSchema{}
+	err = json.Unmarshal(schemaBytes, &schemaV)
+	if err != nil {
+		log.Printf("invalid content in schema file %s\n", schemaFile)
+		GMAlertView(w, r,
+			schemaName, strings.ToUpper(schemaName[:1])+strings.ToLower(schemaName[1:]),
+			"Invalid content in schema file for: "+schemaName)
+		return nil, false
+	}
+
+	return &schemaV, true
+}
+
+func GMAlertView(w http.ResponseWriter, r *http.Request, schemaName string,
+	schemaTitle string, alertText string) {
+
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
+
+	viewData.Context.SchemaName = schemaName
+	viewData.Context.SchemaTitle = schemaTitle
+
+	viewData.Context.Alert.Active = true
+	viewData.Context.Alert.Type = "alert"
+	viewData.Context.Alert.Text = alertText
+
+	tmpl.ExecuteTemplate(w, "alert", viewData)
+}
 
 func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	if GMSessionAuthCheck(w, r) < 0 {
 		GMViewGuestPage(w, r, "login")
 		return
 	}
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
-	schemaBytes, err := os.ReadFile(schemaFile)
-	if err != nil {
-		log.Printf("unavailable schema file %s\n", schemaFile)
-		os.Exit(1)
-	}
-	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
-	if err != nil {
-		log.Printf("invalid content in schema file %s\n", schemaFile)
-		os.Exit(1)
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
 	}
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
@@ -191,7 +229,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Schema = schemaV
+	viewData.Schema = *schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
 	tmpl.ExecuteTemplate(w, "list", viewData)
@@ -211,17 +249,9 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		return
 	}
 
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
-	schemaBytes, err := os.ReadFile(schemaFile)
-	if err != nil {
-		log.Printf("unavailable schema file %s\n", schemaFile)
-		os.Exit(1)
-	}
-	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
-	if err != nil {
-		log.Printf("invalid content in schema file %s\n", schemaFile)
-		os.Exit(1)
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
 	}
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
@@ -292,7 +322,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Schema = schemaV
+	viewData.Schema = *schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
 	tmpl.ExecuteTemplate(w, sTemplate, viewData)
@@ -307,17 +337,9 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 		GMViewGuestPage(w, r, "login")
 		return
 	}
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
-	schemaBytes, err := os.ReadFile(schemaFile)
-	if err != nil {
-		log.Printf("unavailable schema file %s\n", schemaFile)
-		os.Exit(1)
-	}
-	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
-	if err != nil {
-		log.Printf("invalid content in schema file %s\n", schemaFile)
-		os.Exit(1)
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
 	}
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
@@ -337,7 +359,7 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Schema = schemaV
+	viewData.Schema = *schemaV
 	viewData.Fields = selFields
 	tmpl.ExecuteTemplate(w, "new", viewData)
 }
@@ -347,17 +369,9 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 		GMViewGuestPage(w, r, "login")
 		return
 	}
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
-	schemaBytes, err := os.ReadFile(schemaFile)
-	if err != nil {
-		log.Printf("unavailable schema file %s\n", schemaFile)
-		os.Exit(1)
-	}
-	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
-	if err != nil {
-		log.Printf("invalid content in schema file %s\n", schemaFile)
-		os.Exit(1)
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
 	}
 	var valFields = []GMDBField{}
 	for _, v := range schemaV.Fields {
@@ -434,17 +448,9 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 		GMViewGuestPage(w, r, "login")
 		return
 	}
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
-	schemaBytes, err := os.ReadFile(schemaFile)
-	if err != nil {
-		log.Printf("unavailable schema file %s\n", schemaFile)
-		os.Exit(1)
-	}
-	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
-	if err != nil {
-		log.Printf("invalid content in schema file %s\n", schemaFile)
-		os.Exit(1)
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
 	}
 	var valFields = []GMDBField{}
 	var idField = GMSchemaField{}
@@ -535,17 +541,9 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 		GMViewGuestPage(w, r, "login")
 		return
 	}
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
-	schemaBytes, err := os.ReadFile(schemaFile)
-	if err != nil {
-		log.Printf("unavailable schema file %s\n", schemaFile)
-		os.Exit(1)
-	}
-	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
-	if err != nil {
-		log.Printf("invalid content in schema file %s\n", schemaFile)
-		os.Exit(1)
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
 	}
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
@@ -806,17 +804,9 @@ func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
 		return
 	}
 
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
-	schemaBytes, err := os.ReadFile(schemaFile)
-	if err != nil {
-		log.Printf("unavailable schema file %s\n", schemaFile)
-		os.Exit(1)
-	}
-	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
-	if err != nil {
-		log.Printf("invalid content in schema file %s\n", schemaFile)
-		os.Exit(1)
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
 	}
 
 	viewData.Context.SchemaName = schemaV.Name

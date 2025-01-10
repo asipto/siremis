@@ -1,0 +1,14 @@
+{{ define "alert" }}
+  {{ template "header" . }}
+    <div class="container">
+      <h2>Alert Details</h2>
+      <br />
+      {{ if $.Context.Alert.Active }}
+      <p>{{ $.Context.Alert.Text }}</p>
+      {{ else }}
+      <p>Unknown</p>
+      {{ end }}
+      <br />
+    </div>
+  {{ template "footer" . }}
+{{ end }}
