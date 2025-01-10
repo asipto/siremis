@@ -41,6 +41,48 @@
 			]
 		},
 		{
+			"Name": "domain",
+			"Title": "Domain Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/domain",
+					"Inactive": false,
+					"Description": "list all domain records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/domain",
+					"Inactive": false,
+					"Description": "create new domain record"
+				}
+			]
+		},
+		{
+			"Name": "address",
+			"Title": "Address Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/address",
+					"Inactive": false,
+					"Description": "list all address records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/address",
+					"Inactive": false,
+					"Description": "create new address record"
+				}
+			]
+		},
+		{
 			"Name": "version",
 			"Title": "Version Management",
 			"Inactive": false,
