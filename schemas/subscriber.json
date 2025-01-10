@@ -72,11 +72,11 @@
 				"Filter": false
 			},
 			"ValueInsert": {
-				"Func": "ha1",
+				"Func": "HA1",
 				"Params": ["username", "domain", "password"]
 			},
 			"ValueEdit": {
-				"Func": "ha1",
+				"Func": "HA1",
 				"Params": ["username", "domain", "password"]
 			}
 		},
@@ -93,11 +93,11 @@
 				"Filter": false
 			},
 			"ValueInsert": {
-				"Func": "ha1b",
+				"Func": "HA1B",
 				"Params": ["username", "domain", "password"]
 			},
 			"ValueEdit": {
-				"Func": "ha1b",
+				"Func": "HA1B",
 				"Params": ["username", "domain", "password"]
 			}
 		}
