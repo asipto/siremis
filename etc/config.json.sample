@@ -17,5 +17,49 @@
 		"Protocol": "tcp",
 		"Username": "test",
 		"Password": "test"
-	}
+	},
+	"Menu": [
+		{
+			"Name": "subscriber",
+			"Title": "Subscriber Management",
+			"Active": true,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/subscriber",
+					"Active": true,
+					"Description": "list all subscriber records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/subscriber",
+					"Active": true,
+					"Description": "create new subscriber record"
+				}
+			]
+		},
+		{
+			"Name": "version",
+			"Title": "Version Management",
+			"Active": true,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/version",
+					"Active": true,
+					"Description": "list all version records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/version",
+					"Active": true,
+					"Description": "create new version record"
+				}
+			]
+		}
+	]
 }
