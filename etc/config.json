@@ -3,7 +3,7 @@
 	"DefaultAction": "list",
 	"URLDir": "/w",
 	"SchemaDir": "schemas",
-	"Access": [
+	"AuthUsers": [
 		{
 			"Username": "admin",
 			"Password": "text:123",

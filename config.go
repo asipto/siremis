@@ -1,6 +1,6 @@
 package main
 
-type GMConfigAccess struct {
+type GMConfigAuthUser struct {
 	Username string `json:"Username"`
 	Password string `json:"Password"`
 	Role     string `json:"Role"`
@@ -17,10 +17,10 @@ type GMConfigDB struct {
 }
 
 type GMConfig struct {
-	DefaultSchema string           `json:"DefaultSchema"`
-	DefaultAction string           `json:"DefaultAction"`
-	URLDir        string           `json:"URLDir,omitempty"`
-	SchemaDir     string           `json:"SchemaDir"`
-	Access        []GMConfigAccess `json:"Access"`
-	DBData        GMConfigDB       `json:"DBData"`
+	DefaultSchema string             `json:"DefaultSchema"`
+	DefaultAction string             `json:"DefaultAction"`
+	URLDir        string             `json:"URLDir,omitempty"`
+	SchemaDir     string             `json:"SchemaDir"`
+	AuthUsers     []GMConfigAuthUser `json:"AuthUsers"`
+	DBData        GMConfigDB         `json:"DBData"`
 }

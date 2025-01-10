@@ -581,7 +581,7 @@ func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
 	password := r.FormValue("password")
 	authok := false
 
-	for _, v := range GMConfigV.Access {
+	for _, v := range GMConfigV.AuthUsers {
 		if v.Username == username {
 			if v.Password == password {
 				authok = true
