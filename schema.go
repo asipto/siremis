@@ -5,7 +5,7 @@ type GMSchemaQuery struct {
 	Limit   int    `json:"Limit,omitempty"`
 }
 
-type GMSchemaFieldDisplay struct {
+type GMSchemaFieldEnable struct {
 	List   bool `json:"List,omitempty"`
 	Insert bool `json:"Insert,omitempty"`
 	Edit   bool `json:"Edit,omitempty"`
@@ -19,13 +19,13 @@ type GMSchemaFieldValue struct {
 }
 
 type GMSchemaField struct {
-	Name        string               `json:"Name"`
-	Title       string               `json:"Title"`
-	Column      string               `json:"Column"`
-	Type        string               `json:"Type"`
-	Display     GMSchemaFieldDisplay `json:"Display,omitempty"`
-	ValueInsert GMSchemaFieldValue   `json:"ValueInsert,omitempty"`
-	ValueEdit   GMSchemaFieldValue   `json:"ValueEdit,omitempty"`
+	Name        string              `json:"Name"`
+	Title       string              `json:"Title"`
+	Column      string              `json:"Column"`
+	Type        string              `json:"Type"`
+	Enable      GMSchemaFieldEnable `json:"Enable,omitempty"`
+	ValueInsert GMSchemaFieldValue  `json:"ValueInsert,omitempty"`
+	ValueEdit   GMSchemaFieldValue  `json:"ValueEdit,omitempty"`
 }
 
 type GMSchema struct {

@@ -12,7 +12,7 @@
 			"Column": "id",
 			"Name": "id",
 			"Type": "int",
-			"Display": {
+			"Enable": {
 				"List": true,
 				"Insert": false,
 				"Edit": false,
@@ -25,7 +25,7 @@
 			"Column": "table_name",
 			"Name": "table_name",
 			"Type": "str",
-			"Display": {
+			"Enable": {
 				"List": true,
 				"Insert": true,
 				"Edit": true,
@@ -38,7 +38,7 @@
 			"Column": "table_version",
 			"Name": "table_version",
 			"Type": "int",
-			"Display": {
+			"Enable": {
 				"List": true,
 				"Insert": true,
 				"Edit": true,

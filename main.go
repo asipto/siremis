@@ -176,18 +176,18 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
 		if v.Name == schemaV.Query.IdField {
-			log.Printf("using field %s\n", v.Name)
+			log.Printf("using field %s (list)\n", v.Name)
 			selFields = append(selFields, v)
 			break
 		}
 	}
 	for _, v := range schemaV.Fields {
 		if v.Name != schemaV.Query.IdField {
-			if v.Display.List {
-				log.Printf("using field %s\n", v.Name)
+			if v.Enable.List {
+				log.Printf("using field %s (list)\n", v.Name)
 				selFields = append(selFields, v)
 			} else {
-				log.Printf("skipping field %s (%v)\n", v.Name, v.Display.List)
+				log.Printf("skipping field %s (list)\n", v.Name)
 			}
 		}
 	}
@@ -223,8 +223,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 		if err != nil {
 			panic(err.Error())
 		}
-		log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
-
+		//log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
 		dbRes = append(dbRes, dbRow)
 	}
 
@@ -241,14 +240,14 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	GMTemplatesV.ExecuteTemplate(w, "list", viewData)
 }
 
-func GMSchemaFieldDisplayBoolVal(v *GMSchemaFieldDisplay, field string) bool {
+func GMSchemaFieldEnableBoolVal(v *GMSchemaFieldEnable, field string) bool {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
 	return bool(f.Bool())
 }
 
 func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId string,
-	sDisplayField string, sTemplate string) {
+	sEnableField string, sTemplate string) {
 
 	if GMSessionAuthCheck(w, r) < 0 {
 		GMViewGuestPage(w, r, "login")
@@ -262,18 +261,18 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
 		if v.Name == schemaV.Query.IdField {
-			log.Printf("using field %s\n", v.Name)
+			log.Printf("using field %s (%s)\n", v.Name, sEnableField)
 			selFields = append(selFields, v)
 			break
 		}
 	}
 	for _, v := range schemaV.Fields {
 		if v.Name != schemaV.Query.IdField {
-			if GMSchemaFieldDisplayBoolVal(&v.Display, sDisplayField) {
-				log.Printf("using field %s\n", v.Name)
+			if GMSchemaFieldEnableBoolVal(&v.Enable, sEnableField) {
+				log.Printf("using field %s (%s)\n", v.Name, sEnableField)
 				selFields = append(selFields, v)
 			} else {
-				log.Printf("skipping field %s (%v)\n", v.Name, v.Display.List)
+				log.Printf("skipping field %s (%s)\n", v.Name, sEnableField)
 			}
 		}
 	}
@@ -351,11 +350,11 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
 		if v.Name != schemaV.Query.IdField {
-			if v.Display.Insert {
-				log.Printf("using field %s\n", v.Name)
+			if v.Enable.Insert {
+				log.Printf("using field %s (insert)\n", v.Name)
 				selFields = append(selFields, v)
 			} else {
-				log.Printf("skipping field %s (%v)\n", v.Name, v.Display.List)
+				log.Printf("skipping field %s (insert)\n", v.Name)
 			}
 		}
 	}
@@ -387,7 +386,7 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 			var vField = GMDBField{}
 			vField.Name = v.Name
 			vField.Column = v.Column
-			if v.Display.Insert {
+			if v.Enable.Insert {
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(r.FormValue(v.Name))
 				} else {
@@ -469,7 +468,7 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 			var vField = GMDBField{}
 			vField.Name = v.Name
 			vField.Column = v.Column
-			if v.Display.Edit {
+			if v.Enable.Edit {
 				log.Printf("update form field %s\n", v.Name)
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(r.FormValue(v.Name))
@@ -556,7 +555,6 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	var selFields = []GMSchemaField{}
 	for _, v := range schemaV.Fields {
 		if v.Name == schemaV.Query.IdField {
-			log.Printf("using field %s\n", v.Name)
 			selFields = append(selFields, v)
 			break
 		}

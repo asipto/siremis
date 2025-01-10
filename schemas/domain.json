@@ -12,7 +12,7 @@
 			"Column": "id",
 			"Name": "id",
 			"Type": "int",
-			"Display": {
+			"Enable": {
 				"List": true,
 				"Insert": false,
 				"Edit": false,
@@ -25,7 +25,7 @@
 			"Column": "domain",
 			"Name": "domain",
 			"Type": "str",
-			"Display": {
+			"Enable": {
 				"List": true,
 				"Insert": true,
 				"Edit": true,
@@ -38,7 +38,7 @@
 			"Column": "did",
 			"Name": "did",
 			"Type": "str",
-			"Display": {
+			"Enable": {
 				"List": false,
 				"Insert": true,
 				"Edit": true,
@@ -51,7 +51,7 @@
 			"Column": "last_modified",
 			"Name": "last_modified",
 			"Type": "datetime",
-			"Display": {
+			"Enable": {
 				"List": false,
 				"Insert": false,
 				"Edit": false,
