@@ -380,15 +380,14 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 			vField.Name = v.Name
 			vField.Column = v.Column
 			if v.Display.Insert {
-				log.Printf("insert form field %s\n", v.Name)
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(r.FormValue(v.Name))
 				} else {
 					vField.Value = r.FormValue(v.Name)
 				}
+				log.Printf("insert form field: %s / value: '%v'\n", v.Name, vField.Value)
 				valFields = append(valFields, vField)
 			} else if len(v.ValueInsert.Func) > 0 {
-				log.Printf("insert value field %s\n", v.Name)
 				sVal := ""
 				if len(v.ValueInsert.Params) > 0 {
 					var vParams = make([]any, 0)
@@ -409,6 +408,7 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 				} else {
 					vField.Value = sVal
 				}
+				log.Printf("insert func field: %s / value: '%v'\n", v.Name, vField.Value)
 				valFields = append(valFields, vField)
 			} else {
 				log.Printf("skipping field %s\n", v.Name)
@@ -715,17 +715,21 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 		return -3
 	}
 	if userSession.IsExpired() {
+		log.Printf("session expired - token: %s\n", sessionToken)
 		delete(GMSessions, sessionToken)
 		// w.WriteHeader(http.StatusUnauthorized)
 		return -4
 	}
 
-	if userSession.expiry.Before(time.Now().Add(-60 * time.Second)) {
+	if userSession.expiry.After(time.Now().Add(-60 * time.Second)) {
 		// not yet close to expire
+		log.Printf("session active - token: %s\n", sessionToken)
 		return 1
 	}
 
 	newSessionToken := uuid.NewString()
+	log.Printf("new session token: %s\n", newSessionToken)
+
 	expiresAt := time.Now().Add(300 * time.Second)
 
 	GMSessions[newSessionToken] = GMSession{
@@ -867,6 +871,8 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 		GMNew(w, r, tURL[3])
 	} else if tURL[2] == "insert" {
 		GMInsert(w, r, tURL[3])
+	} else if tURL[2] == "menu" {
+		GMSMenuPage(w, r, tURL[3])
 	} else if tURL[2] == "show" {
 		if len(tURL) < 5 {
 			log.Printf("too few tokens in URL: %s\n", sURL)
@@ -1012,8 +1018,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	GMFuncMap["ha1"] = GMFuncHA1
-	GMFuncMap["ha1b"] = GMFuncHA1B
+	GMFuncMap["HA1"] = GMFuncHA1
+	GMFuncMap["HA1B"] = GMFuncHA1B
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
 		"rowon": GMTemplateFuncRowOn,
