@@ -22,20 +22,20 @@
 		{
 			"Name": "subscriber",
 			"Title": "Subscriber Management",
-			"Active": true,
+			"Inactive": false,
 			"Items": [
 				{
 					"Name": "list",
 					"Title": "List",
 					"URLPath": "list/subscriber",
-					"Active": true,
+					"Inactive": false,
 					"Description": "list all subscriber records"
 				},
 				{
 					"Name": "new",
 					"Title": "New",
 					"URLPath": "new/subscriber",
-					"Active": true,
+					"Inactive": false,
 					"Description": "create new subscriber record"
 				}
 			]
@@ -43,20 +43,20 @@
 		{
 			"Name": "version",
 			"Title": "Version Management",
-			"Active": true,
+			"Inactive": false,
 			"Items": [
 				{
 					"Name": "list",
 					"Title": "List",
 					"URLPath": "list/version",
-					"Active": true,
+					"Inactive": false,
 					"Description": "list all version records"
 				},
 				{
 					"Name": "new",
 					"Title": "New",
 					"URLPath": "new/version",
-					"Active": true,
+					"Inactive": false,
 					"Description": "create new version record"
 				}
 			]
