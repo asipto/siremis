@@ -107,6 +107,10 @@ func GMFuncHA1B(params []any) string {
 	return hex.EncodeToString(hash[:])
 }
 
+func GMFuncDateTimeNow() string {
+	return time.Now().Format(time.DateTime)
+}
+
 func dbConn() (db *sql.DB) {
 	log.Println("Database: " + GMConfigV.DBData.Database + " (" + GMConfigV.DBData.Host +
 		":" + GMConfigV.DBData.Port + ")")
@@ -1020,6 +1024,7 @@ func main() {
 
 	GMFuncMap["HA1"] = GMFuncHA1
 	GMFuncMap["HA1B"] = GMFuncHA1B
+	GMFuncMap["DateTimeNow"] = GMFuncDateTimeNow
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
 		"rowon": GMTemplateFuncRowOn,
