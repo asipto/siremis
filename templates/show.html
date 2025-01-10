@@ -1,13 +1,25 @@
 {{ define "show" }}
   {{ template "header" . }}
     <div class="container">
-        <h2>{{ $.Schema.Title }} Details</h2>
+      <h2>{{ $.Schema.Title }} Details</h2>
+      <table id="tableone" class="display">
+        <thead>
+        <tr>
+          <th>...</th>
+          <th>...</th>
+         </tr>
+        </thead>
+        <tbody>
         {{ range $i, $v := $.Fields }}
-        <p><strong>{{ $v.Title }}:</strong> {{ index (index $.Values 0) $i }}</p>
+        <tr>
+        <td><strong>{{ $v.Title }}:</strong></td><td> {{ index (index $.Values 0) $i }}</td>
+        </tr>
         {{ end }}
-        <br /> 
-        <p><a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Edit</a>
-        <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Delete</a></p>
+        </tbody>
+      </table>
+      <br />
+      <p><a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Edit</a>
+      <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Delete</a></p>
     </div>
   {{ template "footer" . }}
 {{ end }}
