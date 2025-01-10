@@ -3,12 +3,17 @@
     <div class="container">
       <h2>Alert Details</h2>
       <br />
+      <div class="alert alert-danger" role="alert">
       {{ if $.Context.Alert.Active }}
       <p>{{ $.Context.Alert.Text }}</p>
       {{ else }}
       <p>Unknown</p>
       {{ end }}
+      </div>
       <br />
+      <p>
+        <a href="{{ $.Config.URLDir }}/{{ $.Config.DefaultViewPath }}" class="btn btn-primary">Main Page</a>
+      </p>
     </div>
   {{ template "footer" . }}
 {{ end }}
