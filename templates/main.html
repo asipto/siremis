@@ -2,8 +2,10 @@
   {{ template "header" . }}
     <div class="container">
       <h2>Main Menu</h2>
+      {{ $crt := 0 }}
       {{ range $i, $m := $.Config.Menu }}
-      {{ if rowon (len $.Config.Menu) $i 3 0 }}
+      {{ if not $m.Inactive }}
+      {{ if rowon (len $.Config.Menu) $crt 3 0 }}
       <div class="row">
       {{ end }}
         <div class="col-sm">
@@ -23,9 +25,11 @@
                 <div class="card-body">
                   <ul class="list-group list-group-flush">
                     {{ range $j, $item := $m.Items }}
+                    {{ if not $item.Inactive }}
                     <li class="list-group-item">
                       <a href="{{ $.Config.URLDir }}/{{ $item.URLPath }}">{{ $item.Title }}</span></a>
                     </li>
+                    {{ end }}
                     {{ end }}
                   </ul>
                 </div>
@@ -35,8 +39,10 @@
           </div>
 
         </div>
-      {{ if rowon (len $.Config.Menu) $i 3 1 }}
+      {{ if rowon (len $.Config.Menu) $crt 3 1 }}
       </div>
+      {{ end }}
+      {{ $crt := add $crt 1 }}
       {{ end }}
       {{ end }}
     </div>

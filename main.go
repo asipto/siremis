@@ -993,6 +993,10 @@ func GMTemplateFuncRowOn(nitems, crt, cols, mode int) bool {
 	return false
 }
 
+func GMTemplateFuncAdd(n, v int) int {
+	return n + v
+}
+
 func main() {
 	flag.Parse()
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -1013,6 +1017,7 @@ func main() {
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
 		"rowon": GMTemplateFuncRowOn,
+		"add":   GMTemplateFuncAdd,
 	}).ParseGlob("templates/*"))
 
 	log.Println("Starting server on: http://localhost:8284")
