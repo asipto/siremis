@@ -1,15 +1,44 @@
 {{ define "main" }}
   {{ template "header" . }}
     <div class="container">
-        <h2>Main Menu</h2>
-        <ul>
-          <li>
-            <a href="{{ $.Config.URLDir }}/list/subscriber">Subscriber - List</span></a>
-          </li>
-          <li>
-            <a href="{{ $.Config.URLDir }}/new/subscriber">Subscriber - New</a>
-          </li>
-        </ul>
+      <h2>Main Menu</h2>
+      {{ range $i, $m := $.Config.Menu }}
+      {{ if rowon (len $.Config.Menu) $i 3 0 }}
+      <div class="row">
+      {{ end }}
+        <div class="col-sm">
+
+          <div id="accordion_{{ $m.Name }}">
+            <div class="card">
+
+              <div class="card-header" id="heading_{{ $m.Name }}">
+                <h5 class="mb-0">
+                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapse_{{ $m.Name }}" aria-expanded="true" aria-controls="collapse_{{ $m.Name }}">
+                    {{ $m.Title }}
+                  </button>
+                </h5>
+              </div>
+
+              <div id="collapse_{{ $m.Name }}" class="collapse" aria-labelledby="heading_{{ $m.Name }}" data-parent="#accordion_{{ $m.Name }}">
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    {{ range $j, $item := $m.Items }}
+                    <li class="list-group-item">
+                      <a href="{{ $.Config.URLDir }}/{{ $item.URLPath }}">{{ $item.Title }}</span></a>
+                    </li>
+                    {{ end }}
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      {{ if rowon (len $.Config.Menu) $i 3 1 }}
+      </div>
+      {{ end }}
+      {{ end }}
     </div>
   {{ template "footer" . }}
 {{ end }}
