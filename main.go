@@ -2,6 +2,8 @@ package main
 
 import (
 	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
@@ -576,6 +578,29 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	GMSMenuPage(w, r, schemaName)
 }
 
+func GMCheckPasswords(cfgPassword string, valPassword string) bool {
+	if strings.HasPrefix(cfgPassword, "sha256:") {
+		v := strings.TrimPrefix(cfgPassword, "sha256:")
+		hash := sha256.Sum256([]byte(v))
+		return (valPassword == hex.EncodeToString(hash[:]))
+	}
+	if strings.HasPrefix(cfgPassword, "sha1:") {
+		v := strings.TrimPrefix(cfgPassword, "sha1:")
+		hash := sha1.Sum([]byte(v))
+		return (valPassword == hex.EncodeToString(hash[:]))
+	}
+	if strings.HasPrefix(cfgPassword, "text:") {
+		return (valPassword == strings.TrimPrefix(cfgPassword, "text:"))
+	}
+	if strings.HasPrefix(cfgPassword, "md5:") {
+		v := strings.TrimPrefix(cfgPassword, "md5:")
+		hash := md5.Sum([]byte(v))
+		return (valPassword == hex.EncodeToString(hash[:]))
+	}
+
+	return (valPassword == cfgPassword)
+}
+
 func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
@@ -583,7 +608,7 @@ func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
 
 	for _, v := range GMConfigV.AuthUsers {
 		if v.Username == username {
-			if v.Password == password {
+			if GMCheckPasswords(v.Password, password) {
 				authok = true
 				break
 			}
