@@ -49,19 +49,10 @@ var GMCLIOptionsV = GMCLIOptions{
 	version:     false,
 }
 
-// SIPUser struct
-type SIPUser struct {
-	Id       int
-	Username string
-	Domain   string
-	Password string
-	Ha1      string
-	Ha1b     string
-}
-
 type GMViewContext struct {
 	AuthOK       bool
 	SchemaName   string
+	SchemaTitle  string
 	IdField      GMSchemaField
 	IdFieldValue any
 }
@@ -198,6 +189,8 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 	viewData.Context.AuthOK = true
+	viewData.Context.SchemaName = schemaV.Name
+	viewData.Context.SchemaTitle = schemaV.Title
 	viewData.Schema = schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
@@ -297,6 +290,8 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 	viewData.Context.AuthOK = true
+	viewData.Context.SchemaName = schemaV.Name
+	viewData.Context.SchemaTitle = schemaV.Title
 	viewData.Schema = schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
@@ -340,6 +335,8 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 	viewData.Context.AuthOK = true
+	viewData.Context.SchemaName = schemaV.Name
+	viewData.Context.SchemaTitle = schemaV.Title
 	viewData.Schema = schemaV
 	viewData.Fields = selFields
 	tmpl.ExecuteTemplate(w, "new", viewData)
@@ -808,7 +805,22 @@ func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
 		GMViewGuestPage(w, r, "login")
 		return
 	}
-	viewData.Context.SchemaName = schemaName
+
+	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
+	schemaBytes, err := os.ReadFile(schemaFile)
+	if err != nil {
+		log.Printf("unavailable schema file %s\n", schemaFile)
+		os.Exit(1)
+	}
+	var schemaV = GMSchema{}
+	err = json.Unmarshal(schemaBytes, &schemaV)
+	if err != nil {
+		log.Printf("invalid content in schema file %s\n", schemaFile)
+		os.Exit(1)
+	}
+
+	viewData.Context.SchemaName = schemaV.Name
+	viewData.Context.SchemaTitle = schemaV.Title
 
 	tmpl.ExecuteTemplate(w, "smenu", viewData)
 }
@@ -831,14 +843,14 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("incoming URL value: %s\n", sURL)
 	if sURL == "/" {
-		sURL = GMConfigV.URLDir + "/" + GMConfigV.DefaultAction + "/" + GMConfigV.DefaultSchema
+		sURL = GMConfigV.URLDir + "/" + GMConfigV.DefaultViewPath
 	}
 	if !strings.HasPrefix(sURL, "/") {
 		sURL = "/" + sURL
 	}
 	if (sURL == GMConfigV.URLDir) || (sURL == "/"+GMConfigV.URLDir) ||
 		(sURL == "/"+GMConfigV.URLDir+"/") || (sURL == GMConfigV.URLDir+"/") {
-		sURL = GMConfigV.URLDir + "/" + GMConfigV.DefaultAction + "/" + GMConfigV.DefaultSchema
+		sURL = GMConfigV.URLDir + "/" + GMConfigV.DefaultViewPath
 	}
 	log.Printf("updated URL value: %s\n", sURL)
 	tURL := strings.Split(sURL, "/")

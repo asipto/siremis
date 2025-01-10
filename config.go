@@ -17,10 +17,9 @@ type GMConfigDB struct {
 }
 
 type GMConfig struct {
-	DefaultSchema string             `json:"DefaultSchema"`
-	DefaultAction string             `json:"DefaultAction"`
-	URLDir        string             `json:"URLDir,omitempty"`
-	SchemaDir     string             `json:"SchemaDir"`
-	AuthUsers     []GMConfigAuthUser `json:"AuthUsers"`
-	DBData        GMConfigDB         `json:"DBData"`
+	DefaultViewPath string             `json:"DefaultViewPath"`
+	URLDir          string             `json:"URLDir,omitempty"`
+	SchemaDir       string             `json:"SchemaDir"`
+	AuthUsers       []GMConfigAuthUser `json:"AuthUsers"`
+	DBData          GMConfigDB         `json:"DBData"`
 }

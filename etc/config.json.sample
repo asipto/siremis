@@ -1,6 +1,5 @@
 {
-	"DefaultSchema": "subscriber",
-	"DefaultAction": "list",
+	"DefaultViewPath": "view/main",
 	"URLDir": "/w",
 	"SchemaDir": "schemas",
 	"AuthUsers": [
