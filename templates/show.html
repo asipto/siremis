@@ -2,9 +2,11 @@
   {{ template "header" . }}
     <div class="container">
       <h2>{{ $.Schema.Title }} Details</h2>
+      <br />
       <table id="tableone" class="display">
         <thead>
         <tr>
+          <th>...</th>
           <th>...</th>
           <th>...</th>
          </tr>
@@ -12,7 +14,7 @@
         <tbody>
         {{ range $i, $v := $.Fields }}
         <tr>
-        <td><strong>{{ $v.Title }}:</strong></td><td> {{ index (index $.Values 0) $i }}</td>
+        <td>*</td><td><strong>{{ $v.Title }}:</strong></td><td> {{ index (index $.Values 0) $i }}</td>
         </tr>
         {{ end }}
         </tbody>

@@ -2,10 +2,24 @@
   {{ template "header" . }}
     <div class="container">
         <h2>Delete {{ $.Schema.Title }}</h2>
-        {{ range $i, $v := $.Fields }}
-        <p><strong>{{ $v.Title }}:</strong> {{ index (index $.Values 0) $i }}</p>
-        {{ end }}
-        <br /> 
+        <br />
+        <table id="tableone" class="display">
+          <thead>
+          <tr>
+            <th>...</th>
+            <th>...</th>
+            <th>...</th>
+           </tr>
+          </thead>
+          <tbody>
+          {{ range $i, $v := $.Fields }}
+          <tr>
+          <td>*</td><td><strong>{{ $v.Title }}:</strong></td><td>{{ index (index $.Values 0) $i }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+        </table>
+        <br />
         <a href="{{ $.Config.URLDir }}/remove/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Do Remove</a></p>
     </div>
   {{ template "footer" . }}
