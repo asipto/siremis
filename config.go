@@ -16,10 +16,26 @@ type GMConfigDB struct {
 	Password string `json:"Password"`
 }
 
+type GMConfigMenuItem struct {
+	Name        string `json:"Name"`
+	Title       string `json:"Title"`
+	Inactive    bool   `json:"Inactive,omitempty"`
+	URLPath     string `json:"URLPath"`
+	Description string `json:"Description,omitempty"`
+}
+
+type GMConfigMenuGroup struct {
+	Name     string             `json:"Name"`
+	Title    string             `json:"Title"`
+	Inactive bool               `json:"Inactive,omitempty"`
+	Items    []GMConfigMenuItem `json:"Items"`
+}
+
 type GMConfig struct {
-	DefaultViewPath string             `json:"DefaultViewPath"`
-	URLDir          string             `json:"URLDir,omitempty"`
-	SchemaDir       string             `json:"SchemaDir"`
-	AuthUsers       []GMConfigAuthUser `json:"AuthUsers"`
-	DBData          GMConfigDB         `json:"DBData"`
+	DefaultViewPath string              `json:"DefaultViewPath"`
+	URLDir          string              `json:"URLDir,omitempty"`
+	SchemaDir       string              `json:"SchemaDir"`
+	AuthUsers       []GMConfigAuthUser  `json:"AuthUsers"`
+	DBData          GMConfigDB          `json:"DBData"`
+	Menu            []GMConfigMenuGroup `json:"Menu"`
 }

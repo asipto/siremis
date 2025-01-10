@@ -84,7 +84,7 @@ var GMFuncMap = make(map[string]any)
 
 var GMSessions = map[string]GMSession{}
 
-var tmpl = template.Must(template.ParseGlob("templates/*"))
+var GMTemplatesV *template.Template = nil
 
 func GMFuncHA1(params []any) string {
 	if len(params) != 3 {
@@ -156,7 +156,7 @@ func GMAlertView(w http.ResponseWriter, r *http.Request, schemaName string,
 	viewData.Context.Alert.Type = "alert"
 	viewData.Context.Alert.Text = alertText
 
-	tmpl.ExecuteTemplate(w, "alert", viewData)
+	GMTemplatesV.ExecuteTemplate(w, "alert", viewData)
 }
 
 func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
@@ -232,7 +232,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Schema = *schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
-	tmpl.ExecuteTemplate(w, "list", viewData)
+	GMTemplatesV.ExecuteTemplate(w, "list", viewData)
 }
 
 func GMSchemaFieldDisplayBoolVal(v *GMSchemaFieldDisplay, field string) bool {
@@ -325,7 +325,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	viewData.Schema = *schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
-	tmpl.ExecuteTemplate(w, sTemplate, viewData)
+	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }
 
 func GMShow(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
@@ -361,7 +361,7 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.SchemaTitle = schemaV.Title
 	viewData.Schema = *schemaV
 	viewData.Fields = selFields
-	tmpl.ExecuteTemplate(w, "new", viewData)
+	GMTemplatesV.ExecuteTemplate(w, "new", viewData)
 }
 
 func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
@@ -648,7 +648,7 @@ func GMLogin(w http.ResponseWriter, r *http.Request) {
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 	viewData.Context.AuthOK = true
-	tmpl.ExecuteTemplate(w, "main", viewData)
+	GMTemplatesV.ExecuteTemplate(w, "main", viewData)
 }
 
 func GMSessionAuthCheck(w http.ResponseWriter, r *http.Request) int {
@@ -773,7 +773,7 @@ func GMViewPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
 	viewData.Config = GMConfigV
 	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
 
-	tmpl.ExecuteTemplate(w, sTemplate, viewData)
+	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }
 
 func GMViewAuthPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
@@ -785,14 +785,14 @@ func GMViewAuthPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
 		return
 	}
 
-	tmpl.ExecuteTemplate(w, sTemplate, viewData)
+	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }
 
 func GMViewGuestPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 
-	tmpl.ExecuteTemplate(w, sTemplate, viewData)
+	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }
 
 func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
@@ -812,7 +812,7 @@ func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
 
-	tmpl.ExecuteTemplate(w, "smenu", viewData)
+	GMTemplatesV.ExecuteTemplate(w, "smenu", viewData)
 }
 
 func GMDoAction(w http.ResponseWriter, r *http.Request, sAction string) {
@@ -980,6 +980,19 @@ func init() {
 	flag.BoolVar(&GMCLIOptionsV.version, "version", GMCLIOptionsV.version, "print version")
 }
 
+func GMTemplateFuncRowOn(nitems, crt, cols, mode int) bool {
+	if mode == 0 {
+		return crt%cols == 0
+	}
+	if crt%cols == cols-1 {
+		return true
+	}
+	if crt == nitems-1 {
+		return true
+	}
+	return false
+}
+
 func main() {
 	flag.Parse()
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -997,6 +1010,10 @@ func main() {
 
 	GMFuncMap["ha1"] = GMFuncHA1
 	GMFuncMap["ha1b"] = GMFuncHA1B
+
+	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
+		"rowon": GMTemplateFuncRowOn,
+	}).ParseGlob("templates/*"))
 
 	log.Println("Starting server on: http://localhost:8284")
 	http.HandleFunc("/", GMRequestHandler)
