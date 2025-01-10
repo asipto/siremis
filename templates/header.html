@@ -41,11 +41,14 @@
   {{ if gt (len $.Context.SchemaName) 0 }}
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="{{ $.Config.URLDir }}/list/{{ $.Context.SchemaName }}">{{ $.Context.SchemaTitle }} - List</span></a>
-      </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ $.Config.URLDir }}/new/{{ $.Context.SchemaName }}">{{ $.Context.SchemaTitle }} - New</a>
+        <a class="nav-link" href="{{ $.Config.URLDir }}/menu/{{ $.Context.SchemaName }}"><strong>{{ $.Context.SchemaTitle }}</strong></a>
+      </li>
+      <li class="nav-item {{ if eq $.Context.Action `list` }} active {{ end }}">
+        <a class="nav-link" href="{{ $.Config.URLDir }}/list/{{ $.Context.SchemaName }}">List</a>
+      </li>
+      <li class="nav-item {{ if eq $.Context.Action `new` }} active {{ end }}">
+        <a class="nav-link" href="{{ $.Config.URLDir }}/new/{{ $.Context.SchemaName }}">New</a>
       </li>
     </ul>    
   </div>

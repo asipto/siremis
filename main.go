@@ -56,6 +56,7 @@ type GMAlert struct {
 }
 
 type GMViewContext struct {
+	Action       string
 	AuthOK       bool
 	SchemaName   string
 	SchemaTitle  string
@@ -230,6 +231,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	GMAuthRefresh(w, r)
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
+	viewData.Context.Action = "list"
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
@@ -324,6 +326,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 	viewData.Context.AuthOK = true
+	viewData.Context.Action = sTemplate
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
 	viewData.Schema = *schemaV
@@ -360,6 +363,7 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	GMAuthRefresh(w, r)
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
+	viewData.Context.Action = "new"
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
