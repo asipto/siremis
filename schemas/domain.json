@@ -1,0 +1,71 @@
+{
+	"Name": "domain",
+	"Title": "Domain",
+	"Table": "domain",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Display": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Domain",
+			"Column": "domain",
+			"Name": "domain",
+			"Type": "str",
+			"Display": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Domain ID",
+			"Column": "did",
+			"Name": "did",
+			"Type": "str",
+			"Display": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Last Modified",
+			"Column": "last_modified",
+			"Name": "last_modified",
+			"Type": "datetime",
+			"Display": {
+				"List": false,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": false
+			},
+			"ValueInsert": {
+				"Func": "DateTimeNow",
+				"Params": [ ]
+			},
+			"ValueEdit": {
+				"Func": "DateTimeNow",
+				"Params": [ ]
+			}
+		}
+	]
+}
