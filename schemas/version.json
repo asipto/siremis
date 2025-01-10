@@ -1,0 +1,50 @@
+{
+	"Name": "version",
+	"Title": "Version",
+	"Table": "version",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Display": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Table Name",
+			"Column": "table_name",
+			"Name": "table_name",
+			"Type": "str",
+			"Display": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Table Version",
+			"Column": "table_version",
+			"Name": "table_version",
+			"Type": "int",
+			"Display": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		}
+	]
+}
