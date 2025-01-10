@@ -1,0 +1,89 @@
+{
+	"Name": "address",
+	"Title": "Address",
+	"Table": "address",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Group Id",
+			"Column": "grp",
+			"Name": "grp",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "IP Address",
+			"Column": "ip_addr",
+			"Name": "ip_addr",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Mask",
+			"Column": "mask",
+			"Name": "mask",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Port",
+			"Column": "port",
+			"Name": "port",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Tag",
+			"Column": "tag",
+			"Name": "tag",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		}
+	]
+}
