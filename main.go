@@ -992,14 +992,14 @@ func init() {
 	flag.BoolVar(&GMCLIOptionsV.version, "version", GMCLIOptionsV.version, "print version")
 }
 
-func GMTemplateFuncRowOn(nitems, crt, cols, mode int) bool {
+func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {
 	if mode == 0 {
 		return crt%cols == 0
 	}
 	if crt%cols == cols-1 {
 		return true
 	}
-	if crt == nitems-1 {
+	if idx == nitems-1 {
 		return true
 	}
 	return false
@@ -1007,6 +1007,44 @@ func GMTemplateFuncRowOn(nitems, crt, cols, mode int) bool {
 
 func GMTemplateFuncAdd(n, v int) int {
 	return n + v
+}
+
+func GMTemplateFuncSub(n, v int) int {
+	return n - v
+}
+
+func GMTemplateFuncMod(n, v int) int {
+	return n % v
+}
+
+func GMTemplateFuncLoop(n int) []int {
+	var i int
+	var items []int
+	for i = 0; i < n; i++ {
+		items = append(items, i)
+	}
+	return items
+}
+
+func GMTemplateFuncLastLoop(idx, cols int) []int {
+	var n int
+	var i int
+	var items []int
+	if cols == 0 {
+		n = 0
+	} else if idx%cols == 0 {
+		n = cols - 1
+	} else {
+		n = (idx % cols) - 1
+	}
+	for i = 0; i < n; i++ {
+		items = append(items, i)
+	}
+	return items
+}
+
+func GMTemplateFuncLastIndex(nitems, idx int) bool {
+	return idx == (nitems - 1)
 }
 
 func main() {
@@ -1029,8 +1067,13 @@ func main() {
 	GMFuncMap["DateTimeNow"] = GMFuncDateTimeNow
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
-		"rowon": GMTemplateFuncRowOn,
-		"add":   GMTemplateFuncAdd,
+		"rowon":     GMTemplateFuncRowOn,
+		"add":       GMTemplateFuncAdd,
+		"sub":       GMTemplateFuncSub,
+		"mod":       GMTemplateFuncMod,
+		"loop":      GMTemplateFuncLoop,
+		"lastloop":  GMTemplateFuncLastLoop,
+		"lastindex": GMTemplateFuncLastIndex,
 	}).ParseGlob("templates/*"))
 
 	log.Println("Starting server on: http://localhost:8284")
