@@ -73,11 +73,11 @@
 			},
 			"ValueInsert": {
 				"Func": "HA1",
-				"Params": ["username", "domain", "password"]
+				"Params": ["@fld:username", "@fld:domain", "@fld:password"]
 			},
 			"ValueEdit": {
 				"Func": "HA1",
-				"Params": ["username", "domain", "password"]
+				"Params": ["@fld:username", "@fld:domain", "@fld:password"]
 			}
 		},
 		{
@@ -94,11 +94,11 @@
 			},
 			"ValueInsert": {
 				"Func": "HA1B",
-				"Params": ["username", "domain", "password"]
+				"Params": ["@fld:username", "@fld:domain", "@fld:password"]
 			},
 			"ValueEdit": {
 				"Func": "HA1B",
-				"Params": ["username", "domain", "password"]
+				"Params": ["@fld:username", "@fld:domain", "@fld:password"]
 			}
 		}
 	]

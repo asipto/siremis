@@ -442,11 +442,16 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 				if len(v.ValueInsert.Params) > 0 {
 					var vParams = make([]any, 0)
 					for _, p := range v.ValueInsert.Params {
-						for _, f := range valFields {
-							if p == f.Name {
-								vParams = append(vParams, f.Value)
-								break
+						if strings.HasPrefix(p, "@fld:") {
+							fldName := strings.TrimPrefix(p, "@fld:")
+							for _, f := range valFields {
+								if fldName == f.Name {
+									vParams = append(vParams, f.Value)
+									break
+								}
 							}
+						} else {
+							vParams = append(vParams, p)
 						}
 					}
 					sVal = GMFuncMap[v.ValueInsert.Func].(func([]any) string)(vParams)
@@ -525,11 +530,16 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 				if len(v.ValueEdit.Params) > 0 {
 					var vParams = make([]any, 0)
 					for _, p := range v.ValueEdit.Params {
-						for _, f := range valFields {
-							if p == f.Name {
-								vParams = append(vParams, f.Value)
-								break
+						if strings.HasPrefix(p, "@fld:") {
+							fldName := strings.TrimPrefix(p, "@fld:")
+							for _, f := range valFields {
+								if fldName == f.Name {
+									vParams = append(vParams, f.Value)
+									break
+								}
 							}
+						} else {
+							vParams = append(vParams, p)
 						}
 					}
 					sVal = GMFuncMap[v.ValueEdit.Func].(func([]any) string)(vParams)
