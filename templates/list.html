@@ -2,9 +2,17 @@
 {{ template "header" . }}
 <div class="container">
   <h2>{{ $.Schema.Title }} List</h2>
-
+  <br />
   <p>
-      <a href="{{ $.Config.URLDir }}/new/{{ $.Schema.Name }}" class="btn btn-primary">New {{ $.Schema.Title }}</a>
+    <a href="{{ $.Config.URLDir }}/new/{{ $.Schema.Name }}" class="btn btn-primary">New {{ $.Schema.Title }}</a>
+    {{ if gt $.Schema.Query.Limit 0 }}
+    {{ if ge $.Context.ResultAttrs.NrGroupPrev 0 }}
+    <a href="{{ $.Config.URLDir }}/list/{{ $.Schema.Name }}/group/{{ $.Context.ResultAttrs.NrGroupPrev }}" class="btn btn-secondary">Prev Rows Group</a>
+    {{ end }}
+    {{ if gt $.Context.ResultAttrs.NrGroupNext 0 }}
+    <a href="{{ $.Config.URLDir }}/list/{{ $.Schema.Name }}/group/{{ $.Context.ResultAttrs.NrGroupNext }}" class="btn btn-secondary">Next Rows Group</a>
+    {{ end }}
+    {{ end }}
   </p>
   <table id="tabledata" class="display" style="width: 100%">
     <thead>

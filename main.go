@@ -55,6 +55,13 @@ type GMAlert struct {
 	Text   string
 }
 
+type GMResultAttrs struct {
+	NrRows      int
+	NrGroup     int
+	NrGroupPrev int
+	NrGroupNext int
+}
+
 type GMViewContext struct {
 	Action       string
 	AuthOK       bool
@@ -62,6 +69,7 @@ type GMViewContext struct {
 	SchemaTitle  string
 	IdField      GMSchemaField
 	IdFieldValue any
+	ResultAttrs  GMResultAttrs
 	Alert        GMAlert
 }
 
@@ -164,7 +172,9 @@ func GMAlertView(w http.ResponseWriter, r *http.Request, schemaName string,
 	GMTemplatesV.ExecuteTemplate(w, "alert", viewData)
 }
 
-func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
+func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
+	listParams []string) {
+
 	if GMSessionAuthCheck(w, r) < 0 {
 		GMViewGuestPage(w, r, "login")
 		return
@@ -199,7 +209,30 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 			strQuery += ", " + v.Column
 		}
 	}
-	strQuery += " FROM " + schemaV.Table + " ORDER BY " + selFields[0].Column + " DESC"
+	strQuery += " FROM " + schemaV.Table
+
+	if len(schemaV.Query.OrderBy) > 0 {
+		strQuery += " ORDER BY " + schemaV.Query.OrderBy
+		if len(schemaV.Query.OrderType) > 0 {
+			strQuery += " " + schemaV.Query.OrderType
+		}
+	}
+
+	groupV := 0
+	if schemaV.Query.Limit > 0 {
+		if len(listParams) > 1 {
+			if listParams[0] == "group" {
+				groupV, _ = strconv.Atoi(listParams[1])
+				if groupV < 0 {
+					groupV = 0
+				}
+			}
+		}
+		offsetV := groupV * schemaV.Query.Limit
+		strQuery += " LIMIT " + strconv.Itoa(offsetV) + ", " +
+			strconv.Itoa(schemaV.Query.Limit)
+	}
+
 	db := dbConn()
 	selDB, err := db.Query(strQuery)
 	if err != nil {
@@ -228,15 +261,25 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string) {
 	}
 
 	GMAuthRefresh(w, r)
+
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 	viewData.Context.Action = "list"
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.ResultAttrs.NrRows = len(dbRes)
+	viewData.Context.ResultAttrs.NrGroup = groupV
+	if schemaV.Query.Limit > 0 {
+		viewData.Context.ResultAttrs.NrGroupPrev = groupV - 1
+		if schemaV.Query.Limit == viewData.Context.ResultAttrs.NrRows {
+			viewData.Context.ResultAttrs.NrGroupNext = groupV + 1
+		}
+	}
 	viewData.Schema = *schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
+
 	GMTemplatesV.ExecuteTemplate(w, "list", viewData)
 }
 
@@ -868,7 +911,11 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if tURL[2] == "list" {
-		GMList(w, r, tURL[3])
+		if len(tURL) > 4 {
+			GMList(w, r, tURL[3], tURL[4:])
+		} else {
+			GMList(w, r, tURL[3], []string{})
+		}
 	} else if tURL[2] == "view" {
 		GMViewPage(w, r, tURL[3])
 	} else if tURL[2] == "do" {

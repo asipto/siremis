@@ -1,8 +1,10 @@
 package main
 
 type GMSchemaQuery struct {
-	IdField string `json:"IdField"`
-	Limit   int    `json:"Limit,omitempty"`
+	IdField   string `json:"IdField"`
+	Limit     int    `json:"Limit,omitempty"`
+	OrderBy   string `json:"OrderBy,omitempty"`
+	OrderType string `json:"OrderType,omitempty"`
 }
 
 type GMSchemaFieldEnable struct {

@@ -4,7 +4,9 @@
 	"Table": "version",
 	"Query": {
 		"IdField": "id",
-		"Limit": 0
+		"Limit": 20,
+		"OrderBy": "id",
+		"OrderType": "ASC"
 	},
 	"Fields": [
 		{
