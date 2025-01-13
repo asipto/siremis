@@ -22,7 +22,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const siregisVersion = "1.00"
+const siregisVersion = "1.0.0"
 
 // CLIOptions - structure for command line options
 type GMCLIOptions struct {
