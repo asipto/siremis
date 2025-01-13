@@ -15,6 +15,16 @@ type GMSchemaFieldEnable struct {
 	Filter bool `json:"Filter,omitempty"`
 }
 
+type GMSchemaFieldOptionValues struct {
+	Func   string   `json:"Func,omitempty"`
+	Params []string `json:"Params,omitempty"`
+}
+
+type GMSchemaInputForm struct {
+	Type         string                    `json:"Type,omitempty"`
+	OptionValues GMSchemaFieldOptionValues `json:"OptionValues,omitempty"`
+}
+
 type GMSchemaFieldValue struct {
 	Func   string   `json:"Func,omitempty"`
 	Params []string `json:"Params,omitempty"`
@@ -26,6 +36,7 @@ type GMSchemaField struct {
 	Column      string              `json:"Column"`
 	Type        string              `json:"Type"`
 	Enable      GMSchemaFieldEnable `json:"Enable,omitempty"`
+	InputForm   GMSchemaInputForm   `json:"InputForm,omitempty"`
 	ValueInsert GMSchemaFieldValue  `json:"ValueInsert,omitempty"`
 	ValueEdit   GMSchemaFieldValue  `json:"ValueEdit,omitempty"`
 }

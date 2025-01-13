@@ -3,11 +3,26 @@
     <div class="container col-{{ len $.Fields}}">
         <h2>New SIP User</h2>  
         <form method="POST" action="{{ $.Config.URLDir }}/insert/{{ $.Schema.Name }}">
-          {{ range $.Fields }}
+          {{ range $.FormFields }}
           <div class="form-group">
-              <label>{{ .Title }}</label>
-              <input type="text" name="{{ .Name }}" class="form-control"/>
-          </div>
+              <label>{{ .Field.Title }}</label>
+              {{ if and (eq .Field.InputForm.Type "select") (gt (len .OptionValues) 0) }}
+              <select name="{{ .Field.Name }}" id="{{ .Field.Name }}" class="form-control">
+                {{ range .OptionValues }}
+                <option value="{{ . }}">{{ . }}</option>
+                {{ end }}
+              </select>
+              {{ else if and (eq .Field.InputForm.Type "dataset") (gt (len .OptionValues) 0) }}
+              <input type="text" name="{{ .Field.Name }}" list="{{ .Field.Name }}_dataset" class="form-control"/>
+              <datalist id="{{ .Field.Name }}_dataset">
+                {{ range .OptionValues }}
+                <option value="{{ . }}">{{ . }}</option>
+                {{ end }}
+              </datalist>
+              {{ else }}
+              <input type="text" name="{{ .Field.Name }}" class="form-control"/>
+              {{ end }}
+        </div>
           {{ end }}
           <input type="submit" value="Save" class="btn btn-primary"/>
         </form>

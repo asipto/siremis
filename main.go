@@ -73,12 +73,19 @@ type GMViewContext struct {
 	Alert        GMAlert
 }
 
+type GMViewFormField struct {
+	Field        GMSchemaField
+	Value        any
+	OptionValues []string
+}
+
 type GMViewData struct {
-	Config  GMConfig
-	Schema  GMSchema
-	Context GMViewContext
-	Fields  []GMSchemaField
-	Values  []any
+	Config     GMConfig
+	Schema     GMSchema
+	Context    GMViewContext
+	Fields     []GMSchemaField
+	Values     []any
+	FormFields []GMViewFormField
 }
 
 type GMDBField struct {
@@ -118,6 +125,36 @@ func GMFuncHA1B(params []any) string {
 
 func GMFuncDateTimeNow() string {
 	return time.Now().Format(time.DateTime)
+}
+
+func GMFuncDBColumnValues(params []any) []string {
+	if len(params) != 2 {
+		log.Printf("invalid number of parameters\n")
+		return []string{}
+	}
+
+	db := dbConn()
+	selDB, err := db.Query("SELECT " + params[1].(string) + " FROM " + params[0].(string) +
+		" ORDER BY " + params[1].(string) + " ASC")
+	if err != nil {
+		log.Printf("error [%s]\n", err.Error())
+		return []string{}
+	}
+	defer db.Close()
+	dbRes := make([]string, 0)
+
+	for selDB.Next() {
+		dbVal := ""
+		err := selDB.Scan(&dbVal)
+		if err != nil {
+			log.Printf("error [%s]\n", err.Error())
+			return []string{}
+		}
+		log.Println("adding option value: " + dbVal)
+		dbRes = append(dbRes, dbVal)
+	}
+
+	return dbRes
 }
 
 func GMConfigEvalVals() {
@@ -449,12 +486,25 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	if !okey {
 		return
 	}
-	var selFields = []GMSchemaField{}
+	var formFields = []GMViewFormField{}
 	for _, v := range schemaV.Fields {
 		if v.Name != schemaV.Query.IdField {
 			if v.Enable.Insert {
 				log.Printf("using field %s (insert)\n", v.Name)
-				selFields = append(selFields, v)
+				var fField = GMViewFormField{}
+				fField.Field = v
+				if len(v.InputForm.OptionValues.Func) > 0 {
+					if len(v.InputForm.OptionValues.Params) > 0 {
+						var vParams = make([]any, 0)
+						for _, p := range v.InputForm.OptionValues.Params {
+							vParams = append(vParams, p)
+						}
+						fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func([]any) []string)(vParams)
+					} else {
+						fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func() []string)()
+					}
+				}
+				formFields = append(formFields, fField)
 			} else {
 				log.Printf("skipping field %s (insert)\n", v.Name)
 			}
@@ -469,7 +519,7 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
 	viewData.Schema = *schemaV
-	viewData.Fields = selFields
+	viewData.FormFields = formFields
 	GMTemplatesV.ExecuteTemplate(w, "new", viewData)
 }
 
@@ -1244,6 +1294,7 @@ func main() {
 	GMFuncMap["HA1"] = GMFuncHA1
 	GMFuncMap["HA1B"] = GMFuncHA1B
 	GMFuncMap["DateTimeNow"] = GMFuncDateTimeNow
+	GMFuncMap["DBColumnValues"] = GMFuncDBColumnValues
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
 		"rowon":     GMTemplateFuncRowOn,
