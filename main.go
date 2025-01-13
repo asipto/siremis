@@ -120,6 +120,65 @@ func GMFuncDateTimeNow() string {
 	return time.Now().Format(time.DateTime)
 }
 
+func GMConfigEvalVals() {
+	if strings.HasPrefix(GMConfigV.DBData.Database, "@env:") {
+		eVal, ok := os.LookupEnv(GMConfigV.DBData.Database[5:])
+		if ok {
+			GMConfigV.DBData.Database = eVal
+		}
+	}
+	if strings.HasPrefix(GMConfigV.DBData.Driver, "@env:") {
+		eVal, ok := os.LookupEnv(GMConfigV.DBData.Driver[5:])
+		if ok {
+			GMConfigV.DBData.Driver = eVal
+		}
+	}
+	if strings.HasPrefix(GMConfigV.DBData.Host, "@env:") {
+		eVal, ok := os.LookupEnv(GMConfigV.DBData.Host[5:])
+		if ok {
+			GMConfigV.DBData.Host = eVal
+		}
+	}
+	if strings.HasPrefix(GMConfigV.DBData.Port, "@env:") {
+		eVal, ok := os.LookupEnv(GMConfigV.DBData.Port[5:])
+		if ok {
+			GMConfigV.DBData.Port = eVal
+		}
+	}
+	if strings.HasPrefix(GMConfigV.DBData.Protocol, "@env:") {
+		eVal, ok := os.LookupEnv(GMConfigV.DBData.Protocol[5:])
+		if ok {
+			GMConfigV.DBData.Protocol = eVal
+		}
+	}
+	if strings.HasPrefix(GMConfigV.DBData.Username, "@env:") {
+		eVal, ok := os.LookupEnv(GMConfigV.DBData.Username[5:])
+		if ok {
+			GMConfigV.DBData.Username = eVal
+		}
+	}
+	if strings.HasPrefix(GMConfigV.DBData.Password, "@env:") {
+		eVal, ok := os.LookupEnv(GMConfigV.DBData.Password[5:])
+		if ok {
+			GMConfigV.DBData.Password = eVal
+		}
+	}
+	for i, v := range GMConfigV.AuthUsers {
+		if strings.HasPrefix(v.Username, "@env:") {
+			eVal, ok := os.LookupEnv(v.Username[5:])
+			if ok {
+				GMConfigV.AuthUsers[i].Username = eVal
+			}
+		}
+		if strings.HasPrefix(v.Password, "@env:") {
+			eVal, ok := os.LookupEnv(v.Password[5:])
+			if ok {
+				GMConfigV.AuthUsers[i].Password = eVal
+			}
+		}
+	}
+}
+
 func dbConn() (db *sql.DB) {
 	log.Println("Database: " + GMConfigV.DBData.Database + " (" + GMConfigV.DBData.Host +
 		":" + GMConfigV.DBData.Port + ")")
@@ -1169,6 +1228,8 @@ func main() {
 		log.Printf("invalid content in config file %s\n", GMCLIOptionsV.config)
 		os.Exit(1)
 	}
+
+	GMConfigEvalVals()
 
 	if _, err := os.Stat(GMConfigV.PublicDir); os.IsNotExist(err) {
 		log.Printf("%s folder cannot be found\n", GMConfigV.PublicDir)
