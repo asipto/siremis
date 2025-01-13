@@ -1,6 +1,7 @@
 {
 	"DefaultViewPath": "view/main",
 	"URLDir": "/w",
+	"PublicDir": "public",
 	"SchemaDir": "schemas",
 	"AuthUsers": [
 		{
