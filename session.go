@@ -144,3 +144,39 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 
 	return 0
 }
+
+func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	authok := false
+
+	for _, v := range GMConfigV.AuthUsers {
+		if v.Username == username {
+			if GMCheckPasswords(v.Password, password) {
+				authok = true
+				break
+			}
+		}
+	}
+
+	if !authok {
+		return -1
+	}
+
+	sessionToken := uuid.NewString()
+	expiresAt := time.Now().Add(300 * time.Second)
+
+	GMSessions[sessionToken] = GMSession{
+		username: username,
+		expiry:   expiresAt,
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   sessionToken,
+		Expires: expiresAt,
+		Path:    "/",
+	})
+
+	return 0
+}

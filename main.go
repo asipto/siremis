@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/md5"
-	"database/sql"
 	"encoding/hex"
 	"encoding/json"
 	"flag"
@@ -19,7 +18,6 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/uuid"
 )
 
 const siregisVersion = "1.0.0"
@@ -149,19 +147,6 @@ func GMFuncDBColumnValues(params []any) []string {
 	}
 
 	return dbRes
-}
-
-func dbConn() (db *sql.DB) {
-	log.Println("Database: " + GMConfigV.DBData.Database + " (" + GMConfigV.DBData.Host +
-		":" + GMConfigV.DBData.Port + ")")
-	db, err := sql.Open(GMConfigV.DBData.Driver, GMConfigV.DBData.Username+":"+
-		GMConfigV.DBData.Password+"@"+GMConfigV.DBData.Protocol+
-		"("+GMConfigV.DBData.Host+":"+GMConfigV.DBData.Port+")/"+
-		GMConfigV.DBData.Database)
-	if err != nil {
-		panic(err.Error())
-	}
-	return db
 }
 
 func GMGetSchema(w http.ResponseWriter, r *http.Request, schemaName string) (*GMSchema, bool) {
@@ -674,42 +659,6 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	delForm.Exec(vId)
 	GMAuthRefresh(w, r)
 	GMSMenuPage(w, r, schemaName)
-}
-
-func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	authok := false
-
-	for _, v := range GMConfigV.AuthUsers {
-		if v.Username == username {
-			if GMCheckPasswords(v.Password, password) {
-				authok = true
-				break
-			}
-		}
-	}
-
-	if !authok {
-		return -1
-	}
-
-	sessionToken := uuid.NewString()
-	expiresAt := time.Now().Add(300 * time.Second)
-
-	GMSessions[sessionToken] = GMSession{
-		username: username,
-		expiry:   expiresAt,
-	}
-
-	http.SetCookie(w, &http.Cookie{
-		Name:    "session_token",
-		Value:   sessionToken,
-		Expires: expiresAt,
-		Path:    "/",
-	})
-
-	return 0
 }
 
 func GMLogin(w http.ResponseWriter, r *http.Request) {
