@@ -41,7 +41,7 @@ type GMCLIOptions struct {
 var GMCLIOptionsV = GMCLIOptions{
 	config:      "etc/config.json",
 	domain:      "",
-	httpsrv:     "127.0.0.1:8040",
+	httpsrv:     ":8284",
 	httpssrv:    "",
 	httpsusele:  false,
 	httpspubkey: "",
@@ -978,6 +978,52 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func startHTTPServices() chan error {
+
+	errchan := make(chan error)
+
+	// starting HTTP server
+	if len(GMCLIOptionsV.httpsrv) > 0 {
+		go func() {
+			if len(GMConfigV.URLDir) > 0 {
+				log.Printf("staring HTTP service on: http://%s%s ...",
+					GMCLIOptionsV.httpsrv, GMConfigV.URLDir)
+			} else {
+				log.Printf("staring HTTP service on: http://%s ...", GMCLIOptionsV.httpsrv)
+			}
+
+			if err := http.ListenAndServe(GMCLIOptionsV.httpsrv, nil); err != nil {
+				errchan <- err
+			}
+
+		}()
+	}
+
+	// starting HTTPS server
+	if len(GMCLIOptionsV.httpssrv) > 0 && len(GMCLIOptionsV.httpspubkey) > 0 && len(GMCLIOptionsV.httpsprvkey) > 0 {
+		go func() {
+			if len(GMConfigV.URLDir) > 0 {
+				log.Printf("Staring HTTPS service on: https://%s%s ...", GMCLIOptionsV.httpssrv, GMConfigV.URLDir)
+			} else {
+				log.Printf("Staring HTTPS service on: https://%s ...", GMCLIOptionsV.httpssrv)
+			}
+			if len(GMCLIOptionsV.domain) > 0 {
+				dtoken := strings.Split(strings.TrimSpace(GMCLIOptionsV.httpssrv), ":")
+				if len(GMConfigV.URLDir) > 0 {
+					log.Printf("HTTPS with domain: https://%s:%s%s ...", GMCLIOptionsV.domain, dtoken[1], GMConfigV.URLDir)
+				} else {
+					log.Printf("HTTPS with domain: https://%s:%s ...", GMCLIOptionsV.domain, dtoken[1])
+				}
+			}
+			if err := http.ListenAndServeTLS(GMCLIOptionsV.httpssrv, GMCLIOptionsV.httpspubkey, GMCLIOptionsV.httpsprvkey, nil); err != nil {
+				errchan <- err
+			}
+		}()
+	}
+
+	return errchan
+}
+
 func printCLIOptions() {
 	type CLIOptionDef struct {
 		Ops      []string
@@ -1108,6 +1154,11 @@ func main() {
 	flag.Parse()
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
+	if GMCLIOptionsV.httpsusele && len(GMCLIOptionsV.domain) == 0 {
+		log.Printf("use-letsencrypt requires domain parameter\n")
+		os.Exit(1)
+	}
+
 	configBytes, err := os.ReadFile(GMCLIOptionsV.config)
 	if err != nil {
 		log.Printf("unavailable config file %s\n", GMCLIOptionsV.config)
@@ -1117,6 +1168,16 @@ func main() {
 	if err != nil {
 		log.Printf("invalid content in config file %s\n", GMCLIOptionsV.config)
 		os.Exit(1)
+	}
+
+	if _, err := os.Stat(GMConfigV.PublicDir); os.IsNotExist(err) {
+		log.Printf("%s folder cannot be found\n", GMConfigV.PublicDir)
+		os.Exit(1)
+	}
+
+	if GMCLIOptionsV.httpsusele && len(GMCLIOptionsV.httpssrv) > 0 && len(GMCLIOptionsV.domain) > 0 {
+		GMCLIOptionsV.httpspubkey = "/etc/letsencrypt/live/" + GMCLIOptionsV.domain + "/fullchain.pem"
+		GMCLIOptionsV.httpsprvkey = "/etc/letsencrypt/live/" + GMCLIOptionsV.domain + "/privkey.pem"
 	}
 
 	GMFuncMap["HA1"] = GMFuncHA1
@@ -1133,8 +1194,16 @@ func main() {
 		"lastindex": GMTemplateFuncLastIndex,
 	}).ParseGlob("templates/*"))
 
-	log.Println("Starting server on: http://localhost:8284")
+	http.Handle(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/",
+		http.StripPrefix(strings.TrimRight(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/", "/"),
+			http.FileServer(http.Dir(GMConfigV.URLDir+"/"+GMConfigV.PublicDir))))
 	http.HandleFunc("/", GMRequestHandler)
 	// http.HandleFunc("/show", Show)
-	http.ListenAndServe(":8284", nil)
+	// http.ListenAndServe(":8284", nil)
+	errchan := startHTTPServices()
+	select {
+	case err := <-errchan:
+		log.Printf("unable to start http services due to (error: %v)", err)
+	}
+	os.Exit(1)
 }

@@ -34,6 +34,7 @@ type GMConfigMenuGroup struct {
 type GMConfig struct {
 	DefaultViewPath string              `json:"DefaultViewPath"`
 	URLDir          string              `json:"URLDir,omitempty"`
+	PublicDir       string              `json:"PublicDir,omitempty"`
 	SchemaDir       string              `json:"SchemaDir"`
 	AuthUsers       []GMConfigAuthUser  `json:"AuthUsers"`
 	DBData          GMConfigDB          `json:"DBData"`
