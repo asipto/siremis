@@ -1201,9 +1201,7 @@ func main() {
 	// http.HandleFunc("/show", Show)
 	// http.ListenAndServe(":8284", nil)
 	errchan := startHTTPServices()
-	select {
-	case err := <-errchan:
-		log.Printf("unable to start http services due to (error: %v)", err)
-	}
+	errx := <-errchan
+	log.Printf("unable to start http services due to (error: %v)", errx)
 	os.Exit(1)
 }
