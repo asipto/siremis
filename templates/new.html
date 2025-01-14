@@ -1,7 +1,8 @@
 {{ define "new" }}
   {{ template "header" . }}
     <div class="container col-{{ len $.Fields}}">
-        <h2>New SIP User</h2>  
+        <h2>New {{ $.Schema.Title }}</h2>
+        <br />
         <form method="POST" action="{{ $.Config.URLDir }}/insert/{{ $.Schema.Name }}">
           {{ range $.FormFields }}
           <div class="form-group">

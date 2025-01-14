@@ -1,7 +1,8 @@
 {{ define "edit" }}
   {{ template "header" . }}
     <div class="container col-5">
-        <h2>Edit SIP User</h2>  
+        <h2>Edit {{ $.Schema.Title }}</h2>
+        <br />
         <form method="POST" action="{{ $.Config.URLDir }}/update/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}">
           {{ range $i, $v := $.FormFields }}
           <div class="form-group">
