@@ -6,7 +6,7 @@
           {{ range $i, $v := $.Fields }}
           <div class="form-group">
               <label><strong>{{ $v.Title }}</strong></label>
-              <input type="text" name="{{ $v.Name }}" value="{{ index (index $.Values 0) $i }}" class="form-control" />
+              <input type="text" name="{{ $v.Name }}" value="{{ index (index $.Values 0) $i }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>
           </div>
           {{ end }}
           <input type="submit" value="Save" class="btn btn-primary" />
