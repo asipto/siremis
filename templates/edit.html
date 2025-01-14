@@ -3,10 +3,25 @@
     <div class="container col-5">
         <h2>Edit SIP User</h2>  
         <form method="POST" action="{{ $.Config.URLDir }}/update/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}">
-          {{ range $i, $v := $.Fields }}
+          {{ range $i, $v := $.FormFields }}
           <div class="form-group">
-              <label><strong>{{ $v.Title }}</strong></label>
-              <input type="text" name="{{ $v.Name }}" value="{{ index (index $.Values 0) $i }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>
+            <label>{{ $v.Field.Title }}</label>
+            {{ if and (eq $v.Field.InputForm.Type "select") (gt (len $v.OptionValues) 0) }}
+            <select name="{{ $v.Field.Name }}" id="{{ $v.Field.Name }}" class="form-control">
+              {{ range $v.OptionValues }}
+              <option value="{{ . }}"{{ if eq $v.Value . }} selected{{ end }}>{{ . }}</option>
+              {{ end }}
+            </select>
+            {{ else if and (eq $v.Field.InputForm.Type "dataset") (gt (len $v.OptionValues) 0) }}
+            <input type="text" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" list="{{ $v.Field.Name }}_dataset" class="form-control"/>
+            <datalist id="{{ $v.Field.Name }}_dataset">
+              {{ range $v.OptionValues }}
+              <option value="{{ . }}">{{ . }}</option>
+              {{ end }}
+            </datalist>
+            {{ else }}
+            <input type="text" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>
+            {{ end }}
           </div>
           {{ end }}
           <input type="submit" value="Save" class="btn btn-primary" />

@@ -180,10 +180,14 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		return
 	}
 	var selFields = []GMSchemaField{}
+	var formFields = []GMViewFormField{}
 	for _, v := range schemaV.Fields {
 		if v.Name == schemaV.Query.IdField {
 			log.Printf("using field %s (%s)\n", v.Name, sEnableField)
 			selFields = append(selFields, v)
+			var fField = GMViewFormField{}
+			fField.Field = v
+			formFields = append(formFields, fField)
 			break
 		}
 	}
@@ -192,6 +196,22 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			if GMSchemaFieldEnableBoolVal(&v.Enable, sEnableField) {
 				log.Printf("using field %s (%s)\n", v.Name, sEnableField)
 				selFields = append(selFields, v)
+				if sTemplate == "edit" {
+					var fField = GMViewFormField{}
+					fField.Field = v
+					if len(v.InputForm.OptionValues.Func) > 0 {
+						if len(v.InputForm.OptionValues.Params) > 0 {
+							var vParams = make([]any, 0)
+							for _, p := range v.InputForm.OptionValues.Params {
+								vParams = append(vParams, p)
+							}
+							fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func([]any) []string)(vParams)
+						} else {
+							fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func() []string)()
+						}
+					}
+					formFields = append(formFields, fField)
+				}
 			} else {
 				log.Printf("skipping field %s (%s)\n", v.Name, sEnableField)
 			}
@@ -240,6 +260,11 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
 
 		dbRes = append(dbRes, dbRow)
+		if sTemplate == "edit" {
+			for i, v := range dbRow {
+				formFields[i].Value = v
+			}
+		}
 	}
 
 	GMAuthRefresh(w, r)
@@ -252,6 +277,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	viewData.Schema = *schemaV
 	viewData.Fields = selFields
 	viewData.Values = dbRes
+	viewData.FormFields = formFields
 	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }
 
