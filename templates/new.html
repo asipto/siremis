@@ -1,6 +1,6 @@
 {{ define "new" }}
   {{ template "header" . }}
-    <div class="container col-{{ len $.Fields}}">
+    <div class="container col-{{ len $.FormFields }}">
         <h2>New {{ $.Schema.Title }}</h2>
         <br />
         <form method="POST" action="{{ $.Config.URLDir }}/insert/{{ $.Schema.Name }}">
