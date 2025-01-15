@@ -35,6 +35,11 @@ type GMViewContext struct {
 	Alert        GMAlert
 }
 
+type GMViewList struct {
+	Fields []GMSchemaField
+	Values []any
+}
+
 type GMViewFormField struct {
 	Field        GMSchemaField
 	Value        any
@@ -45,8 +50,7 @@ type GMViewData struct {
 	Config      GMConfig
 	Schema      GMSchema
 	Context     GMViewContext
-	Fields      []GMSchemaField
-	Values      []any
+	ViewList    GMViewList
 	FormFieldId GMViewFormField
 	FormFields  []GMViewFormField
 }
@@ -201,8 +205,8 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 		}
 	}
 	viewData.Schema = *schemaV
-	viewData.Fields = selFields
-	viewData.Values = dbRes
+	viewData.ViewList.Fields = selFields
+	viewData.ViewList.Values = dbRes
 
 	GMTemplatesV.ExecuteTemplate(w, "list", viewData)
 }
@@ -321,8 +325,8 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
 	viewData.Schema = *schemaV
-	viewData.Fields = selFields
-	viewData.Values = dbRes
+	viewData.ViewList.Fields = selFields
+	viewData.ViewList.Values = dbRes
 	viewData.FormFields = formFields
 	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }

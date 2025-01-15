@@ -17,7 +17,7 @@
   <table id="tabledata" class="display" style="width: 100%">
     <thead>
       <tr>
-        {{ range $.Fields }}
+        {{ range $.ViewList.Fields }}
         <th>{{ .Title }}</th>
         {{ end }}
         <th></th>
@@ -25,14 +25,14 @@
     </thead>
     <tfoot>
       <tr>
-        {{ range $.Fields }}
+        {{ range $.ViewList.Fields }}
         <th>{{ .Title }}</th>
         {{ end }}
         <th></th>
       </tr>
     </tfoot>
     <tbody>
-      {{ range $.Values }}
+      {{ range $.ViewList.Values }}
       <tr>
         {{ range . }}
         <td>{{ . }}</td>
