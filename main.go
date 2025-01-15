@@ -40,51 +40,6 @@ var GMCLIOptionsV = GMCLIOptions{
 	version:     false,
 }
 
-type GMAlert struct {
-	Active bool
-	Type   string
-	Text   string
-}
-
-type GMResultAttrs struct {
-	NrRows      int
-	NrGroup     int
-	NrGroupPrev int
-	NrGroupNext int
-}
-
-type GMViewContext struct {
-	Action       string
-	AuthOK       bool
-	SchemaName   string
-	SchemaTitle  string
-	IdField      GMSchemaField
-	IdFieldValue any
-	ResultAttrs  GMResultAttrs
-	Alert        GMAlert
-}
-
-type GMViewFormField struct {
-	Field        GMSchemaField
-	Value        any
-	OptionValues []string
-}
-
-type GMViewData struct {
-	Config     GMConfig
-	Schema     GMSchema
-	Context    GMViewContext
-	Fields     []GMSchemaField
-	Values     []any
-	FormFields []GMViewFormField
-}
-
-type GMDBField struct {
-	Name   string
-	Column string
-	Value  any
-}
-
 var GMTemplatesV *template.Template = nil
 
 func startHTTPServices() chan error {
