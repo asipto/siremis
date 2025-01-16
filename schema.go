@@ -8,11 +8,12 @@ type GMSchemaQuery struct {
 }
 
 type GMSchemaFieldEnable struct {
-	List   bool `json:"List,omitempty"`
-	Insert bool `json:"Insert,omitempty"`
-	Edit   bool `json:"Edit,omitempty"`
-	Show   bool `json:"Show,omitempty"`
-	Filter bool `json:"Filter,omitempty"`
+	List    bool `json:"List,omitempty"`
+	Insert  bool `json:"Insert,omitempty"`
+	Edit    bool `json:"Edit,omitempty"`
+	Show    bool `json:"Show,omitempty"`
+	Filter  bool `json:"Filter,omitempty"`
+	Discard bool `json:"Discard,omitempty"`
 }
 
 type GMSchemaFieldOptionValues struct {

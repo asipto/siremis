@@ -56,9 +56,10 @@ type GMViewData struct {
 }
 
 type GMDBField struct {
-	Name   string
-	Column string
-	Value  any
+	Name    string
+	Column  string
+	Value   any
+	Discard bool
 }
 
 func GMGetSchema(w http.ResponseWriter, r *http.Request, schemaName string) (*GMSchema, bool) {
@@ -424,7 +425,9 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 				} else {
 					vField.Value = sVal
 				}
-				log.Printf("insert func field: %s / value: '%v'\n", v.Name, vField.Value)
+				vField.Discard = v.Enable.Discard
+				log.Printf("insert func field: %s / value: '%v'/ discard: %v\n",
+					v.Name, vField.Value, vField.Discard)
 				valFields = append(valFields, vField)
 			} else {
 				log.Printf("skipping field %s\n", v.Name)
@@ -437,14 +440,19 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 	strQCols := ""
 	strQValQ := ""
 	var dbVals = make([]any, 0)
-	for i, v := range valFields {
-		if i != 0 {
-			strQCols += ", "
-			strQValQ += ", "
+	comma := false
+	for _, v := range valFields {
+		if !v.Discard {
+			if comma {
+				strQCols += ", "
+				strQValQ += ", "
+			} else {
+				comma = true
+			}
+			strQCols += v.Column
+			strQValQ += "?"
+			dbVals = append(dbVals, v.Value)
 		}
-		strQCols += v.Column
-		strQValQ += "?"
-		dbVals = append(dbVals, v.Value)
 	}
 	insForm, err := db.Prepare("INSERT INTO " + schemaV.Table + " (" + strQCols + ") VALUES (" + strQValQ + ")")
 	if err != nil {
@@ -512,6 +520,7 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 				} else {
 					vField.Value = sVal
 				}
+				vField.Discard = v.Enable.Discard
 				valFields = append(valFields, vField)
 			} else {
 				log.Printf("skipping field %s\n", v.Name)
@@ -524,12 +533,15 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 
 	strQuery := "UPDATE " + schemaV.Table + " SET "
 	var dbVals = make([]any, 0)
-	for i, v := range valFields {
-		if i != 0 {
-			strQuery += ", "
+	comma := false
+	for _, v := range valFields {
+		if !v.Discard {
+			if comma {
+				strQuery += ", "
+			}
+			strQuery += v.Column + "=?"
+			dbVals = append(dbVals, v.Value)
 		}
-		strQuery += v.Column + "=?"
-		dbVals = append(dbVals, v.Value)
 	}
 	var vId any
 	if idField.Type == "int" {

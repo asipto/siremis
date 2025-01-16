@@ -63,7 +63,8 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": false,
-				"Filter": false
+				"Filter": false,
+				"Discard": true
 			}
 		},
 		{
