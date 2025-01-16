@@ -229,12 +229,10 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	if !okey {
 		return
 	}
-	var selFields = []GMSchemaField{}
 	var formFields = []GMViewFormField{}
 	for _, v := range schemaV.Fields {
 		if v.Name == schemaV.Query.IdField {
 			log.Printf("using field %s (%s)\n", v.Name, sEnableField)
-			selFields = append(selFields, v)
 			var fField = GMViewFormField{}
 			fField.Field = v
 			formFields = append(formFields, fField)
@@ -245,9 +243,9 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		if v.Name != schemaV.Query.IdField {
 			if GMSchemaFieldEnableBoolVal(&v.Enable, sEnableField) {
 				log.Printf("using field %s (%s)\n", v.Name, sEnableField)
-				selFields = append(selFields, v)
+				var fField = GMViewFormField{}
+				fField.Field = v
 				if sTemplate == "edit" {
-					var fField = GMViewFormField{}
 					fField.Field = v
 					if len(v.InputForm.OptionValues.Func) > 0 {
 						if len(v.InputForm.OptionValues.Params) > 0 {
@@ -260,26 +258,26 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 							fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func() []string)()
 						}
 					}
-					formFields = append(formFields, fField)
 				}
+				formFields = append(formFields, fField)
 			} else {
 				log.Printf("skipping field %s (%s)\n", v.Name, sEnableField)
 			}
 		}
 	}
 	strQuery := "SELECT "
-	for i, v := range selFields {
+	for i, v := range formFields {
 		if i == 0 {
-			strQuery += v.Column
+			strQuery += v.Field.Column
 		} else {
-			strQuery += ", " + v.Column
+			strQuery += ", " + v.Field.Column
 		}
 	}
-	strQuery += " FROM " + schemaV.Table + " WHERE " + selFields[0].Column + " = ?"
+	strQuery += " FROM " + schemaV.Table + " WHERE " + formFields[0].Field.Column + " = ?"
 	db := dbConn()
 	defer db.Close()
 	var vId any
-	if selFields[0].Type == "int" {
+	if formFields[0].Field.Type == "int" {
 		nId := 0
 		nId, _ = strconv.Atoi(sId)
 		vId = nId
@@ -290,14 +288,13 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	if err != nil {
 		panic(err.Error())
 	}
-	dbRes := make([]any, 0)
 
 	for selDB.Next() {
-		dbRow := make([]any, len(selFields))
-		for i, v := range selFields {
-			if v.Type == "int" {
+		dbRow := make([]any, len(formFields))
+		for i, v := range formFields {
+			if v.Field.Type == "int" {
 				dbRow[i] = new(int)
-			} else if v.Type == "str" || v.Type == "string" {
+			} else if v.Field.Type == "str" || v.Field.Type == "string" {
 				dbRow[i] = new(string)
 			} else {
 				dbRow[i] = new(string)
@@ -309,11 +306,8 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		}
 		log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
 
-		dbRes = append(dbRes, dbRow)
-		if sTemplate == "edit" {
-			for i, v := range dbRow {
-				formFields[i].Value = v
-			}
+		for i, v := range dbRow {
+			formFields[i].Value = v
 		}
 	}
 
@@ -324,10 +318,10 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	viewData.Context.Action = sTemplate
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Schema = *schemaV
-	viewData.ViewList.Fields = selFields
-	viewData.ViewList.Values = dbRes
+	viewData.Context.IdField = formFields[0].Field
+	viewData.Context.IdFieldValue = formFields[0].Value
 	viewData.FormFields = formFields
+	viewData.Schema = *schemaV
 	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }
 

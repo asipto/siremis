@@ -12,16 +12,16 @@
          </tr>
         </thead>
         <tbody>
-        {{ range $i, $v := $.Fields }}
+        {{ range $i, $v := $.FormFields }}
         <tr>
-        <td>*</td><td><strong>{{ $v.Title }}:</strong></td><td> {{ index (index $.Values 0) $i }}</td>
+        <td>*</td><td><strong>{{ $v.Field.Title }}:</strong></td><td> {{ $v.Value }}</td>
         </tr>
         {{ end }}
         </tbody>
       </table>
       <br />
-      <p><a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Edit</a>
-      <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ index (index $.Values 0) 0 }}" class="btn btn-primary">Delete</a></p>
+      <p><a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}" class="btn btn-primary">Edit</a>
+      <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}" class="btn btn-primary">Delete</a></p>
     </div>
   {{ template "footer" . }}
 {{ end }}
