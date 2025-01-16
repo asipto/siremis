@@ -3,7 +3,7 @@
     <div class="container col-5">
         <h2>Edit {{ $.Schema.Title }}</h2>
         <br />
-        <form method="POST" action="{{ $.Config.URLDir }}/update/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue  }}">
+        <form method="POST" action="{{ $.Config.URLDir }}/update/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}">
           {{ range $i, $v := $.FormFields }}
           <div class="form-group">
             <label>{{ $v.Field.Title }}</label>
