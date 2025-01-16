@@ -66,6 +66,14 @@ func GMFuncDBColumnValues(params []any) []string {
 	return dbRes
 }
 
+func GMFuncParamValues(params []any) []string {
+	strRes := make([]string, 0)
+	for _, v := range params {
+		strRes = append(strRes, v.(string))
+	}
+	return strRes
+}
+
 func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {
 	if mode == 0 {
 		return crt%cols == 0

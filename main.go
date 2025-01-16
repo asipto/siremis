@@ -194,7 +194,9 @@ func main() {
 	GMFuncMap["HA1"] = GMFuncHA1
 	GMFuncMap["HA1B"] = GMFuncHA1B
 	GMFuncMap["DateTimeNow"] = GMFuncDateTimeNow
+
 	GMFuncMap["DBColumnValues"] = GMFuncDBColumnValues
+	GMFuncMap["ParamValues"] = GMFuncParamValues
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
 		"rowon":     GMTemplateFuncRowOn,
