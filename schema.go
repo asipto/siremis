@@ -27,6 +27,7 @@ type GMSchemaInputForm struct {
 }
 
 type GMSchemaFieldValue struct {
+	Mode   int      `json:"Mode,omitempty"`
 	Func   string   `json:"Func,omitempty"`
 	Params []string `json:"Params,omitempty"`
 }
