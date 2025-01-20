@@ -1,4 +1,4 @@
-module github.com/asipto/siregmis
+module github.com/asipto/siregis-go
 
 go 1.21
 
