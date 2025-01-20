@@ -6,7 +6,7 @@
         <form method="POST" action="{{ $.Config.URLDir }}/insert/{{ $.Schema.Name }}">
           {{ range $i, $v := $.FormFields }}
           <div class="form-group">
-              <label>{{ $v.Field.Title }}</label>
+              <label><strong>{{ $v.Field.Title }}</strong></label>
               {{ if and (eq $v.Field.InputForm.Type "select") (gt (len $v.OptionValues) 0) }}
               <select name="{{ $v.Field.Name }}" id="{{ $v.Field.Name }}" class="form-control">
                 {{ range $v.OptionValues }}

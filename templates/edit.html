@@ -6,11 +6,11 @@
         <form method="POST" action="{{ $.Config.URLDir }}/update/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}">
           {{ range $i, $v := $.FormFields }}
           <div class="form-group">
-            <label>{{ $v.Field.Title }}</label>
+            <label><strong>{{ $v.Field.Title }}</strong></label>
             {{ if and (eq $v.Field.InputForm.Type "select") (gt (len $v.OptionValues) 0) }}
             <select name="{{ $v.Field.Name }}" id="{{ $v.Field.Name }}" class="form-control">
               {{ range $v.OptionValues }}
-              <option value="{{ .Value }}"{{ if eq $v.Value .Value }} selected{{ end }}>{{ .Title }}</option>
+              <option value="{{ .Value }}"{{ if eq $v.SValue .Value }} selected{{ end }}>{{ .Title }}</option>
               {{ end }}
             </select>
             {{ else if and (eq $v.Field.InputForm.Type "dataset") (gt (len $v.OptionValues) 0) }}
@@ -22,13 +22,14 @@
             </datalist>
             {{ else if and (eq $v.Field.InputForm.Type "radio") (gt (len $v.OptionValues) 0) }}
               {{ range $j, $w := $v.OptionValues }}
-              <input type="radio" id="{{ $v.Field.Name }}_{{ $j }}" name="{{ $v.Field.Name }}" value="{{ $w.Value }}{{ if eq $v.Value $w.Value }} checked{{ end }}" />
+              <br />
+              <input type="radio" id="{{ $v.Field.Name }}_{{ $j }}" name="{{ $v.Field.Name }}" value="{{ $w.Value }}"{{ if eq $v.SValue $w.Value }} checked{{ end }} />
               <label>{{ $w.Title }}</label>
               {{ end }}
             {{ else if gt (len $v.Field.InputForm.Type) 0 }}
-            <input type="{{ $v.Field.InputForm.Type }}" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>
+            <input type="{{ $v.Field.InputForm.Type }}" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }} />
             {{ else }}
-            <input type="text" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>
+            <input type="text" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }} />
             {{ end }}
           </div>
           {{ end }}

@@ -43,6 +43,7 @@ type GMViewList struct {
 type GMViewFormField struct {
 	Field        GMSchemaField
 	Value        any
+	SValue       string
 	OptionValues []GMOptionValue
 }
 
@@ -309,6 +310,11 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 
 		for i, v := range dbRow {
 			formFields[i].Value = v
+			if formFields[i].Field.Type == "int" {
+				formFields[i].SValue = strconv.Itoa(*(v.(*int)))
+			} else {
+				formFields[i].SValue = *(v.(*string))
+			}
 		}
 	}
 
@@ -538,6 +544,8 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 		if !v.Discard {
 			if comma {
 				strQuery += ", "
+			} else {
+				comma = true
 			}
 			strQuery += v.Column + "=?"
 			dbVals = append(dbVals, v.Value)
