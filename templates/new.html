@@ -4,24 +4,30 @@
         <h2>New {{ $.Schema.Title }}</h2>
         <br />
         <form method="POST" action="{{ $.Config.URLDir }}/insert/{{ $.Schema.Name }}">
-          {{ range $.FormFields }}
+          {{ range $i, $v := $.FormFields }}
           <div class="form-group">
-              <label>{{ .Field.Title }}</label>
-              {{ if and (eq .Field.InputForm.Type "select") (gt (len .OptionValues) 0) }}
-              <select name="{{ .Field.Name }}" id="{{ .Field.Name }}" class="form-control">
-                {{ range .OptionValues }}
+              <label>{{ $v.Field.Title }}</label>
+              {{ if and (eq $v.Field.InputForm.Type "select") (gt (len $v.OptionValues) 0) }}
+              <select name="{{ $v.Field.Name }}" id="{{ $v.Field.Name }}" class="form-control">
+                {{ range $v.OptionValues }}
                 <option value="{{ . }}">{{ . }}</option>
                 {{ end }}
               </select>
-              {{ else if and (eq .Field.InputForm.Type "dataset") (gt (len .OptionValues) 0) }}
-              <input type="text" name="{{ .Field.Name }}" list="{{ .Field.Name }}_dataset" class="form-control"/>
-              <datalist id="{{ .Field.Name }}_dataset">
-                {{ range .OptionValues }}
+              {{ else if and (eq $v.Field.InputForm.Type "dataset") (gt (len $v.OptionValues) 0) }}
+              <input type="text" name="{{ $v.Field.Name }}" list="{{ $v.Field.Name }}_dataset" class="form-control"/>
+              <datalist id="{{ $v.Field.Name }}_dataset">
+                {{ range $v.OptionValues }}
                 <option value="{{ . }}">{{ . }}</option>
                 {{ end }}
               </datalist>
+              {{ else if and (eq $v.Field.InputForm.Type "radio") (gt (len $v.OptionValues) 0) }}
+              {{ range $j, $w := $v.OptionValues }}
+              <br />
+              <input type="radio" id="{{ $v.Field.Name }}_{{ $j }}" name="{{ $v.Field.Name }}" value="{{ $w }}" />
+              <label>{{ $w }}</label>
+              {{ end }}
               {{ else }}
-              <input type="text" name="{{ .Field.Name }}" class="form-control"/>
+              <input type="text" name="{{ $v.Field.Name }}" class="form-control"/>
               {{ end }}
         </div>
           {{ end }}

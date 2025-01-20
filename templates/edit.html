@@ -20,6 +20,11 @@
               <option value="{{ . }}">{{ . }}</option>
               {{ end }}
             </datalist>
+            {{ else if and (eq $v.Field.InputForm.Type "radio") (gt (len $v.OptionValues) 0) }}
+              {{ range $j, $w := $v.OptionValues }}
+              <input type="radio" id="{{ $v.Field.Name }}_{{ $j }}" name="{{ $v.Field.Name }}" value="{{ $w }}" />
+              <label>{{ $w }}</label>
+              {{ end }}
             {{ else }}
             <input type="text" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>
             {{ end }}
