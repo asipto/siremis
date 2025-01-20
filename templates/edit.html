@@ -10,20 +10,20 @@
             {{ if and (eq $v.Field.InputForm.Type "select") (gt (len $v.OptionValues) 0) }}
             <select name="{{ $v.Field.Name }}" id="{{ $v.Field.Name }}" class="form-control">
               {{ range $v.OptionValues }}
-              <option value="{{ . }}"{{ if eq $v.Value . }} selected{{ end }}>{{ . }}</option>
+              <option value="{{ .Value }}"{{ if eq $v.Value .Value }} selected{{ end }}>{{ .Title }}</option>
               {{ end }}
             </select>
             {{ else if and (eq $v.Field.InputForm.Type "dataset") (gt (len $v.OptionValues) 0) }}
             <input type="text" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" list="{{ $v.Field.Name }}_dataset" class="form-control"/>
             <datalist id="{{ $v.Field.Name }}_dataset">
               {{ range $v.OptionValues }}
-              <option value="{{ . }}">{{ . }}</option>
+              <option value="{{ .Value }}">{{ .Title }}</option>
               {{ end }}
             </datalist>
             {{ else if and (eq $v.Field.InputForm.Type "radio") (gt (len $v.OptionValues) 0) }}
               {{ range $j, $w := $v.OptionValues }}
-              <input type="radio" id="{{ $v.Field.Name }}_{{ $j }}" name="{{ $v.Field.Name }}" value="{{ $w }}" />
-              <label>{{ $w }}</label>
+              <input type="radio" id="{{ $v.Field.Name }}_{{ $j }}" name="{{ $v.Field.Name }}" value="{{ $w.Value }}{{ if eq $v.Value $w.Value }} checked{{ end }}" />
+              <label>{{ $w.Title }}</label>
               {{ end }}
             {{ else }}
             <input type="text" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>

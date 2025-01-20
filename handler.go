@@ -43,7 +43,7 @@ type GMViewList struct {
 type GMViewFormField struct {
 	Field        GMSchemaField
 	Value        any
-	OptionValues []string
+	OptionValues []GMOptionValue
 }
 
 type GMViewData struct {
@@ -254,9 +254,9 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 							for _, p := range v.InputForm.OptionValues.Params {
 								vParams = append(vParams, p)
 							}
-							fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func([]any) []string)(vParams)
+							fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func([]any) []GMOptionValue)(vParams)
 						} else {
-							fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func() []string)()
+							fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func() []GMOptionValue)()
 						}
 					}
 				}
@@ -352,9 +352,9 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 						for _, p := range v.InputForm.OptionValues.Params {
 							vParams = append(vParams, p)
 						}
-						fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func([]any) []string)(vParams)
+						fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func([]any) []GMOptionValue)(vParams)
 					} else {
-						fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func() []string)()
+						fField.OptionValues = GMFuncMap[v.InputForm.OptionValues.Func].(func() []GMOptionValue)()
 					}
 				}
 				formFields = append(formFields, fField)

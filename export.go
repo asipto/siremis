@@ -9,6 +9,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type GMOptionValue struct {
+	Title string
+	Value string
+}
+
 var GMFuncMap = make(map[string]any)
 
 func GMFuncHA1(params []any) string {
@@ -36,10 +41,10 @@ func GMFuncDateTimeNow() string {
 	return time.Now().Format(time.DateTime)
 }
 
-func GMFuncDBColumnValues(params []any) []string {
+func GMFuncDBColumnValues(params []any) []GMOptionValue {
 	if len(params) != 2 {
 		log.Printf("invalid number of parameters\n")
-		return []string{}
+		return []GMOptionValue{}
 	}
 
 	db := dbConn()
@@ -47,31 +52,35 @@ func GMFuncDBColumnValues(params []any) []string {
 		" ORDER BY " + params[1].(string) + " ASC")
 	if err != nil {
 		log.Printf("error [%s]\n", err.Error())
-		return []string{}
+		return []GMOptionValue{}
 	}
 	defer db.Close()
-	dbRes := make([]string, 0)
+	dbRes := make([]GMOptionValue, 0)
 
 	for selDB.Next() {
-		dbVal := ""
-		err := selDB.Scan(&dbVal)
+		var oVal = GMOptionValue{}
+		err := selDB.Scan(&oVal.Value)
 		if err != nil {
 			log.Printf("error [%s]\n", err.Error())
-			return []string{}
+			return []GMOptionValue{}
 		}
-		log.Println("adding option value: " + dbVal)
-		dbRes = append(dbRes, dbVal)
+		oVal.Title = oVal.Value
+		log.Println("adding option value: " + oVal.Value)
+		dbRes = append(dbRes, oVal)
 	}
 
 	return dbRes
 }
 
-func GMFuncParamValues(params []any) []string {
-	strRes := make([]string, 0)
+func GMFuncParamValues(params []any) []GMOptionValue {
+	lRes := make([]GMOptionValue, 0)
 	for _, v := range params {
-		strRes = append(strRes, v.(string))
+		var oVal = GMOptionValue{}
+		oVal.Value = v.(string)
+		oVal.Title = oVal.Value
+		lRes = append(lRes, oVal)
 	}
-	return strRes
+	return lRes
 }
 
 func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {
