@@ -1,0 +1,108 @@
+{
+	"Name": "dispatcher",
+	"Title": "Dispatcher",
+	"Table": "dispatcher",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Set Id",
+			"Column": "setid",
+			"Name": "setid",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Destination SIP URI",
+			"Column": "destination",
+			"Name": "destination",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Flags",
+			"Column": "flags",
+			"Name": "flags",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			},
+			"InputForm": {
+				"Type": "number"
+			}
+		},
+		{
+			"Title": "Priority",
+			"Column": "priority",
+			"Name": "priority",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			},
+			"InputForm": {
+				"Type": "number"
+			}
+		},
+		{
+			"Title": "Attributes",
+			"Column": "attrs",
+			"Name": "attrs",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		},
+		{
+			"Title": "Description",
+			"Column": "description",
+			"Name": "description",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Filter": true
+			}
+		}
+	]
+}
