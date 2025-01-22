@@ -10,6 +10,35 @@ SIREMIS is a generic web management interface designed to work mainly with Kamai
 
 * https://www.kamailio.org
 
+## Usage
+
+Clone the repository:
+
+```
+git clone https://github.com/asipto/siremis-go
+```
+
+Build the application:
+
+```
+cd siremis-go
+go build .
+```
+
+Copy `etc/config-sample.json` to `etc/config.json`. Edit `etc/config.json` and
+update database access and authentication users.
+
+Run the application:
+
+```
+./siremis-go
+```
+
+Go with a modern web browser to:
+
+* http://local.ip:8284/w/
+
+
 ## Contributions
 
 Contributions can be made by submitting pull requests and have to be provided under BSD license.
