@@ -108,10 +108,6 @@ func GMAlertView(w http.ResponseWriter, r *http.Request, schemaName string,
 func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 	listParams []string) {
 
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -226,11 +222,6 @@ func GMSchemaFieldEnableBoolVal(v *GMSchemaFieldEnable, field string) bool {
 func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId string,
 	sEnableField string, sTemplate string) {
 
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
-
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -342,10 +333,7 @@ func GMShow(w http.ResponseWriter, r *http.Request, schemaName string, sId strin
 }
 
 func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
+
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -389,10 +377,6 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 }
 
 func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -482,10 +466,6 @@ func GMEdit(w http.ResponseWriter, r *http.Request, schemaName string, sId strin
 }
 
 func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -589,10 +569,6 @@ func GMDelete(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 }
 
 func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -625,10 +601,6 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 }
 
 func GMSearch(w http.ResponseWriter, r *http.Request, schemaName string) {
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -661,10 +633,6 @@ func GMSearch(w http.ResponseWriter, r *http.Request, schemaName string) {
 }
 
 func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
-	if GMSessionAuthCheck(w, r) < 0 {
-		GMViewGuestPage(w, r, "login")
-		return
-	}
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
@@ -958,6 +926,12 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("invalid URL prefix: %s (%s | %s)\n", sURL, GMConfigV.URLDir, tURL[1])
 		http.Error(w, "Invalid URL prefix", http.StatusBadRequest)
 		return
+	}
+	if tURL[2] != "do" || tURL[3] != "login" {
+		if GMSessionAuthCheck(w, r) < 0 {
+			GMViewGuestPage(w, r, "login")
+			return
+		}
 	}
 	if tURL[2] == "list" {
 		if len(tURL) > 4 {
