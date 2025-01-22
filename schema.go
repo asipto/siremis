@@ -12,7 +12,7 @@ type GMSchemaFieldEnable struct {
 	Insert  bool `json:"Insert,omitempty"`
 	Edit    bool `json:"Edit,omitempty"`
 	Show    bool `json:"Show,omitempty"`
-	Filter  bool `json:"Filter,omitempty"`
+	Search  bool `json:"Search,omitempty"`
 	Discard bool `json:"Discard,omitempty"`
 }
 

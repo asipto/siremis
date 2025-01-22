@@ -59,6 +59,7 @@ type GMViewData struct {
 type GMDBField struct {
 	Name    string
 	Column  string
+	Op      string
 	Value   any
 	Discard bool
 }
@@ -618,6 +619,201 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	GMSMenuPage(w, r, schemaName)
 }
 
+func GMSearch(w http.ResponseWriter, r *http.Request, schemaName string) {
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
+	}
+	var formFields = []GMViewFormField{}
+	for _, v := range schemaV.Fields {
+		if v.Name != schemaV.Query.IdField {
+			if v.Enable.Search {
+				log.Printf("using field %s (insert)\n", v.Name)
+				var fField = GMViewFormField{}
+				fField.Field = v
+				formFields = append(formFields, fField)
+			} else {
+				log.Printf("skipping field %s (search)\n", v.Name)
+			}
+		}
+	}
+
+	GMAuthRefresh(w, r)
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.Action = "search"
+	viewData.Context.AuthOK = true
+	viewData.Context.SchemaName = schemaV.Name
+	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Schema = *schemaV
+	viewData.FormFields = formFields
+	GMTemplatesV.ExecuteTemplate(w, "search", viewData)
+}
+
+func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
+	if GMSessionAuthCheck(w, r) < 0 {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+	schemaV, okey := GMGetSchema(w, r, schemaName)
+	if !okey {
+		return
+	}
+	var valFields = []GMDBField{}
+	for _, v := range schemaV.Fields {
+		if v.Enable.Search {
+			oVal := r.FormValue(v.Name + "_op")
+			if len(oVal) > 0 && oVal != "skip" {
+				var vField = GMDBField{}
+				vField.Name = v.Name
+				vField.Column = v.Column
+				switch oVal {
+				case "ne":
+					vField.Op = "!="
+				case "gt":
+					vField.Op = ">"
+				case "lt":
+					vField.Op = "<"
+				case "ge":
+					vField.Op = ">="
+				case "le":
+					vField.Op = "<="
+				case "like":
+					vField.Op = "LIKE"
+				case "regexp":
+					vField.Op = "REGEXP"
+				default:
+					vField.Op = "="
+				}
+				sVal := r.FormValue(v.Name)
+				log.Printf("search form field: %s / value: '%v'\n", v.Name, sVal)
+				if v.Type == "int" {
+					vField.Value, _ = strconv.Atoi(sVal)
+				} else {
+					vField.Value = sVal
+				}
+				valFields = append(valFields, vField)
+			} else {
+				log.Printf("skipping form search field %s\n", v.Name)
+			}
+		} else {
+			log.Printf("skipping search field %s\n", v.Name)
+		}
+	}
+
+	if len(valFields) == 0 {
+		GMList(w, r, schemaName, []string{})
+		return
+	}
+
+	var selFields = []GMSchemaField{}
+	for _, v := range schemaV.Fields {
+		if v.Name == schemaV.Query.IdField {
+			log.Printf("using list field %s (list)\n", v.Name)
+			selFields = append(selFields, v)
+			break
+		}
+	}
+	for _, v := range schemaV.Fields {
+		if v.Name != schemaV.Query.IdField {
+			if v.Enable.List {
+				log.Printf("using list field %s (list)\n", v.Name)
+				selFields = append(selFields, v)
+			} else {
+				log.Printf("skipping list field %s (list)\n", v.Name)
+			}
+		}
+	}
+	strQuery := "SELECT "
+	for i, v := range selFields {
+		if i == 0 {
+			strQuery += v.Column
+		} else {
+			strQuery += ", " + v.Column
+		}
+	}
+	strQuery += " FROM " + schemaV.Table + " WHERE "
+
+	var selVals = make([]any, 0)
+	sAnd := false
+	for _, v := range valFields {
+		if sAnd {
+			strQuery += " AND "
+		} else {
+			sAnd = true
+		}
+		strQuery += v.Column + " " + v.Op + " ?"
+		selVals = append(selVals, v.Value)
+	}
+
+	if len(schemaV.Query.OrderBy) > 0 {
+		strQuery += " ORDER BY " + schemaV.Query.OrderBy
+		if len(schemaV.Query.OrderType) > 0 {
+			strQuery += " " + schemaV.Query.OrderType
+		}
+	}
+
+	groupV := 0
+	if schemaV.Query.Limit > 0 {
+		offsetV := groupV * schemaV.Query.Limit
+		strQuery += " LIMIT " + strconv.Itoa(offsetV) + ", " +
+			strconv.Itoa(schemaV.Query.Limit)
+	}
+
+	db := dbConn()
+	selDB, err := db.Query(strQuery, selVals...)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+	dbRes := make([]any, 0)
+
+	for selDB.Next() {
+		dbRow := make([]any, len(selFields))
+		for i, v := range selFields {
+			if v.Type == "int" {
+				dbRow[i] = new(int)
+			} else if v.Type == "str" || v.Type == "string" {
+				dbRow[i] = new(string)
+			} else {
+				dbRow[i] = new(string)
+			}
+		}
+		err := selDB.Scan(dbRow...)
+		if err != nil {
+			panic(err.Error())
+		}
+		//log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
+		dbRes = append(dbRes, dbRow)
+	}
+
+	GMAuthRefresh(w, r)
+
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.Action = "list"
+	viewData.Context.AuthOK = true
+	viewData.Context.SchemaName = schemaV.Name
+	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.ResultAttrs.NrRows = len(dbRes)
+	viewData.Context.ResultAttrs.NrGroup = groupV
+	if schemaV.Query.Limit > 0 {
+		viewData.Context.ResultAttrs.NrGroupPrev = groupV - 1
+		if schemaV.Query.Limit == viewData.Context.ResultAttrs.NrRows {
+			viewData.Context.ResultAttrs.NrGroupNext = groupV + 1
+		}
+	}
+	viewData.Schema = *schemaV
+	viewData.ViewList.Fields = selFields
+	viewData.ViewList.Values = dbRes
+
+	GMTemplatesV.ExecuteTemplate(w, "list", viewData)
+}
+
 func GMLogin(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		GMViewGuestPage(w, r, "login")
@@ -800,6 +996,10 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		GMRemove(w, r, tURL[3], tURL[4])
+	} else if tURL[2] == "search" {
+		GMSearch(w, r, tURL[3])
+	} else if tURL[2] == "find" {
+		GMFind(w, r, tURL[3])
 	} else {
 		log.Printf("invalid URL value: %s\n", sURL)
 		http.Error(w, "Invalid URL value", http.StatusBadRequest)
