@@ -29,6 +29,7 @@ type GMViewContext struct {
 	AuthOK       bool
 	SchemaName   string
 	SchemaTitle  string
+	SchemaMenu   *GMConfigMenuGroup
 	IdField      GMSchemaField
 	IdFieldValue any
 	ResultAttrs  GMResultAttrs
@@ -95,6 +96,7 @@ func GMAlertView(w http.ResponseWriter, r *http.Request, schemaName string,
 
 	viewData.Context.SchemaName = schemaName
 	viewData.Context.SchemaTitle = schemaTitle
+	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
 
 	viewData.Context.Alert.Active = true
 	viewData.Context.Alert.Type = "alert"
@@ -199,6 +201,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
 	viewData.Context.ResultAttrs.NrRows = len(dbRes)
 	viewData.Context.ResultAttrs.NrGroup = groupV
 	if schemaV.Query.Limit > 0 {
@@ -326,6 +329,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	viewData.Context.Action = sTemplate
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
 	viewData.Context.IdField = formFields[0].Field
 	viewData.Context.IdFieldValue = formFields[0].Value
 	viewData.FormFields = formFields
@@ -378,6 +382,7 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
 	viewData.Schema = *schemaV
 	viewData.FormFields = formFields
 	GMTemplatesV.ExecuteTemplate(w, "new", viewData)
@@ -649,6 +654,7 @@ func GMSearch(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
 	viewData.Schema = *schemaV
 	viewData.FormFields = formFields
 	GMTemplatesV.ExecuteTemplate(w, "search", viewData)
@@ -799,6 +805,7 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
 	viewData.Context.ResultAttrs.NrRows = len(dbRes)
 	viewData.Context.ResultAttrs.NrGroup = groupV
 	if schemaV.Query.Limit > 0 {
@@ -899,6 +906,7 @@ func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
 
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
+	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
 
 	GMTemplatesV.ExecuteTemplate(w, "smenu", viewData)
 }

@@ -106,3 +106,12 @@ func GMConfigEvalVals() {
 		}
 	}
 }
+
+func GMConfigGetSchemaMenu(schemaName string) *GMConfigMenuGroup {
+	for i, v := range GMConfigV.Menu {
+		if schemaName == v.Name {
+			return &GMConfigV.Menu[i]
+		}
+	}
+	return nil
+}

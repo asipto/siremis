@@ -44,12 +44,13 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ $.Config.URLDir }}/menu/{{ $.Context.SchemaName }}"><strong>{{ $.Context.SchemaTitle }}</strong></a>
       </li>
-      <li class="nav-item {{ if eq $.Context.Action `list` }} active {{ end }}">
-        <a class="nav-link" href="{{ $.Config.URLDir }}/list/{{ $.Context.SchemaName }}">List</a>
+      {{ if $.Context.SchemaMenu }}
+      {{ range $i, $v := $.Context.SchemaMenu.Items }}
+      <li class="nav-item {{ if eq $v.Name $.Context.Action }} active {{ end }}">
+        <a class="nav-link" href="{{ $.Config.URLDir }}/{{ $v.URLPath }}">{{ $v.Title }}</a>
       </li>
-      <li class="nav-item {{ if eq $.Context.Action `new` }} active {{ end }}">
-        <a class="nav-link" href="{{ $.Config.URLDir }}/new/{{ $.Context.SchemaName }}">New</a>
-      </li>
+      {{ end }}
+      {{ end }}
     </ul>    
   </div>
   {{ end }}
