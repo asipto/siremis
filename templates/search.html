@@ -4,8 +4,14 @@
         <h2>Search {{ $.Schema.Title }}</h2>
         <br />
         <form method="POST" action="{{ $.Config.URLDir }}/find/{{ $.Schema.Name }}">
-          {{ range $i, $v := $.FormFields }}
           <div class="form-group">
+            <label><strong>Search Mode: </strong></label>
+            <input type="radio" id="search_mode_all" name="search_mode" value="all" checked />
+            <label>All</label>
+            <input type="radio" id="search_mode_any" name="search_mode" value="any" />
+            <label>Any</label>
+            <br />
+            {{ range $i, $v := $.FormFields }}
             <label><strong>{{ $v.Field.Title }}</strong></label>
             <select name="{{ $v.Field.Name }}_op" id="{{ $v.Field.Name }}_op" class="form-control">
               <option value="skip">Skip</option>
@@ -19,8 +25,8 @@
               <option value="regexp">RegExp</option>
             </select>
             <input type="text" name="{{ $v.Field.Name }}" class="form-control" />
-          </div>
           {{ end }}
+          </div>
           <input type="submit" value="Search" class="btn btn-primary" />
         </form><br />
     </div>  

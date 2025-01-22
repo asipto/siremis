@@ -670,6 +670,12 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 		return
 	}
 	var valFields = []GMDBField{}
+	sMode := r.FormValue("search_mode")
+	if sMode == "any" {
+		sMode = " OR "
+	} else {
+		sMode = " AND "
+	}
 	for _, v := range schemaV.Fields {
 		if v.Enable.Search {
 			oVal := r.FormValue(v.Name + "_op")
@@ -745,12 +751,12 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 	strQuery += " FROM " + schemaV.Table + " WHERE "
 
 	var selVals = make([]any, 0)
-	sAnd := false
+	sNext := false
 	for _, v := range valFields {
-		if sAnd {
-			strQuery += " AND "
+		if sNext {
+			strQuery += sMode
 		} else {
-			sAnd = true
+			sNext = true
 		}
 		strQuery += v.Column + " " + v.Op + " ?"
 		selVals = append(selVals, v.Value)
