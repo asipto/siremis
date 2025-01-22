@@ -7,12 +7,13 @@
         </div>
         <div class="card-body">
         <ul class="list-group list-group-flush">
+          {{ if $.Context.SchemaMenu }}
+          {{ range $i, $v := $.Context.SchemaMenu.Items }}
           <li class="list-group-item">
-            <a href="{{ $.Config.URLDir }}/list/{{ $.Context.SchemaName }}">List</span></a>
+            <a href="{{ $.Config.URLDir }}/{{ $v.URLPath }}">{{ $v.Title }}</span></a>
           </li>
-          <li class="list-group-item">
-            <a href="{{ $.Config.URLDir }}/new/{{ $.Context.SchemaName }}">New</a>
-          </li>
+          {{ end }}
+          {{ end }}
         </ul>
         </div>
       </div>
