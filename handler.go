@@ -397,25 +397,26 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 			var vField = GMDBField{}
 			vField.Name = v.Name
 			vField.Column = v.Column
+			vField.Discard = v.Enable.Discard
+			sVal := ""
 			if v.Enable.Insert {
-				if v.Type == "int" {
-					vField.Value, _ = strconv.Atoi(r.FormValue(v.Name))
-				} else {
-					vField.Value = r.FormValue(v.Name)
-				}
-				log.Printf("insert form field: %s / value: '%v'\n", v.Name, vField.Value)
-				valFields = append(valFields, vField)
-			} else if len(v.ValueInsert.Func) > 0 {
-				sVal := ""
+				sVal = r.FormValue(v.Name)
+				log.Printf("insert form field: %s / value: '%v'\n", v.Name, sVal)
+			}
+			if len(v.ValueInsert.Func) > 0 {
 				if len(v.ValueInsert.Params) > 0 {
 					var vParams = make([]any, 0)
 					for _, p := range v.ValueInsert.Params {
 						if strings.HasPrefix(p, "@fld:") {
 							fldName := strings.TrimPrefix(p, "@fld:")
-							for _, f := range valFields {
-								if fldName == f.Name {
-									vParams = append(vParams, f.Value)
-									break
+							if fldName == vField.Name {
+								vParams = append(vParams, sVal)
+							} else {
+								for _, f := range valFields {
+									if fldName == f.Name {
+										vParams = append(vParams, f.Value)
+										break
+									}
 								}
 							}
 						} else {
@@ -426,17 +427,18 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 				} else {
 					sVal = GMFuncMap[v.ValueInsert.Func].(func() string)()
 				}
+				log.Printf("insert func field: %s / value: '%v'/ discard: %v\n",
+					v.Name, sVal, vField.Discard)
+			}
+			if !v.Enable.Insert && len(v.ValueInsert.Func) == 0 {
+				log.Printf("skipping insert field %s\n", v.Name)
+			} else {
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(sVal)
 				} else {
 					vField.Value = sVal
 				}
-				vField.Discard = v.Enable.Discard
-				log.Printf("insert func field: %s / value: '%v'/ discard: %v\n",
-					v.Name, vField.Value, vField.Discard)
 				valFields = append(valFields, vField)
-			} else {
-				log.Printf("skipping field %s\n", v.Name)
 			}
 		}
 	}
@@ -491,26 +493,26 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 			var vField = GMDBField{}
 			vField.Name = v.Name
 			vField.Column = v.Column
+			vField.Discard = v.Enable.Discard
+			sVal := ""
 			if v.Enable.Edit {
-				log.Printf("update form field %s\n", v.Name)
-				if v.Type == "int" {
-					vField.Value, _ = strconv.Atoi(r.FormValue(v.Name))
-				} else {
-					vField.Value = r.FormValue(v.Name)
-				}
-				valFields = append(valFields, vField)
-			} else if len(v.ValueEdit.Func) > 0 {
-				log.Printf("update value field %s\n", v.Name)
-				sVal := ""
+				sVal = r.FormValue(v.Name)
+				log.Printf("edit form field: %s / value: '%v'\n", v.Name, sVal)
+			}
+			if len(v.ValueEdit.Func) > 0 {
 				if len(v.ValueEdit.Params) > 0 {
 					var vParams = make([]any, 0)
 					for _, p := range v.ValueEdit.Params {
 						if strings.HasPrefix(p, "@fld:") {
 							fldName := strings.TrimPrefix(p, "@fld:")
-							for _, f := range valFields {
-								if fldName == f.Name {
-									vParams = append(vParams, f.Value)
-									break
+							if fldName == vField.Name {
+								vParams = append(vParams, sVal)
+							} else {
+								for _, f := range valFields {
+									if fldName == f.Name {
+										vParams = append(vParams, f.Value)
+										break
+									}
 								}
 							}
 						} else {
@@ -521,15 +523,18 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 				} else {
 					sVal = GMFuncMap[v.ValueEdit.Func].(func() string)()
 				}
+				log.Printf("edit func field: %s / value: '%v'/ discard: %v\n",
+					v.Name, sVal, vField.Discard)
+			}
+			if !v.Enable.Edit && len(v.ValueEdit.Func) == 0 {
+				log.Printf("skipping edit field %s\n", v.Name)
+			} else {
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(sVal)
 				} else {
 					vField.Value = sVal
 				}
-				vField.Discard = v.Enable.Discard
 				valFields = append(valFields, vField)
-			} else {
-				log.Printf("skipping field %s\n", v.Name)
 			}
 		}
 	}
