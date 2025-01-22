@@ -17,7 +17,7 @@
 				"Insert": false,
 				"Edit": false,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			}
 		},
 		{
@@ -30,7 +30,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			}
 		},
 		{
@@ -43,7 +43,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			}
 		},
 		{
@@ -56,7 +56,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			},
 			"InputForm": {
 				"Type": "number"
@@ -72,7 +72,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			},
 			"InputForm": {
 				"Type": "number"
@@ -88,7 +88,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			}
 		},
 		{
@@ -101,7 +101,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			}
 		}
 	]

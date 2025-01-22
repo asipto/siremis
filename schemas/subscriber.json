@@ -17,7 +17,7 @@
 				"Insert": false,
 				"Edit": false,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			}
 		},
 		{
@@ -30,7 +30,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			}
 		},
 		{
@@ -43,7 +43,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
-				"Filter": true
+				"Search": true
 			},
 			"InputForm": {
 				"Type": "dataset",
@@ -63,7 +63,7 @@
 				"Insert": true,
 				"Edit": true,
 				"Show": false,
-				"Filter": false,
+				"Search": false,
 				"Discard": true
 			}
 		},
@@ -77,7 +77,7 @@
 				"Insert": false,
 				"Edit": false,
 				"Show": true,
-				"Filter": false
+				"Search": false
 			},
 			"ValueInsert": {
 				"Func": "HA1",
@@ -98,7 +98,7 @@
 				"Insert": false,
 				"Edit": false,
 				"Show": true,
-				"Filter": false
+				"Search": false
 			},
 			"ValueInsert": {
 				"Func": "HA1B",
