@@ -200,9 +200,12 @@ func main() {
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
 		"rowon":     GMTemplateFuncRowOn,
+		"rowstart":  GMTemplateFuncRowStart,
+		"rowend":    GMTemplateFuncRowEnd,
 		"add":       GMTemplateFuncAdd,
 		"sub":       GMTemplateFuncSub,
 		"mod":       GMTemplateFuncMod,
+		"modx":      GMTemplateFuncModX,
 		"loop":      GMTemplateFuncLoop,
 		"lastloop":  GMTemplateFuncLastLoop,
 		"lastindex": GMTemplateFuncLastIndex,

@@ -5,7 +5,8 @@
       {{ $crt := 0 }}
       {{ range $i, $m := $.Config.Menu }}
       {{ if not $m.Inactive }}
-      {{ if rowon (len $.Config.Menu) $i $crt 3 0 }}
+      {{ $crt = add $crt 1 }}
+      {{ if rowstart $crt 3 }}
       <div class="row">
       {{ end }}
         <div class="col-sm">
@@ -39,17 +40,17 @@
           </div>
 
         </div>
-        {{ if lastindex (len $.Config.Menu) $i }}
-        {{ range $k := lastloop $crt 3 }}
-        <div class="col-sm">
+        {{ if rowend $crt 3 }}
         </div>
         {{ end }}
-        {{ end }}
-      {{ if rowon (len $.Config.Menu) $i $crt 3 1 }}
+      {{ end }}
+      {{ end }}
+      {{ range $k := lastloop $crt 3 }}
+        <div class="col-sm">
+        </div>
+      {{ end }}
+      {{ if modx $crt 3 }}
       </div>
-      {{ end }}
-      {{ $crt = add $crt 1 }}
-      {{ end }}
       {{ end }}
     </div>
   {{ template "footer" . }}

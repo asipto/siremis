@@ -85,15 +85,23 @@ func GMFuncParamValues(params []any) []GMOptionValue {
 
 func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {
 	if mode == 0 {
-		return crt%cols == 0
+		return (crt-1)%cols == 0
 	}
-	if crt%cols == cols-1 {
+	if (crt-1)%cols == cols-1 {
 		return true
 	}
 	if idx == nitems-1 {
 		return true
 	}
 	return false
+}
+
+func GMTemplateFuncRowStart(crt, cols int) bool {
+	return crt%cols == 1
+}
+
+func GMTemplateFuncRowEnd(crt, cols int) bool {
+	return crt%cols == 0
 }
 
 func GMTemplateFuncAdd(n, v int) int {
@@ -106,6 +114,10 @@ func GMTemplateFuncSub(n, v int) int {
 
 func GMTemplateFuncMod(n, v int) int {
 	return n % v
+}
+
+func GMTemplateFuncModX(n, v int) bool {
+	return (n % v) > 0
 }
 
 func GMTemplateFuncLoop(n int) []int {
@@ -121,12 +133,13 @@ func GMTemplateFuncLastLoop(idx, cols int) []int {
 	var n int
 	var i int
 	var items []int
-	if cols == 0 {
+
+	if cols-1 == 0 {
 		n = 0
 	} else if idx%cols == 0 {
-		n = cols - 1
+		n = 0
 	} else {
-		n = (idx % cols) - 1
+		n = cols - (idx % cols)
 	}
 	for i = 0; i < n; i++ {
 		items = append(items, i)
