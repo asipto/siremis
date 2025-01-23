@@ -10,7 +10,13 @@ import (
 type GMConfigAuthUser struct {
 	Username string `json:"Username"`
 	Password string `json:"Password"`
-	Role     string `json:"Role"`
+	Role     string `json:"Role,omitempty"`
+}
+
+type GMConfigAuthUsersFile struct {
+	Title       string             `json:"Title,omitempty"`
+	Description string             `json:"Description,omitempty"`
+	AuthUsers   []GMConfigAuthUser `json:"AuthUsers"`
 }
 
 type GMConfigDB struct {
@@ -45,14 +51,15 @@ type GMConfigMenuFile struct {
 }
 
 type GMConfig struct {
-	DefaultViewPath string              `json:"DefaultViewPath"`
-	URLDir          string              `json:"URLDir,omitempty"`
-	PublicDir       string              `json:"PublicDir,omitempty"`
-	SchemaDir       string              `json:"SchemaDir"`
-	AuthUsers       []GMConfigAuthUser  `json:"AuthUsers"`
-	DBData          GMConfigDB          `json:"DBData"`
-	MenuFilePath    string              `json:"MenuFilePath,omitempty"`
-	Menu            []GMConfigMenuGroup `json:"Menu,omitempty"`
+	DefaultViewPath   string              `json:"DefaultViewPath"`
+	URLDir            string              `json:"URLDir,omitempty"`
+	PublicDir         string              `json:"PublicDir,omitempty"`
+	SchemaDir         string              `json:"SchemaDir"`
+	AuthUsersFilePath string              `json:"AuthUsersFilePath,omitempty"`
+	AuthUsers         []GMConfigAuthUser  `json:"AuthUsers"`
+	DBData            GMConfigDB          `json:"DBData"`
+	MenuFilePath      string              `json:"MenuFilePath,omitempty"`
+	Menu              []GMConfigMenuGroup `json:"Menu,omitempty"`
 }
 
 var GMConfigV = GMConfig{}
@@ -159,5 +166,29 @@ func GMConfigLoad() {
 		}
 		GMConfigV.Menu = menuFile.Menu
 	}
+
+	if len(GMConfigV.AuthUsers) == 0 {
+		if len(GMConfigV.AuthUsersFilePath) == 0 {
+			log.Printf("no auth users in config file %s\n", GMCLIOptionsV.config)
+			os.Exit(1)
+		}
+		configBytes, err = os.ReadFile(GMConfigV.AuthUsersFilePath)
+		if err != nil {
+			log.Printf("unavailable auth users file %s\n", GMConfigV.AuthUsersFilePath)
+			os.Exit(1)
+		}
+		var auFile = GMConfigAuthUsersFile{}
+		err = json.Unmarshal(configBytes, &auFile)
+		if err != nil {
+			log.Printf("invalid content in auth users file %s\n", GMConfigV.AuthUsersFilePath)
+			os.Exit(1)
+		}
+		if len(auFile.AuthUsers) == 0 {
+			log.Printf("no auth users in file %s\n", GMConfigV.AuthUsersFilePath)
+			os.Exit(1)
+		}
+		GMConfigV.AuthUsers = auFile.AuthUsers
+	}
+
 	GMConfigEvalVals()
 }
