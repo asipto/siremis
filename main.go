@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -168,18 +167,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	configBytes, err := os.ReadFile(GMCLIOptionsV.config)
-	if err != nil {
-		log.Printf("unavailable config file %s\n", GMCLIOptionsV.config)
-		os.Exit(1)
-	}
-	err = json.Unmarshal(configBytes, &GMConfigV)
-	if err != nil {
-		log.Printf("invalid content in config file %s\n", GMCLIOptionsV.config)
-		os.Exit(1)
-	}
-
-	GMConfigEvalVals()
+	GMConfigLoad()
 
 	if _, err := os.Stat(GMConfigV.PublicDir); os.IsNotExist(err) {
 		log.Printf("%s folder cannot be found\n", GMConfigV.PublicDir)

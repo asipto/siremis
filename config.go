@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"os"
 	"strings"
 )
@@ -36,6 +38,12 @@ type GMConfigMenuGroup struct {
 	Items    []GMConfigMenuItem `json:"Items"`
 }
 
+type GMConfigMenuFile struct {
+	Title       string              `json:"Title,omitempty"`
+	Description string              `json:"Description,omitempty"`
+	Menu        []GMConfigMenuGroup `json:"Menu"`
+}
+
 type GMConfig struct {
 	DefaultViewPath string              `json:"DefaultViewPath"`
 	URLDir          string              `json:"URLDir,omitempty"`
@@ -43,7 +51,8 @@ type GMConfig struct {
 	SchemaDir       string              `json:"SchemaDir"`
 	AuthUsers       []GMConfigAuthUser  `json:"AuthUsers"`
 	DBData          GMConfigDB          `json:"DBData"`
-	Menu            []GMConfigMenuGroup `json:"Menu"`
+	MenuFilePath    string              `json:"MenuFilePath,omitempty"`
+	Menu            []GMConfigMenuGroup `json:"Menu,omitempty"`
 }
 
 var GMConfigV = GMConfig{}
@@ -114,4 +123,41 @@ func GMConfigGetSchemaMenu(schemaName string) *GMConfigMenuGroup {
 		}
 	}
 	return nil
+}
+
+func GMConfigLoad() {
+	configBytes, err := os.ReadFile(GMCLIOptionsV.config)
+	if err != nil {
+		log.Printf("unavailable config file %s\n", GMCLIOptionsV.config)
+		os.Exit(1)
+	}
+	err = json.Unmarshal(configBytes, &GMConfigV)
+	if err != nil {
+		log.Printf("invalid content in config file %s\n", GMCLIOptionsV.config)
+		os.Exit(1)
+	}
+
+	if len(GMConfigV.Menu) == 0 {
+		if len(GMConfigV.MenuFilePath) == 0 {
+			log.Printf("no menu in config file %s\n", GMCLIOptionsV.config)
+			os.Exit(1)
+		}
+		configBytes, err = os.ReadFile(GMConfigV.MenuFilePath)
+		if err != nil {
+			log.Printf("unavailable menu file %s\n", GMConfigV.MenuFilePath)
+			os.Exit(1)
+		}
+		var menuFile = GMConfigMenuFile{}
+		err = json.Unmarshal(configBytes, &menuFile)
+		if err != nil {
+			log.Printf("invalid content in menu file %s\n", GMConfigV.MenuFilePath)
+			os.Exit(1)
+		}
+		if len(menuFile.Menu) == 0 {
+			log.Printf("no menu in file %s\n", GMConfigV.MenuFilePath)
+			os.Exit(1)
+		}
+		GMConfigV.Menu = menuFile.Menu
+	}
+	GMConfigEvalVals()
 }
