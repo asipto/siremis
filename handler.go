@@ -220,11 +220,23 @@ func GMSchemaFieldEnableBoolVal(v *GMSchemaFieldEnable, field string) bool {
 }
 
 func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId string,
-	sEnableField string, sTemplate string) {
-
+	sEnableField string, sTemplate string, sAction string) {
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
 		return
+	}
+	if sAction == "edit" {
+		if (schemaV.InactiveActions & InactiveActionEdit) != 0 {
+			GMAlertView(w, r, schemaV.Name, schemaV.Title,
+				"Edit operation not permitted for: "+schemaV.Name)
+			return
+		}
+	} else if sAction == "delete" {
+		if (schemaV.InactiveActions & InactiveActionDelete) != 0 {
+			GMAlertView(w, r, schemaV.Name, schemaV.Title,
+				"Delete operation not permitted for: "+schemaV.Name)
+			return
+		}
 	}
 	var formFields = []GMViewFormField{}
 	for _, v := range schemaV.Fields {
@@ -242,7 +254,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 				log.Printf("using field %s (%s)\n", v.Name, sEnableField)
 				var fField = GMViewFormField{}
 				fField.Field = v
-				if sTemplate == "edit" {
+				if sAction == "edit" {
 					fField.Field = v
 					if len(v.InputForm.OptionValues.Func) > 0 {
 						if len(v.InputForm.OptionValues.Params) > 0 {
@@ -329,13 +341,17 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 }
 
 func GMShow(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	GMFormView(w, r, schemaName, sId, "Show", "show")
+	GMFormView(w, r, schemaName, sId, "Show", "show", "show")
 }
 
 func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
-
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
+		return
+	}
+	if (schemaV.InactiveActions & InactiveActionInsert) != 0 {
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Insert operation not permitted for: "+schemaV.Name)
 		return
 	}
 	var formFields = []GMViewFormField{}
@@ -379,6 +395,11 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
+		return
+	}
+	if (schemaV.InactiveActions & InactiveActionInsert) != 0 {
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Insert operation not permitted for : "+schemaV.Name)
 		return
 	}
 	var valFields = []GMDBField{}
@@ -462,12 +483,17 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 }
 
 func GMEdit(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	GMFormView(w, r, schemaName, sId, "Edit", "edit")
+	GMFormView(w, r, schemaName, sId, "Edit", "edit", "edit")
 }
 
 func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
+		return
+	}
+	if (schemaV.InactiveActions & InactiveActionEdit) != 0 {
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Edit operation not permitted for: "+schemaV.Name)
 		return
 	}
 	var valFields = []GMDBField{}
@@ -561,16 +587,21 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	insForm.Exec(dbVals...)
 
 	GMAuthRefresh(w, r)
-	GMFormView(w, r, schemaName, sId, "Show", "show")
+	GMFormView(w, r, schemaName, sId, "Show", "show", "show")
 }
 
 func GMDelete(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
-	GMFormView(w, r, schemaName, sId, "Show", "delete")
+	GMFormView(w, r, schemaName, sId, "Show", "delete", "delete")
 }
 
 func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
 	schemaV, okey := GMGetSchema(w, r, schemaName)
 	if !okey {
+		return
+	}
+	if (schemaV.InactiveActions & InactiveActionDelete) != 0 {
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Delete operation not permitted for: "+schemaV.Name)
 		return
 	}
 	var selFields = []GMSchemaField{}

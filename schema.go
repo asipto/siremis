@@ -1,5 +1,11 @@
 package main
 
+const (
+	InactiveActionInsert uint32 = 1
+	InactiveActionEdit   uint32 = 2
+	InactiveActionDelete uint32 = 4
+)
+
 type GMSchemaQuery struct {
 	IdField   string `json:"IdField"`
 	Limit     int    `json:"Limit,omitempty"`
@@ -44,9 +50,10 @@ type GMSchemaField struct {
 }
 
 type GMSchema struct {
-	Name   string          `json:"Name"`
-	Title  string          `json:"Title"`
-	Table  string          `json:"Table"`
-	Query  GMSchemaQuery   `json:"Query"`
-	Fields []GMSchemaField `json:"Fields"`
+	Name            string          `json:"Name"`
+	Title           string          `json:"Title"`
+	Table           string          `json:"Table"`
+	InactiveActions uint32          `json:"InactiveActions,omitempty"`
+	Query           GMSchemaQuery   `json:"Query"`
+	Fields          []GMSchemaField `json:"Fields"`
 }
