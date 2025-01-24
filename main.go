@@ -14,7 +14,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-const siregisVersion = "1.0.0"
+const siremisVersion = "1.0.0"
 
 // CLIOptions - structure for command line options
 type GMCLIOptions struct {
@@ -141,7 +141,7 @@ func printCLIOptions() {
 func init() {
 	// command line arguments
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage of %s (v%s):\n", filepath.Base(os.Args[0]), siregisVersion)
+		fmt.Fprintf(os.Stderr, "Usage of %s (v%s):\n", filepath.Base(os.Args[0]), siremisVersion)
 		printCLIOptions()
 		fmt.Fprintf(os.Stderr, "\n")
 		os.Exit(1)
