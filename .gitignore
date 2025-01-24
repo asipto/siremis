@@ -8,7 +8,8 @@
 *.so
 *.dylib
 
-siregmis
+./siremis
+./siremis-go
 
 # Test binary, built with `go test -c`
 *.test
@@ -32,3 +33,9 @@ go.work.sum
 
 # Tmp files
 .fuse_hidde*
+
+# VSCode folder
+./.vscode
+
+# custom local files
+./etc/config.json
