@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // {"jsonrpc": "2.0", "method": "command", "params": [p1, "p2"], "id": 1}
@@ -19,9 +20,15 @@ type GMJSONRPCMethod struct {
 	Id      int    `json:"id"`
 }
 
-func GMJSONRPCExec(sMethod string, sParams string) (string, bool) {
+func GMJSONRPCExec(sCommand string) (string, bool) {
 	if len(GMConfigV.JSONRPC.Protocol) == 0 {
 		return "", false
+	}
+	sArr := strings.SplitN(sCommand, " ", 2)
+	sMethod := sArr[0]
+	sParams := ""
+	if len(sArr) > 1 {
+		sParams = sArr[1]
 	}
 	var jCmd = GMJSONRPCMethod{}
 	jCmd.JSONRPC = "2.0"
@@ -55,6 +62,7 @@ func GMJSONRPCExec(sMethod string, sParams string) (string, bool) {
 		return "", false
 	}
 	if GMConfigV.JSONRPC.Protocol == "udp" {
+		log.Printf("udp - jsonrpc command: '%s'\n", sMethod)
 		LocalAddr, err := net.ResolveUDPAddr(GMConfigV.JSONRPC.Protocol, GMConfigV.JSONRPC.LAddress)
 		if err != nil {
 			log.Printf("failed to resolve udp local address: '%s'\n", GMConfigV.JSONRPC.LAddress)
@@ -79,6 +87,7 @@ func GMJSONRPCExec(sMethod string, sParams string) (string, bool) {
 		}
 		return string(bRes), true
 	} else if GMConfigV.JSONRPC.Protocol == "unixgram" {
+		log.Printf("unixgram - jsonrpc command: '%s'\n", sMethod)
 		// remove any existing local socket
 		os.Remove(GMConfigV.JSONRPC.LAddress)
 		LocalAddr, err := net.ResolveUnixAddr(GMConfigV.JSONRPC.Protocol, GMConfigV.JSONRPC.LAddress)
@@ -86,21 +95,35 @@ func GMJSONRPCExec(sMethod string, sParams string) (string, bool) {
 			log.Printf("failed to resolve unixgram local address: '%s'\n", GMConfigV.JSONRPC.LAddress)
 			return "", false
 		}
+
 		RemoteAddr, err := net.ResolveUnixAddr(GMConfigV.JSONRPC.Protocol, GMConfigV.JSONRPC.RAddress)
 		if err != nil {
 			log.Printf("failed to resolve unixgram remote address: '%s'\n", GMConfigV.JSONRPC.RAddress)
 			return "", false
 		}
-		conn, err := net.DialUnix(GMConfigV.JSONRPC.Protocol, LocalAddr, RemoteAddr)
+		rConn, err := net.DialUnix(GMConfigV.JSONRPC.Protocol, LocalAddr, RemoteAddr)
 		if err != nil {
-			log.Printf("failed to connect to unixgram remote address: '%s'\n", GMConfigV.JSONRPC.RAddress)
+			log.Printf("failed to connect to unixgram remote address: '%s' (%v)\n",
+				GMConfigV.JSONRPC.RAddress, err)
 			return "", false
 		}
-		conn.Write(bCmd)
-		defer conn.Close()
-		bRes, err := io.ReadAll(conn)
+		defer rConn.Close()
+		defer os.Remove(GMConfigV.JSONRPC.LAddress)
+
+		rConn.SetWriteDeadline(time.Now().Add(5 * time.Second))
+		rConn.SetReadDeadline(time.Now().Add(5 * time.Second))
+
+		_, err = rConn.Write(bCmd)
 		if err != nil {
-			log.Printf("failed to read from unixgram remote address: '%s'\n", GMConfigV.JSONRPC.RAddress)
+			log.Printf("failed to write to unixgram remote address: '%s' (%v)\n",
+				GMConfigV.JSONRPC.RAddress, err)
+			return "", false
+		}
+		bRes := make([]byte, 8*1024)
+		_, err = rConn.Read(bRes)
+		if err != nil {
+			log.Printf("failed to read from unixgram remote address: '%s' (%v)\n",
+				GMConfigV.JSONRPC.RAddress, err)
 			return "", false
 		}
 		return string(bRes), true

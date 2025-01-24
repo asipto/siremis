@@ -24,6 +24,12 @@ type GMResultAttrs struct {
 	NrGroupNext int
 }
 
+type GMJRPCData struct {
+	Command  string
+	Result   string
+	ViewForm GMConfigJRForm
+}
+
 type GMViewContext struct {
 	Action       string
 	AuthOK       bool
@@ -55,6 +61,7 @@ type GMViewData struct {
 	ViewList    GMViewList
 	FormFieldId GMViewFormField
 	FormFields  []GMViewFormField
+	JRPCData    *GMJRPCData
 }
 
 type GMDBField struct {
@@ -916,11 +923,38 @@ func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
 	GMTemplatesV.ExecuteTemplate(w, "smenu", viewData)
 }
 
+func GMDoJSONRPC(w http.ResponseWriter, r *http.Request) {
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
+	if !viewData.Context.AuthOK {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+
+	var jData = GMJRPCData{}
+
+	jData.Command = r.FormValue("command")
+	if len(jData.Command) > 0 {
+		log.Printf("jsonrpc command { %s }\n", jData.Command)
+
+		jData.Result, _ = GMJSONRPCExec(jData.Command)
+	}
+	viewData.Context.SchemaName = "JSONRPC"
+	viewData.Context.SchemaTitle = "JSONRPC"
+	viewData.JRPCData = &jData
+	viewData.JRPCData.ViewForm = GMConfigV.JSONRPC.ViewForm
+
+	GMTemplatesV.ExecuteTemplate(w, "jsonrpc", viewData)
+}
+
 func GMDoAction(w http.ResponseWriter, r *http.Request, sAction string) {
 	if sAction == "login" {
 		GMLogin(w, r)
 	} else if sAction == "logout" {
 		GMLogout(w, r)
+	} else if sAction == "jsonrpc" {
+		GMDoJSONRPC(w, r)
 	} else {
 		GMViewGuestPage(w, r, "login")
 		return
