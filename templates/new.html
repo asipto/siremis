@@ -27,7 +27,7 @@
               <label>{{ $w.Title }}</label>
               {{ end }}
               {{ else if gt (len $v.Field.InputForm.Type) 0 }}
-              <input type="{{ $v.Field.InputForm.Type }}" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"{{ if eq $i 0 }} readonly{{ end }}/>
+              <input type="{{ $v.Field.InputForm.Type }}" name="{{ $v.Field.Name }}" value="{{ $v.Value }}" class="form-control"/>
               {{ else }}
               <input type="text" name="{{ $v.Field.Name }}" class="form-control"/>
               {{ end }}
