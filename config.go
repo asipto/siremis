@@ -50,14 +50,21 @@ type GMConfigMenuFile struct {
 	Menu        []GMConfigMenuGroup `json:"Menu"`
 }
 
+type GMConfigJSONRPC struct {
+	Protocol string `json:"Protocol"`
+	LAddress string `json:"LAddress"`
+	RAddress string `json:"RAddress"`
+}
+
 type GMConfig struct {
 	DefaultViewPath   string              `json:"DefaultViewPath"`
 	URLDir            string              `json:"URLDir,omitempty"`
 	PublicDir         string              `json:"PublicDir,omitempty"`
 	SchemaDir         string              `json:"SchemaDir"`
 	AuthUsersFilePath string              `json:"AuthUsersFilePath,omitempty"`
-	AuthUsers         []GMConfigAuthUser  `json:"AuthUsers"`
+	AuthUsers         []GMConfigAuthUser  `json:"AuthUsers,omitempty"`
 	DBData            GMConfigDB          `json:"DBData"`
+	JSONRPC           GMConfigJSONRPC     `json:"JSONRPC,omitempty"`
 	MenuFilePath      string              `json:"MenuFilePath,omitempty"`
 	Menu              []GMConfigMenuGroup `json:"Menu,omitempty"`
 }
