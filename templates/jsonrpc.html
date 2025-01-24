@@ -1,0 +1,55 @@
+{{ define "jsonrpc" }}
+  {{ template "header" . }}
+    <div class="container">
+        <h2>JSON RPC Commands</h2>
+        <br />
+        <form method="POST" action="{{ $.Config.URLDir }}/do/jsonrpc">
+          {{ if $.JRPCData }}
+          <div class="form-group">
+              <label><strong>Command</strong></label>
+              {{ if and (eq $.JRPCData.ViewForm.Type "select") (gt (len $.JRPCData.ViewForm.CommandOptions) 0) }}
+              <select name="command" id="command" class="form-control">
+                {{ range $.JRPCData.ViewForm.CommandOptions }}
+                <option value="{{ .Command }}">{{ .Title }}</option>
+                {{ end }}
+              </select>
+              {{ else if and (eq $.JRPCData.ViewForm.Type "dataset") (gt (len $.JRPCData.ViewForm.CommandOptions) 0) }}
+              <input type="text" name="command" list="command_dataset" class="form-control"/>
+              <datalist id="command_dataset">
+                {{ range $.JRPCData.ViewForm.CommandOptions }}
+                <option value="{{ .Command }}">{{ .Title }}</option>
+                {{ end }}
+              </datalist>
+              {{ else if and (eq $.JRPCData.ViewForm.Type "radio") (gt (len $.JRPCData.ViewForm.CommandOptions) 0) }}
+              {{ range $j, $w := $.JRPCData.ViewForm.CommandOptions }}
+              <br />
+              <input type="radio" id="command_{{ $j }}" name="command" value="{{ $w.Command }}" />
+              <label>{{ $w.Title }}</label>
+              {{ end }}
+              {{ else if gt (len $.JRPCData.ViewForm.Type) 0 }}
+              <input type="{{ $.JRPCData.ViewForm.Type }}" name="command" class="form-control"/>
+              {{ else }}
+              <input type="text" name="command" class="form-control"/>
+              {{ end }}
+          </div>
+          {{ end }}
+          <input type="submit" value="Execute" class="btn btn-primary"/>
+        </form>
+    </div> 
+    {{ if $.JRPCData }}
+    {{ if $.JRPCData.Result }}
+    <div class="container">
+      <hr />
+      <hr />
+      <hr />
+      <p><strong>Executed Command: <span style="color: #2c3e50;">{{ $.JRPCData.Command }}</span></strong></p>
+      <hr />
+      <hr />
+      <div style="overflow:scroll; height:400px;">
+      <pre>{{ $.JRPCData.Result }}</pre>
+      </div>
+    </div>
+    {{ end }}
+    {{ end }}
+    {{ template "footer" . }}
+{{ end }}
