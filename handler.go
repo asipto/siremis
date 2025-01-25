@@ -54,6 +54,11 @@ type GMViewFormField struct {
 	OptionValues []GMOptionValue
 }
 
+type GMChartsData struct {
+	Title string
+	Data  string
+}
+
 type GMViewData struct {
 	Config      GMConfig
 	Schema      GMSchema
@@ -62,6 +67,7 @@ type GMViewData struct {
 	FormFieldId GMViewFormField
 	FormFields  []GMViewFormField
 	JRPCData    *GMJRPCData
+	ChartsData  *GMChartsData
 }
 
 type GMDBField struct {
@@ -940,7 +946,7 @@ func GMDoJSONRPC(w http.ResponseWriter, r *http.Request) {
 
 		jData.Result, _ = GMJSONRPCExec(jData.Command)
 	}
-	viewData.Context.SchemaName = "JSONRPC"
+	viewData.Context.SchemaName = "jsonrpc"
 	viewData.Context.SchemaTitle = "JSONRPC"
 	viewData.JRPCData = &jData
 	viewData.JRPCData.ViewForm = GMConfigV.JSONRPC.ViewForm
@@ -959,6 +965,25 @@ func GMDoAction(w http.ResponseWriter, r *http.Request, sAction string) {
 		GMViewGuestPage(w, r, "login")
 		return
 	}
+}
+
+func GMViewCharts(w http.ResponseWriter, r *http.Request, sChartGroup string) {
+	var viewData = GMViewData{}
+	viewData.Config = GMConfigV
+	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
+	if !viewData.Context.AuthOK {
+		GMViewGuestPage(w, r, "login")
+		return
+	}
+	var cData = GMChartsData{}
+	cData.Data, _ = GMChartGetData(sChartGroup, "shm")
+	log.Printf("incoming URL value: || %s ||\n", cData.Data)
+
+	viewData.Context.SchemaName = "charts"
+	viewData.Context.SchemaTitle = "Charts"
+	viewData.ChartsData = &cData
+
+	GMTemplatesV.ExecuteTemplate(w, "chart", viewData)
 }
 
 func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
@@ -1053,6 +1078,8 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 		GMSearch(w, r, tURL[3])
 	} else if tURL[2] == "find" {
 		GMFind(w, r, tURL[3])
+	} else if tURL[2] == "charts" {
+		GMViewCharts(w, r, tURL[3])
 	} else {
 		log.Printf("invalid URL value: %s\n", sURL)
 		http.Error(w, "Invalid URL value", http.StatusBadRequest)
