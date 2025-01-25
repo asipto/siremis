@@ -3,6 +3,7 @@
 	"URLDir": "/w",
 	"PublicDir": "public",
 	"SchemaDir": "schemas",
+	"AuthUsersFilePath": "",
 	"AuthUsers": [
 		{
 			"Username": "admin",
@@ -19,6 +20,97 @@
 		"Username": "test",
 		"Password": "test"
 	},
+	"JSONRPC": {
+		"Protocol": "unixgram",
+		"LAddress": "/tmp/siremis_rpc.sock",
+		"RAddress": "/run/kamailio/kamailio_rpc.sock",
+		"ViewForm": {
+			"Type": "dataset",
+			"CommandOptions": [
+				{
+					"Command": "core.uptime",
+					"Title": "Server Uptime"
+				},
+				{
+					"Command": "core.psx",
+					"Title": "List Processes"
+				},
+				{
+					"Command": "stats.fetchn all",
+					"Title": "Fetch All Statistics"
+				}
+			]
+		}
+	},
+	"ChartGroupsFilePath": "",
+	"ChartGroups": [
+		{
+			"Name": "shm",
+			"Title": "Shared Memory Charts",
+			"Charts": [
+				{
+					"Name": "shm",
+					"Table": "statistics",
+					"Title": "Shared Memory",
+					"BGColor": "#40E046",
+					"Type": "area",
+					"Order": "reverse",
+					"OrderBy": "id",
+					"OrderMode": "DESC",
+					"Limit": 20,
+					"XAxis": {
+						"Name": "time_stamp",
+						"Column": "time_stamp",
+						"Title": "timestamp",
+						"Type": "timestamp"
+					},
+					"YAxis": [
+						{
+							"Name": "shm_used_size",
+							"Column": "shm_used_size",
+							"Title": "Used Size",
+							"Type": "dataset",
+							"Color": "#DFC329"
+						},
+						{
+							"Name": "shm_real_used_size",
+							"Column": "shm_real_used_size",
+							"Title": "Real Used Size",
+							"Type": "dataset",
+							"Color": "#5E4785"
+						}
+					]
+				},
+				{
+					"Name": "shmmaxused",
+					"Table": "statistics",
+					"Title": "Max Used Shared Memory",
+					"BGColor": "#B0E0E6",
+					"Type": "area",
+					"Order": "reverse",
+					"OrderBy": "id",
+					"OrderMode": "DESC",
+					"Limit": 20,
+					"XAxis": {
+						"Name": "time_stamp",
+						"Column": "time_stamp",
+						"Title": "timestamp",
+						"Type": "timestamp"
+					},
+					"YAxis": [
+						{
+							"Name": "shm_max_used_size",
+							"Column": "shm_max_used_size",
+							"Title": "Max Used Size",
+							"Type": "dataset",
+							"Color": "#6363AC"
+						}
+					]
+				}
+			]
+		}
+	],
+	"MenuFilePath": "",
 	"Menu": [
 		{
 			"Name": "subscriber",
