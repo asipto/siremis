@@ -199,9 +199,11 @@ func main() {
 		"lastindex": GMTemplateFuncLastIndex,
 	}).ParseGlob("templates/*"))
 
-	http.Handle(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/",
-		http.StripPrefix(strings.TrimRight(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/", "/"),
-			http.FileServer(http.Dir(GMConfigV.URLDir+"/"+GMConfigV.PublicDir))))
+	if len(GMConfigV.PublicDir) > 0 && len(GMConfigV.PublicDirPath) > 0 {
+		http.Handle(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/",
+			http.StripPrefix(strings.TrimRight(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/", "/"),
+				http.FileServer(http.Dir(GMConfigV.PublicDirPath))))
+	}
 	http.HandleFunc("/", GMRequestHandler)
 	// http.HandleFunc("/show", Show)
 	// http.ListenAndServe(":8284", nil)

@@ -77,6 +77,7 @@ type GMConfig struct {
 	DefaultViewPath     string              `json:"DefaultViewPath"`
 	URLDir              string              `json:"URLDir,omitempty"`
 	PublicDir           string              `json:"PublicDir,omitempty"`
+	PublicDirPath       string              `json:"PublicDirPath,omitempty"`
 	SchemaDir           string              `json:"SchemaDir"`
 	AuthUsersFilePath   string              `json:"AuthUsersFilePath,omitempty"`
 	AuthUsers           []GMConfigAuthUser  `json:"AuthUsers,omitempty"`
