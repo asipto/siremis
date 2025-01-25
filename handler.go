@@ -55,10 +55,16 @@ type GMViewFormField struct {
 }
 
 type GMChartsData struct {
+	Name  string
 	Title string
 	Data  string
 }
 
+type GMChartsInfo struct {
+	Name       string
+	Title      string
+	ChartsData []GMChartsData
+}
 type GMViewData struct {
 	Config      GMConfig
 	Schema      GMSchema
@@ -67,7 +73,7 @@ type GMViewData struct {
 	FormFieldId GMViewFormField
 	FormFields  []GMViewFormField
 	JRPCData    *GMJRPCData
-	ChartsData  *GMChartsData
+	ChartsInfo  *GMChartsInfo
 }
 
 type GMDBField struct {
@@ -975,13 +981,27 @@ func GMViewCharts(w http.ResponseWriter, r *http.Request, sChartGroup string) {
 		GMViewGuestPage(w, r, "login")
 		return
 	}
-	var cData = GMChartsData{}
-	cData.Data, _ = GMChartGetData(sChartGroup, "shm")
-	log.Printf("incoming URL value: || %s ||\n", cData.Data)
+	g, _ := GMChartGroupGet(sChartGroup)
+	if g == nil {
+		GMAlertView(w, r, "charts", "Charts", "Charts group "+sChartGroup+" not found")
+		return
+	}
+	var cInfo = GMChartsInfo{}
+	cInfo.Name = g.Name
+	cInfo.Title = g.Title
+	viewData.ChartsInfo = &cInfo
+	viewData.ChartsInfo.ChartsData = make([]GMChartsData, 0)
+	for i, c := range g.Charts {
+		var cData = GMChartsData{}
+		cData.Name = c.Name
+		cData.Title = c.Title
+		cData.Data, _ = GMChartGetData(g, &g.Charts[i])
+		log.Printf("incoming chart value: || %s ||\n", cData.Data)
+		viewData.ChartsInfo.ChartsData = append(viewData.ChartsInfo.ChartsData, cData)
+	}
 
 	viewData.Context.SchemaName = "charts"
 	viewData.Context.SchemaTitle = "Charts"
-	viewData.ChartsData = &cData
 
 	GMTemplatesV.ExecuteTemplate(w, "chart", viewData)
 }

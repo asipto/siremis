@@ -1,18 +1,20 @@
 {{ define "chart" }}
   {{ template "header" . }}
     <div class="container">
-        <h2>Charts Service</h2>
+        <h2>Charts Service - {{ $.ChartsInfo.Title }}</h2>
+        {{ range $.ChartsInfo.ChartsData }}
         <br />
-        <div id="echart_shm" style="height:400px;">
+        <div id="echart_{{ .Name }}" style="height:400px;">
 				</div>
+        {{ end }}
     </div> 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
     <script type="text/javascript">
-    // echart: shm
-      
-      var vChart_shm = echarts.init(document.getElementById("echart_shm"));
-      var vOpts_shm = JSON.parse('{{ .ChartsData.Data }}');
-      vChart_shm.setOption(vOpts_shm);
-    </script>
+      {{ range $.ChartsInfo.ChartsData }}
+      var vChart_{{ .Name }} = echarts.init(document.getElementById("echart_{{ .Name }}"));
+      var vOpts_{{ .Name }}= JSON.parse('{{ .Data }}');
+      vChart_{{ .Name }}.setOption(vOpts_{{ .Name }});
+      {{ end }}
+      </script>
     {{ template "footer" . }}
 {{ end }}

@@ -91,31 +91,41 @@ type GMEChart struct {
 	Series  []GMEChartSeries `json:"series"`
 }
 
-func GMChartGetData(vChartGroup string, vChart string) (string, bool) {
+func GMChartGroupGet(vChartGroup string) (*GMChartGroup, bool) {
 	if len(GMConfigV.ChartGroups) == 0 {
 		log.Printf("no chart groups\n")
-		return "", false
+		return nil, false
 	}
-	var g = GMChartGroup{}
-	for _, g = range GMConfigV.ChartGroups {
+	var g GMChartGroup
+	var i int
+	for i, g = range GMConfigV.ChartGroups {
 		if g.Name == vChartGroup {
 			break
 		}
 	}
-	if len(g.Name) == 0 {
+	if i == len(GMConfigV.ChartGroups) {
 		log.Printf("chart group %s not found\n", vChartGroup)
-		return "", false
+		return nil, false
 	}
-	var c = GMChart{}
-	for _, c = range g.Charts {
+	return &GMConfigV.ChartGroups[i], true
+}
+
+func GMChartGroupGetChart(g *GMChartGroup, vChart string) (*GMChart, bool) {
+	var c GMChart
+	var i int
+	for i, c = range g.Charts {
 		if c.Name == vChart {
 			break
 		}
 	}
-	if len(c.Name) == 0 {
+	if i == len(g.Charts) {
 		log.Printf("chart %s not found\n", vChart)
-		return "", false
+		return nil, false
 	}
+	return &g.Charts[i], true
+}
+
+func GMChartGetData(g *GMChartGroup, c *GMChart) (string, bool) {
 	db := dbConn()
 	defer db.Close()
 
@@ -220,7 +230,7 @@ func GMChartGetData(vChartGroup string, vChart string) (string, bool) {
 
 	bJson, err := json.Marshal(&vEChart)
 	if err != nil {
-		log.Printf("failed to generate json for %s/%s\n", vChartGroup, vChart)
+		log.Printf("failed to generate json for [%s/%s]\n", g.Title, c.Title)
 		return "", false
 	}
 	return string(bJson), true
