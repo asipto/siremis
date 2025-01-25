@@ -67,6 +67,12 @@ type GMConfigJR struct {
 	ViewForm GMConfigJRForm `json:"ViewForm,omitempty"`
 }
 
+type GMConfigChartGroupsFile struct {
+	Title       string         `json:"Title,omitempty"`
+	Description string         `json:"Description,omitempty"`
+	ChartGroups []GMChartGroup `json:"ChartGroups,omitempty"`
+}
+
 type GMConfig struct {
 	DefaultViewPath     string              `json:"DefaultViewPath"`
 	URLDir              string              `json:"URLDir,omitempty"`
@@ -208,6 +214,25 @@ func GMConfigLoad() {
 			os.Exit(1)
 		}
 		GMConfigV.AuthUsers = auFile.AuthUsers
+	}
+
+	if len(GMConfigV.ChartGroupsFilePath) > 0 {
+		configBytes, err = os.ReadFile(GMConfigV.ChartGroupsFilePath)
+		if err != nil {
+			log.Printf("unavailable chart groups file %s\n", GMConfigV.ChartGroupsFilePath)
+			os.Exit(1)
+		}
+		var cgFile = GMConfigChartGroupsFile{}
+		err = json.Unmarshal(configBytes, &cgFile)
+		if err != nil {
+			log.Printf("invalid content in chart groups file %s\n", GMConfigV.ChartGroupsFilePath)
+			os.Exit(1)
+		}
+		if len(cgFile.ChartGroups) == 0 {
+			log.Printf("no chart groups in file %s\n", GMConfigV.ChartGroupsFilePath)
+			os.Exit(1)
+		}
+		GMConfigV.ChartGroups = cgFile.ChartGroups
 	}
 
 	GMConfigEvalVals()
