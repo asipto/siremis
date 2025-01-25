@@ -106,6 +106,23 @@ func GMGetSchema(w http.ResponseWriter, r *http.Request, schemaName string) (*GM
 	return &schemaV, true
 }
 
+func GMLoadSchema(schemaName string) (*GMSchema, bool) {
+	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
+	schemaBytes, err := os.ReadFile(schemaFile)
+	if err != nil {
+		log.Printf("unavailable schema file %s\n", schemaFile)
+		return nil, false
+	}
+	var schemaV = GMSchema{}
+	err = json.Unmarshal(schemaBytes, &schemaV)
+	if err != nil {
+		log.Printf("invalid content in schema file %s\n", schemaFile)
+		return nil, false
+	}
+
+	return &schemaV, true
+}
+
 func GMAlertView(w http.ResponseWriter, r *http.Request, schemaName string,
 	schemaTitle string, alertText string) {
 
@@ -115,7 +132,7 @@ func GMAlertView(w http.ResponseWriter, r *http.Request, schemaName string,
 
 	viewData.Context.SchemaName = schemaName
 	viewData.Context.SchemaTitle = schemaTitle
-	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
+	viewData.Context.SchemaMenu = GMConfigGetMenu(schemaName)
 
 	viewData.Context.Alert.Active = true
 	viewData.Context.Alert.Type = "alert"
@@ -216,7 +233,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
+	viewData.Context.SchemaMenu = GMConfigGetMenu(schemaName)
 	viewData.Context.ResultAttrs.NrRows = len(dbRes)
 	viewData.Context.ResultAttrs.NrGroup = groupV
 	if schemaV.Query.Limit > 0 {
@@ -351,7 +368,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	viewData.Context.Action = sTemplate
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
+	viewData.Context.SchemaMenu = GMConfigGetMenu(schemaName)
 	viewData.Context.IdField = formFields[0].Field
 	viewData.Context.IdFieldValue = formFields[0].Value
 	viewData.FormFields = formFields
@@ -405,7 +422,7 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
+	viewData.Context.SchemaMenu = GMConfigGetMenu(schemaName)
 	viewData.Schema = *schemaV
 	viewData.FormFields = formFields
 	GMTemplatesV.ExecuteTemplate(w, "new", viewData)
@@ -676,7 +693,7 @@ func GMSearch(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
+	viewData.Context.SchemaMenu = GMConfigGetMenu(schemaName)
 	viewData.Schema = *schemaV
 	viewData.FormFields = formFields
 	GMTemplatesV.ExecuteTemplate(w, "search", viewData)
@@ -829,7 +846,7 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 	viewData.Context.AuthOK = true
 	viewData.Context.SchemaName = schemaV.Name
 	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
+	viewData.Context.SchemaMenu = GMConfigGetMenu(schemaName)
 	viewData.Context.ResultAttrs.NrRows = len(dbRes)
 	viewData.Context.ResultAttrs.NrGroup = groupV
 	if schemaV.Query.Limit > 0 {
@@ -914,7 +931,7 @@ func GMViewGuestPage(w http.ResponseWriter, r *http.Request, sTemplate string) {
 	GMTemplatesV.ExecuteTemplate(w, sTemplate, viewData)
 }
 
-func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
+func GMSMenuPage(w http.ResponseWriter, r *http.Request, menuName string) {
 	var viewData = GMViewData{}
 	viewData.Config = GMConfigV
 	viewData.Context.AuthOK = GMSessionAuthActive(w, r)
@@ -923,14 +940,9 @@ func GMSMenuPage(w http.ResponseWriter, r *http.Request, schemaName string) {
 		return
 	}
 
-	schemaV, okey := GMGetSchema(w, r, schemaName)
-	if !okey {
-		return
-	}
-
-	viewData.Context.SchemaName = schemaV.Name
-	viewData.Context.SchemaTitle = schemaV.Title
-	viewData.Context.SchemaMenu = GMConfigGetSchemaMenu(schemaName)
+	viewData.Context.SchemaMenu = GMConfigGetMenu(menuName)
+	viewData.Context.SchemaName = viewData.Context.SchemaMenu.Name
+	viewData.Context.SchemaTitle = viewData.Context.SchemaMenu.Title
 
 	GMTemplatesV.ExecuteTemplate(w, "smenu", viewData)
 }
