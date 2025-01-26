@@ -1,0 +1,146 @@
+{
+	"Title": "Siremis Menu",
+	"Description": "Siremis Menu",
+	"Menu": [
+		{
+			"Name": "subscriber",
+			"Title": "Subscriber Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/subscriber",
+					"Inactive": false,
+					"Description": "list all subscriber records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/subscriber",
+					"Inactive": false,
+					"Description": "create new subscriber record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/subscriber",
+					"Inactive": false,
+					"Description": "search subscriber records"
+				}
+			]
+		},
+		{
+			"Name": "domain",
+			"Title": "Domain Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/domain",
+					"Inactive": false,
+					"Description": "list all domain records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/domain",
+					"Inactive": false,
+					"Description": "create new domain record"
+				}
+			]
+		},
+		{
+			"Name": "address",
+			"Title": "Address Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/address",
+					"Inactive": false,
+					"Description": "list all address records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/address",
+					"Inactive": false,
+					"Description": "create new address record"
+				}
+			]
+		},
+		{
+			"Name": "dispatcher",
+			"Title": "Dispatcher Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/dispatcher",
+					"Inactive": false,
+					"Description": "list all dispatcher records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/dispatcher",
+					"Inactive": false,
+					"Description": "create new dispatcher record"
+				}
+			]
+		},
+		{
+			"Name": "version",
+			"Title": "Version Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/version",
+					"Inactive": false,
+					"Description": "list all version records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/version",
+					"Inactive": false,
+					"Description": "create new version record"
+				}
+			]
+		},
+		{
+			"Name": "jsonrpc",
+			"Title": "Json RPC Command",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "execute",
+					"Title": "Execute",
+					"URLPath": "do/jsonrpc",
+					"Inactive": false,
+					"Description": "execute jsonrpc command"
+				}
+			]
+		},
+		{
+			"Name": "charts",
+			"Title": "Charts Service",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "shm",
+					"Title": "Shared Memory",
+					"URLPath": "charts/shm",
+					"Inactive": false,
+					"Description": "show charts service"
+				}
+			]
+		}
+	]
+}
