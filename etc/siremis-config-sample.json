@@ -1,6 +1,6 @@
 {
 	"DefaultViewPath": "view/main",
-	"URLDir": "/w",
+	"URLDir": "/siremis",
 	"PublicDir": "public",
 	"SchemaDir": "schemas",
 	"AuthUsersFilePath": "",
