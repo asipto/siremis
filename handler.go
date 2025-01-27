@@ -901,6 +901,7 @@ func GMLogout(w http.ResponseWriter, r *http.Request) int {
 		Expires: time.Now(),
 	})
 
+	GMViewGuestPage(w, r, "login")
 	return 0
 }
 
