@@ -29,7 +29,7 @@ type GMCLIOptions struct {
 }
 
 var GMCLIOptionsV = GMCLIOptions{
-	config:      "etc/config.json",
+	config:      "etc/siremis-config.json",
 	domain:      "",
 	httpsrv:     ":8284",
 	httpssrv:    "",
