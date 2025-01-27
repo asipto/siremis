@@ -14,7 +14,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-const siremisVersion = "1.0.0"
+const siremisVersion = "0.9.0"
 
 // CLIOptions - structure for command line options
 type GMCLIOptions struct {
