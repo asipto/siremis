@@ -31,7 +31,7 @@ type GMCLIOptions struct {
 var GMCLIOptionsV = GMCLIOptions{
 	config:      "etc/siremis-config.json",
 	domain:      "",
-	httpsrv:     ":8284",
+	httpsrv:     "127.0.0.1:8284",
 	httpssrv:    "",
 	httpsusele:  false,
 	httpspubkey: "",
