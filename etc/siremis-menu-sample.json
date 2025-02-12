@@ -94,6 +94,27 @@
 			]
 		},
 		{
+			"Name": "group",
+			"Title": "Group Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/group",
+					"Inactive": false,
+					"Description": "list all group records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/group",
+					"Inactive": false,
+					"Description": "create new group record"
+				}
+			]
+		},
+		{
 			"Name": "version",
 			"Title": "Version Management",
 			"Inactive": false,
