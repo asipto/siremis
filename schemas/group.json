@@ -1,0 +1,91 @@
+{
+	"Name": "grp",
+	"Title": "Group",
+	"Table": "grp",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Username",
+			"Column": "username",
+			"Name": "username",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Domain",
+			"Column": "domain",
+			"Name": "domain",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			},
+			"InputForm": {
+				"Type": "dataset",
+				"OptionValues": {
+					"Func": "DBColumnValues",
+					"Params": [ "domain", "domain" ]
+				}
+			}
+		},
+		{
+			"Title": "Group Name",
+			"Column": "grp",
+			"Name": "grp",
+			"Type": "grp",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Last Modified",
+			"Column": "last_modified",
+			"Name": "last_modified",
+			"Type": "datetime",
+			"Enable": {
+				"List": false,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": false
+			},
+			"ValueInsert": {
+				"Func": "DateTimeNow",
+				"Params": [ ]
+			},
+			"ValueEdit": {
+				"Func": "DateTimeNow",
+				"Params": [ ]
+			}
+		}
+	]
+}
