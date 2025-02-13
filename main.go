@@ -185,6 +185,7 @@ func main() {
 
 	GMFuncMap["DBColumnValues"] = GMFuncDBColumnValues
 	GMFuncMap["ParamValues"] = GMFuncParamValues
+	GMFuncMap["ParamVN"] = GMFuncParamVN
 
 	GMTemplatesV = template.Must(template.New("").Funcs(template.FuncMap{
 		"rowon":     GMTemplateFuncRowOn,

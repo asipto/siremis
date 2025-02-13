@@ -83,6 +83,20 @@ func GMFuncParamValues(params []any) []GMOptionValue {
 	return lRes
 }
 
+func GMFuncParamVN(params []any) []GMOptionValue {
+	lRes := make([]GMOptionValue, 0)
+	for i, v := range params {
+		var oVal = GMOptionValue{}
+		if i%2 == 1 {
+			oVal.Title = v.(string)
+			lRes = append(lRes, oVal)
+		} else {
+			oVal.Value = v.(string)
+		}
+	}
+	return lRes
+}
+
 func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {
 	if mode == 0 {
 		return (crt-1)%cols == 0
