@@ -1,0 +1,103 @@
+{
+	"Name": "htable",
+	"Title": "HTable",
+	"Table": "htable",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Key Name",
+			"Column": "key_name",
+			"Name": "key_name",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Key Type",
+			"Column": "key_type",
+			"Name": "key_type",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			},
+			"InputForm": {
+				"Type": "radio",
+				"OptionValues": {
+					"Func": "ParamVN",
+					"Params": [ "0", "simple", "1", "array"]
+				}
+			}
+		},
+		{
+			"Title": "Value Type",
+			"Column": "value_type",
+			"Name": "value_type",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			},
+			"InputForm": {
+				"Type": "radio",
+				"OptionValues": {
+					"Func": "ParamVN",
+					"Params": [ "0", "string", "1", "integer"]
+				}
+			}
+		},
+		{
+			"Title": "Key Value",
+			"Column": "key_value",
+			"Name": "key_value",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Expires",
+			"Column": "expires",
+			"Name": "expires",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		}
+	]
+}
