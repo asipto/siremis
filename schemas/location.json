@@ -1,0 +1,325 @@
+{
+	"Name": "mtree",
+	"Title": "MTree",
+	"Table": "mtree",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "RUID",
+			"Column": "ruid",
+			"Name": "ruid",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Username",
+			"Column": "username",
+			"Name": "username",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Domain",
+			"Column": "domain",
+			"Name": "domain",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			},
+			"InputForm": {
+				"Type": "dataset",
+				"OptionValues": {
+					"Func": "DBColumnValues",
+					"Params": [ "domain", "domain" ]
+				}
+			}
+		},
+		{
+			"Title": "Contact",
+			"Column": "contact",
+			"Name": "contact",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Received",
+			"Column": "received",
+			"Name": "received",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Path",
+			"Column": "path",
+			"Name": "path",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Expires",
+			"Column": "expires",
+			"Name": "expires",
+			"Type": "datetime",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Q",
+			"Column": "q",
+			"Name": "q",
+			"Type": "float",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "CallID",
+			"Column": "callid",
+			"Name": "callid",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "CSeq",
+			"Column": "cseq",
+			"Name": "cseq",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Last Modified",
+			"Column": "last_modified",
+			"Name": "last_modified",
+			"Type": "datetime",
+			"Enable": {
+				"List": false,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": false
+			},
+			"ValueInsert": {
+				"Func": "DateTimeNow",
+				"Params": [ ]
+			},
+			"ValueEdit": {
+				"Func": "DateTimeNow",
+				"Params": [ ]
+			}
+		},
+		{
+			"Title": "Flags",
+			"Column": "flags",
+			"Name": "flags",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "CFlags",
+			"Column": "cflags",
+			"Name": "cflags",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "User Agent",
+			"Column": "user_agent",
+			"Name": "user_agent",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Socket",
+			"Column": "socket",
+			"Name": "socket",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Methods",
+			"Column": "methods",
+			"Name": "methods",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Instance",
+			"Column": "instance",
+			"Name": "instance",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Reg Id",
+			"Column": "reg_id",
+			"Name": "reg_id",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Server Id",
+			"Column": "server_id",
+			"Name": "server_id",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Connection Id",
+			"Column": "connection_id",
+			"Name": "connection_id",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Keepalive",
+			"Column": "keepalive",
+			"Name": "keepalive",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		},
+		{
+			"Title": "Partition",
+			"Column": "partition",
+			"Name": "partition",
+			"Type": "int",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": false
+			}
+		}
+	]
+}
