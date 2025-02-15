@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -211,6 +212,8 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 		for i, v := range selFields {
 			if v.Type == "int" {
 				dbRow[i] = new(int)
+			} else if v.Type == "float" {
+				dbRow[i] = new(float32)
 			} else if v.Type == "str" || v.Type == "string" {
 				dbRow[i] = new(string)
 			} else {
@@ -339,6 +342,8 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		for i, v := range formFields {
 			if v.Field.Type == "int" {
 				dbRow[i] = new(int)
+			} else if v.Field.Type == "float" {
+				dbRow[i] = new(float32)
 			} else if v.Field.Type == "str" || v.Field.Type == "string" {
 				dbRow[i] = new(string)
 			} else {
@@ -355,6 +360,8 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			formFields[i].Value = v
 			if formFields[i].Field.Type == "int" {
 				formFields[i].SValue = strconv.Itoa(*(v.(*int)))
+			} else if formFields[i].Field.Type == "float" {
+				formFields[i].SValue = fmt.Sprintf("%.2f", *(v.(*float32)))
 			} else {
 				formFields[i].SValue = *(v.(*string))
 			}
@@ -482,6 +489,8 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 			} else {
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(sVal)
+				} else if v.Type == "float" {
+					vField.Value, _ = strconv.ParseFloat(sVal, 32)
 				} else {
 					vField.Value = sVal
 				}
@@ -579,6 +588,8 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 			} else {
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(sVal)
+				} else if v.Type == "float" {
+					vField.Value, _ = strconv.ParseFloat(sVal, 32)
 				} else {
 					vField.Value = sVal
 				}
@@ -740,6 +751,9 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 				log.Printf("search form field: %s / value: '%v'\n", v.Name, sVal)
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(sVal)
+				} else if v.Type == "float" {
+					vField.Value, _ = strconv.Atoi(sVal)
+					strconv.ParseFloat(sVal, 32)
 				} else {
 					vField.Value = sVal
 				}
@@ -824,6 +838,8 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 		for i, v := range selFields {
 			if v.Type == "int" {
 				dbRow[i] = new(int)
+			} else if v.Type == "float" {
+				dbRow[i] = new(float32)
 			} else if v.Type == "str" || v.Type == "string" {
 				dbRow[i] = new(string)
 			} else {
