@@ -1,7 +1,7 @@
 {
-	"Name": "mtree",
-	"Title": "MTree",
-	"Table": "mtree",
+	"Name": "location",
+	"Title": "Location",
+	"Table": "location",
 	"Query": {
 		"IdField": "id",
 		"Limit": 0
