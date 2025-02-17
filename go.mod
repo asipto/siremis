@@ -1,4 +1,4 @@
-module github.com/asipto/siremis-go
+module github.com/asipto/siremis
 
 go 1.21
 
