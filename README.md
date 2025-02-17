@@ -1,4 +1,10 @@
-# SIREMIS - Web Management Interface
+# SIREMIS - Web Management Interface Fo Kamailio
+
+This is the next-generation SIREMIS written in Go language.
+
+The old SIREMIS generation written in PHP (with support up to PHP 7.x) can be found at:
+
+* https://github.com/asipto/siremis-php
 
 Project web site:
 
@@ -12,20 +18,20 @@ SIREMIS is a generic web management interface designed to work mainly with Kamai
 
 Some screenshots can be seen at:
 
-* [https://github.com/asipto/siremis-go/issues/1](https://github.com/asipto/siremis-go/issues/1)
+* [https://github.com/asipto/siremis/issues/1](https://github.com/asipto/siremis/issues/1)
 
 ## Usage
 
 Clone the repository:
 
 ```
-git clone https://github.com/asipto/siremis-go
+git clone https://github.com/asipto/siremis
 ```
 
 Build the application:
 
 ```
-cd siremis-go
+cd siremis
 go build .
 ```
 
@@ -38,14 +44,14 @@ Copy `etc/siremis-menu-sample.json` to `etc/siremis-menu.json`, and
 Run the application:
 
 ```
-./siremis-go
+./siremis
 ```
 
 Go with a modern web browser to:
 
 * http://local.ip:8284/w/
 
-See `siremis-go -h` for options to set the IP and port to listen on, or the domain
+See `siremis -h` for options to set the IP and port to listen on, or the domain
 and certificates for HTTPS.
 
 ## Contributions
