@@ -54,6 +54,20 @@ Go with a modern web browser to:
 See `siremis -h` for options to set the IP and port to listen on, or the domain
 and certificates for HTTPS.
 
+## Version Policy
+
+The version string is composed of three numbers, the format is:
+
+```
+YY.MM.VV
+```
+
+Where:
+
+* `YY` - the last two digits of the year for the release
+* `MM` - the month of the release, if it is `0`, then it is a development version
+* `VV` - the incremental version for minor updates of the same release series
+
 ## Contributions
 
 Contributions can be made by submitting pull requests and have to be provided
