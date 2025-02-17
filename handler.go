@@ -171,15 +171,15 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 	strQuery := "SELECT "
 	for i, v := range selFields {
 		if i == 0 {
-			strQuery += v.Column
+			strQuery += dbColumnQuoted(v.Column)
 		} else {
-			strQuery += ", " + v.Column
+			strQuery += ", " + dbColumnQuoted(v.Column)
 		}
 	}
 	strQuery += " FROM " + schemaV.Table
 
 	if len(schemaV.Query.OrderBy) > 0 {
-		strQuery += " ORDER BY " + schemaV.Query.OrderBy
+		strQuery += " ORDER BY " + dbColumnQuoted(schemaV.Query.OrderBy)
 		if len(schemaV.Query.OrderType) > 0 {
 			strQuery += " " + schemaV.Query.OrderType
 		}
@@ -227,11 +227,11 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 			panic(err.Error())
 		}
 		dbVals := make([]any, len(selFields))
-		for i, _ := range selFields {
-			switch nw := dbRow[i].(type) {
+		for i := range dbRow {
+			switch fv := dbRow[i].(type) {
 			case *sql.NullString:
-				if nw.Valid {
-					dbVals[i] = nw.String
+				if fv.Valid {
+					dbVals[i] = fv.String
 				} else {
 					dbVals[i] = ""
 				}
@@ -331,9 +331,9 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	strQuery := "SELECT "
 	for i, v := range formFields {
 		if i == 0 {
-			strQuery += v.Field.Column
+			strQuery += dbColumnQuoted(v.Field.Column)
 		} else {
-			strQuery += ", " + v.Field.Column
+			strQuery += ", " + dbColumnQuoted(v.Field.Column)
 		}
 	}
 	strQuery += " FROM " + schemaV.Table + " WHERE " + formFields[0].Field.Column + " = ?"
@@ -349,6 +349,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	}
 	selDB, err := db.Query(strQuery, vId)
 	if err != nil {
+		log.Printf("failed query [[%s]] (%v)\n", strQuery, vId)
 		panic(err.Error())
 	}
 
@@ -360,9 +361,9 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			} else if v.Field.Type == "float" {
 				dbRow[i] = new(float32)
 			} else if v.Field.Type == "str" || v.Field.Type == "string" {
-				dbRow[i] = new(string)
+				dbRow[i] = new(sql.NullString)
 			} else {
-				dbRow[i] = new(string)
+				dbRow[i] = new(sql.NullString)
 			}
 		}
 		err := selDB.Scan(dbRow...)
@@ -378,7 +379,12 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			} else if formFields[i].Field.Type == "float" {
 				formFields[i].SValue = fmt.Sprintf("%.2f", *(v.(*float32)))
 			} else {
-				formFields[i].SValue = *(v.(*string))
+				fv := *(v.(*sql.NullString))
+				if fv.Valid {
+					formFields[i].SValue = fv.String
+				} else {
+					formFields[i].SValue = ""
+				}
 			}
 		}
 	}
@@ -528,7 +534,7 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 			} else {
 				comma = true
 			}
-			strQCols += v.Column
+			strQCols += dbColumnQuoted(v.Column)
 			strQValQ += "?"
 			dbVals = append(dbVals, v.Value)
 		}
@@ -626,7 +632,7 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 			} else {
 				comma = true
 			}
-			strQuery += v.Column + "=?"
+			strQuery += dbColumnQuoted(v.Column) + "=?"
 			dbVals = append(dbVals, v.Value)
 		}
 	}
@@ -673,7 +679,8 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 			break
 		}
 	}
-	strQuery := " DELETE FROM " + schemaV.Table + " WHERE " + selFields[0].Column + " = ?"
+	strQuery := " DELETE FROM " + schemaV.Table + " WHERE " +
+		dbColumnQuoted(selFields[0].Column) + " = ?"
 	var vId any
 	if selFields[0].Type == "int" {
 		nId := 0
@@ -807,9 +814,9 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 	strQuery := "SELECT "
 	for i, v := range selFields {
 		if i == 0 {
-			strQuery += v.Column
+			strQuery += dbColumnQuoted(v.Column)
 		} else {
-			strQuery += ", " + v.Column
+			strQuery += ", " + dbColumnQuoted(v.Column)
 		}
 	}
 	strQuery += " FROM " + schemaV.Table + " WHERE "
@@ -827,7 +834,7 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 	}
 
 	if len(schemaV.Query.OrderBy) > 0 {
-		strQuery += " ORDER BY " + schemaV.Query.OrderBy
+		strQuery += " ORDER BY " + dbColumnQuoted(schemaV.Query.OrderBy)
 		if len(schemaV.Query.OrderType) > 0 {
 			strQuery += " " + schemaV.Query.OrderType
 		}

@@ -19,3 +19,7 @@ func dbConn() (db *sql.DB) {
 	}
 	return db
 }
+
+func dbColumnQuoted(cName string) string {
+	return GMConfigV.DBData.ColumnQuote + cName + GMConfigV.DBData.ColumnQuote
+}

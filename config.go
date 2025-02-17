@@ -20,13 +20,14 @@ type GMConfigAuthUsersFile struct {
 }
 
 type GMConfigDB struct {
-	Database string `json:"Database"`
-	Driver   string `json:"Driver"`
-	Host     string `json:"Host"`
-	Port     string `json:"Port"`
-	Protocol string `json:"Protocol"`
-	Username string `json:"Username"`
-	Password string `json:"Password"`
+	Database    string `json:"Database"`
+	Driver      string `json:"Driver"`
+	Host        string `json:"Host"`
+	Port        string `json:"Port"`
+	Protocol    string `json:"Protocol"`
+	Username    string `json:"Username"`
+	Password    string `json:"Password"`
+	ColumnQuote string `json:"ColumnQuote,omitempty"`
 }
 
 type GMConfigMenuItem struct {
@@ -132,6 +133,13 @@ func GMConfigEvalVals() {
 		eVal, ok := os.LookupEnv(GMConfigV.DBData.Password[5:])
 		if ok {
 			GMConfigV.DBData.Password = eVal
+		}
+	}
+	if GMConfigV.DBData.ColumnQuote == "" {
+		if GMConfigV.DBData.Driver == "mysql" {
+			GMConfigV.DBData.ColumnQuote = "`"
+		} else {
+			GMConfigV.DBData.ColumnQuote = "\""
 		}
 	}
 	for i, v := range GMConfigV.AuthUsers {
