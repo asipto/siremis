@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -202,6 +203,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 	db := dbConn()
 	selDB, err := db.Query(strQuery)
 	if err != nil {
+		log.Printf("query failed [[%s]]\n", strQuery)
 		panic(err.Error())
 	}
 	defer db.Close()
@@ -215,17 +217,30 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 			} else if v.Type == "float" {
 				dbRow[i] = new(float32)
 			} else if v.Type == "str" || v.Type == "string" {
-				dbRow[i] = new(string)
+				dbRow[i] = new(sql.NullString)
 			} else {
-				dbRow[i] = new(string)
+				dbRow[i] = new(sql.NullString)
 			}
 		}
 		err := selDB.Scan(dbRow...)
 		if err != nil {
 			panic(err.Error())
 		}
+		dbVals := make([]any, len(selFields))
+		for i, _ := range selFields {
+			switch nw := dbRow[i].(type) {
+			case *sql.NullString:
+				if nw.Valid {
+					dbVals[i] = nw.String
+				} else {
+					dbVals[i] = ""
+				}
+			default:
+				dbVals[i] = dbRow[i]
+			}
+		}
 		//log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
-		dbRes = append(dbRes, dbRow)
+		dbRes = append(dbRes, dbVals)
 	}
 
 	GMAuthRefresh(w, r)
