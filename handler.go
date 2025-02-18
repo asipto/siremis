@@ -213,9 +213,9 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 		dbRow := make([]any, len(selFields))
 		for i, v := range selFields {
 			if v.Type == "int" {
-				dbRow[i] = new(int)
+				dbRow[i] = new(sql.NullInt64)
 			} else if v.Type == "float" {
-				dbRow[i] = new(float32)
+				dbRow[i] = new(sql.NullFloat64)
 			} else if v.Type == "str" || v.Type == "string" {
 				dbRow[i] = new(sql.NullString)
 			} else {
@@ -234,6 +234,18 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 					dbVals[i] = fv.String
 				} else {
 					dbVals[i] = ""
+				}
+			case *sql.NullInt64:
+				if fv.Valid {
+					dbVals[i] = fv.Int64
+				} else {
+					dbVals[i] = 0
+				}
+			case *sql.NullFloat64:
+				if fv.Valid {
+					dbVals[i] = fv.Float64
+				} else {
+					dbVals[i] = 0.0
 				}
 			default:
 				dbVals[i] = dbRow[i]
@@ -357,9 +369,9 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		dbRow := make([]any, len(formFields))
 		for i, v := range formFields {
 			if v.Field.Type == "int" {
-				dbRow[i] = new(int)
+				dbRow[i] = new(sql.NullInt64)
 			} else if v.Field.Type == "float" {
-				dbRow[i] = new(float32)
+				dbRow[i] = new(sql.NullFloat64)
 			} else if v.Field.Type == "str" || v.Field.Type == "string" {
 				dbRow[i] = new(sql.NullString)
 			} else {
@@ -370,19 +382,34 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		if err != nil {
 			panic(err.Error())
 		}
-		log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
+		log.Println("listing row: id: " + strconv.FormatInt((*(dbRow[0].(*sql.NullInt64))).Int64, 10))
 
 		for i, v := range dbRow {
-			formFields[i].Value = v
 			if formFields[i].Field.Type == "int" {
-				formFields[i].SValue = strconv.Itoa(*(v.(*int)))
+				fv := *(v.(*sql.NullInt64))
+				if fv.Valid {
+					formFields[i].Value = fv.Int64
+					formFields[i].SValue = strconv.FormatInt(fv.Int64, 10)
+				} else {
+					formFields[i].Value = 0
+					formFields[i].SValue = "0"
+				}
 			} else if formFields[i].Field.Type == "float" {
-				formFields[i].SValue = fmt.Sprintf("%.2f", *(v.(*float32)))
+				fv := *(v.(*sql.NullFloat64))
+				if fv.Valid {
+					formFields[i].Value = fv.Float64
+					formFields[i].SValue = fmt.Sprintf("%.2f", fv.Float64)
+				} else {
+					formFields[i].Value = 0.00
+					formFields[i].SValue = "0.00"
+				}
 			} else {
 				fv := *(v.(*sql.NullString))
 				if fv.Valid {
+					formFields[i].Value = fv.String
 					formFields[i].SValue = fv.String
 				} else {
+					formFields[i].Value = ""
 					formFields[i].SValue = ""
 				}
 			}
