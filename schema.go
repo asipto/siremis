@@ -47,6 +47,7 @@ type GMSchemaField struct {
 	InputForm   GMSchemaInputForm   `json:"InputForm,omitempty"`
 	ValueInsert GMSchemaFieldValue  `json:"ValueInsert,omitempty"`
 	ValueEdit   GMSchemaFieldValue  `json:"ValueEdit,omitempty"`
+	ValueShow   GMSchemaFieldValue  `json:"ValueShow,omitempty"`
 }
 
 type GMSchema struct {

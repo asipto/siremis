@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"log"
 	"time"
 
@@ -95,6 +96,10 @@ func GMFuncParamVN(params []any) []GMOptionValue {
 		}
 	}
 	return lRes
+}
+
+func GMFuncFloat2D(param float64) string {
+	return fmt.Sprintf("%.2f", param)
 }
 
 func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {

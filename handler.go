@@ -388,7 +388,11 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			if formFields[i].Field.Type == "int" {
 				fv := *(v.(*sql.NullInt64))
 				if fv.Valid {
-					formFields[i].Value = fv.Int64
+					if sAction == "show" || len(formFields[i].Field.ValueShow.Func) > 0 {
+						formFields[i].Value = GMFuncMap[formFields[i].Field.ValueShow.Func].(func(int64) string)(fv.Int64)
+					} else {
+						formFields[i].Value = fv.Int64
+					}
 					formFields[i].SValue = strconv.FormatInt(fv.Int64, 10)
 				} else {
 					formFields[i].Value = 0
@@ -397,7 +401,11 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			} else if formFields[i].Field.Type == "float" {
 				fv := *(v.(*sql.NullFloat64))
 				if fv.Valid {
-					formFields[i].Value = fv.Float64
+					if sAction == "show" || len(formFields[i].Field.ValueShow.Func) > 0 {
+						formFields[i].Value = GMFuncMap[formFields[i].Field.ValueShow.Func].(func(float64) string)(fv.Float64)
+					} else {
+						formFields[i].Value = fv.Float64
+					}
 					formFields[i].SValue = fmt.Sprintf("%.2f", fv.Float64)
 				} else {
 					formFields[i].Value = 0.00
@@ -406,7 +414,11 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			} else {
 				fv := *(v.(*sql.NullString))
 				if fv.Valid {
-					formFields[i].Value = fv.String
+					if sAction == "show" || len(formFields[i].Field.ValueShow.Func) > 0 {
+						formFields[i].Value = GMFuncMap[formFields[i].Field.ValueShow.Func].(func(string) string)(fv.String)
+					} else {
+						formFields[i].Value = fv.String
+					}
 					formFields[i].SValue = fv.String
 				} else {
 					formFields[i].Value = ""
