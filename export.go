@@ -98,8 +98,8 @@ func GMFuncParamVN(params []any) []GMOptionValue {
 	return lRes
 }
 
-func GMFuncFloat2D(param float64) string {
-	return fmt.Sprintf("%.2f", param)
+func GMFuncFloat2D(params []any) string {
+	return fmt.Sprintf("%.2f", params[0].(float64))
 }
 
 func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {
