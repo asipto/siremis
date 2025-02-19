@@ -245,6 +245,13 @@
 				"Edit": true,
 				"Show": true,
 				"Search": false
+			},
+			"ValueShow": {
+				"Func": "ListBitFlags",
+				"Params": [ "@fld:methods", "0:INVITE", "1:CANCEL", "2:ACK", "3:BYE",
+							"4:INFO", "5:REGISTER", "6:SUBSCRIBE", "7:NOTIFY",
+							"8:MESSAGE", "9:OPTIONS", "10:PRACK", "11:UPDATE",
+							"12:REFER", "13:PUBLISH", "14:KDMQ"]
 			}
 		},
 		{
