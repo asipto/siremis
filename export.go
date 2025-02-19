@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -100,6 +102,30 @@ func GMFuncParamVN(params []any) []GMOptionValue {
 
 func GMFuncFloat2D(params []any) string {
 	return fmt.Sprintf("%.2f", params[0].(float64))
+}
+
+func GMFuncListBitFlags(params []any) string {
+	fv := params[0].(int64)
+	if fv == 0 {
+		return "0"
+	}
+	sv := fmt.Sprintf("%d", fv)
+	if len(params) == 1 {
+		return sv
+	}
+	sv += " [ "
+	for i := 1; i < len(params); i++ {
+		sPm := params[i].(string)
+		vFN := strings.Split(sPm, ":")
+		if len(vFN) == 2 {
+			fl, _ := strconv.Atoi(vFN[0])
+			if (fv & (1 << fl)) != 0 {
+				sv += sPm + " "
+			}
+		}
+	}
+	sv += "]"
+	return sv
 }
 
 func GMTemplateFuncRowOn(nitems, idx, crt, cols, mode int) bool {
