@@ -129,6 +129,10 @@
 				"Edit": true,
 				"Show": true,
 				"Search": false
+			},
+			"ValueShow": {
+				"Func": "Float2D",
+				"Params": [ ]
 			}
 		},
 		{
