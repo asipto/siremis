@@ -6,7 +6,11 @@
 		"IdField": "id",
 		"Limit": 0
 	},
-	"InactiveActions": 7,
+	"InactiveActions": {
+		"Insert": true,
+		"Edit": true,
+		"Delete": true
+	},
 	"Fields": [
 		{
 			"Title": "Id",

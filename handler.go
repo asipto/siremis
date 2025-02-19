@@ -292,13 +292,13 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		return
 	}
 	if sAction == "edit" {
-		if (schemaV.InactiveActions & InactiveActionEdit) != 0 {
+		if schemaV.InactiveActions.Edit {
 			GMAlertView(w, r, schemaV.Name, schemaV.Title,
 				"Edit operation not permitted for: "+schemaV.Name)
 			return
 		}
 	} else if sAction == "delete" {
-		if (schemaV.InactiveActions & InactiveActionDelete) != 0 {
+		if schemaV.InactiveActions.Delete {
 			GMAlertView(w, r, schemaV.Name, schemaV.Title,
 				"Delete operation not permitted for: "+schemaV.Name)
 			return
@@ -469,7 +469,7 @@ func GMNew(w http.ResponseWriter, r *http.Request, schemaName string) {
 	if !okey {
 		return
 	}
-	if (schemaV.InactiveActions & InactiveActionInsert) != 0 {
+	if schemaV.InactiveActions.Insert {
 		GMAlertView(w, r, schemaV.Name, schemaV.Title,
 			"Insert operation not permitted for: "+schemaV.Name)
 		return
@@ -517,7 +517,7 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 	if !okey {
 		return
 	}
-	if (schemaV.InactiveActions & InactiveActionInsert) != 0 {
+	if schemaV.InactiveActions.Insert {
 		GMAlertView(w, r, schemaV.Name, schemaV.Title,
 			"Insert operation not permitted for : "+schemaV.Name)
 		return
@@ -613,7 +613,7 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	if !okey {
 		return
 	}
-	if (schemaV.InactiveActions & InactiveActionEdit) != 0 {
+	if schemaV.InactiveActions.Edit {
 		GMAlertView(w, r, schemaV.Name, schemaV.Title,
 			"Edit operation not permitted for: "+schemaV.Name)
 		return
@@ -723,7 +723,7 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	if !okey {
 		return
 	}
-	if (schemaV.InactiveActions & InactiveActionDelete) != 0 {
+	if schemaV.InactiveActions.Delete {
 		GMAlertView(w, r, schemaV.Name, schemaV.Title,
 			"Delete operation not permitted for: "+schemaV.Name)
 		return
