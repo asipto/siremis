@@ -6,6 +6,7 @@
 		"IdField": "id",
 		"Limit": 0
 	},
+	"InactiveActions": 7,
 	"Fields": [
 		{
 			"Title": "Id",
