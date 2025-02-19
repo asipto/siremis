@@ -183,6 +183,8 @@ func main() {
 	GMFuncMap["HA1B"] = GMFuncHA1B
 	GMFuncMap["DateTimeNow"] = GMFuncDateTimeNow
 
+	GMFuncMap["Float2D"] = GMFuncFloat2D
+
 	GMFuncMap["DBColumnValues"] = GMFuncDBColumnValues
 	GMFuncMap["ParamValues"] = GMFuncParamValues
 	GMFuncMap["ParamVN"] = GMFuncParamVN
