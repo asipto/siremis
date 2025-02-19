@@ -63,6 +63,11 @@
 			},
 			"InputForm": {
 				"Type": "number"
+			},
+			"ValueShow": {
+				"Func": "ListBitFlags",
+				"Params": [ "@fld:flags", "0:INACTIVE", "1:TRYING", "2:ADMIN-DISABLED",
+					"3:PROBING", "4:SKIP-DNS" ]
 			}
 		},
 		{
