@@ -4,7 +4,9 @@
   <h2>{{ $.Schema.Title }} List</h2>
   <br />
   <p>
+    {{ if not $.Schema.InactiveActions.Insert }}
     <a href="{{ $.Config.URLDir }}/new/{{ $.Schema.Name }}" class="btn btn-primary">New {{ $.Schema.Title }}</a>
+    {{ end }}
     {{ if gt $.Schema.Query.Limit 0 }}
     {{ if ge $.Context.ResultAttrs.NrGroupPrev 0 }}
     <a href="{{ $.Config.URLDir }}/list/{{ $.Schema.Name }}/group/{{ $.Context.ResultAttrs.NrGroupPrev }}" class="btn btn-secondary">Prev Rows Group</a>
@@ -39,9 +41,13 @@
         {{ end }}
         <td>
           <a href="{{ $.Config.URLDir }}/show/{{ $.Schema.Name }}/{{ index . 0 }}" class="btn btn-primary">View</a>
+          {{ if not $.Schema.InactiveActions.Edit }}
           <a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ index . 0 }}" class="btn btn-primary">Edit</a>
+          {{ end }}
+          {{ if not $.Schema.InactiveActions.Delete }}
           <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ index . 0 }}" class="btn btn-danger">Delete</a>
-        </td>
+          {{ end }}
+      </td>
       </tr>
       {{ end }}
     </tbody>
