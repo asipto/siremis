@@ -20,8 +20,14 @@
         </tbody>
       </table>
       <br />
-      <p><a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}" class="btn btn-primary">Edit</a>
-      <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}" class="btn btn-primary">Delete</a></p>
+      <p>
+        {{ if not $.Schema.InactiveActions.Edit }}
+        <a href="{{ $.Config.URLDir }}/edit/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}" class="btn btn-primary">Edit</a>
+        {{ end }}
+        {{ if not $.Schema.InactiveActions.Delete }}
+        <a href="{{ $.Config.URLDir }}/delete/{{ $.Schema.Name }}/{{ $.Context.IdFieldValue }}" class="btn btn-primary">Delete</a>
+        {{ end }}
+      </p>
     </div>
   {{ template "footer" . }}
 {{ end }}
