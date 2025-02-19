@@ -385,45 +385,62 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		log.Println("listing row: id: " + strconv.FormatInt((*(dbRow[0].(*sql.NullInt64))).Int64, 10))
 
 		for i, v := range dbRow {
+			var rv any
 			if formFields[i].Field.Type == "int" {
 				fv := *(v.(*sql.NullInt64))
 				if fv.Valid {
-					if sAction == "show" || len(formFields[i].Field.ValueShow.Func) > 0 {
-						formFields[i].Value = GMFuncMap[formFields[i].Field.ValueShow.Func].(func(int64) string)(fv.Int64)
-					} else {
-						formFields[i].Value = fv.Int64
-					}
+					rv = fv.Int64
 					formFields[i].SValue = strconv.FormatInt(fv.Int64, 10)
 				} else {
-					formFields[i].Value = 0
+					rv = int64(0)
 					formFields[i].SValue = "0"
 				}
 			} else if formFields[i].Field.Type == "float" {
 				fv := *(v.(*sql.NullFloat64))
 				if fv.Valid {
-					if sAction == "show" || len(formFields[i].Field.ValueShow.Func) > 0 {
-						formFields[i].Value = GMFuncMap[formFields[i].Field.ValueShow.Func].(func(float64) string)(fv.Float64)
-					} else {
-						formFields[i].Value = fv.Float64
-					}
+					rv = fv.Float64
 					formFields[i].SValue = fmt.Sprintf("%.2f", fv.Float64)
 				} else {
-					formFields[i].Value = 0.00
+					formFields[i].Value = float64(0.00)
 					formFields[i].SValue = "0.00"
 				}
 			} else {
 				fv := *(v.(*sql.NullString))
 				if fv.Valid {
-					if sAction == "show" || len(formFields[i].Field.ValueShow.Func) > 0 {
-						formFields[i].Value = GMFuncMap[formFields[i].Field.ValueShow.Func].(func(string) string)(fv.String)
-					} else {
-						formFields[i].Value = fv.String
-					}
+					rv = fv.String
 					formFields[i].SValue = fv.String
 				} else {
-					formFields[i].Value = ""
+					rv = ""
 					formFields[i].SValue = ""
 				}
+			}
+
+			if sAction == "show" && len(formFields[i].Field.ValueShow.Func) > 0 {
+				var vParams = make([]any, 0)
+				if len(formFields[i].Field.ValueShow.Params) > 0 {
+					for _, p := range formFields[i].Field.ValueShow.Params {
+						if strings.HasPrefix(p, "@fld:") {
+							fldName := strings.TrimPrefix(p, "@fld:")
+							if fldName == formFields[i].Field.Name {
+								vParams = append(vParams, rv)
+							} else {
+								for j := 0; j < i; j++ {
+									if fldName == formFields[j].Field.Name {
+										vParams = append(vParams, formFields[j].Value)
+										break
+									}
+								}
+							}
+						} else {
+							vParams = append(vParams, p)
+						}
+					}
+				} else {
+					vParams = append(vParams, rv)
+				}
+				formFields[i].Value = GMFuncMap[formFields[i].Field.ValueShow.Func].(func([]any) string)(vParams)
+			} else {
+				formFields[i].Value = rv
 			}
 		}
 	}
