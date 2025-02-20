@@ -31,6 +31,27 @@
 			]
 		},
 		{
+			"Name": "location",
+			"Title": "Location Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/location",
+					"Inactive": false,
+					"Description": "list all location records"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/location",
+					"Inactive": false,
+					"Description": "search location records"
+				}
+			]
+		},
+		{
 			"Name": "domain",
 			"Title": "Domain Management",
 			"Inactive": false,
@@ -115,6 +136,62 @@
 			]
 		},
 		{
+			"Name": "htable",
+			"Title": "HTable Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/htable",
+					"Inactive": false,
+					"Description": "list all htable records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/htable",
+					"Inactive": false,
+					"Description": "create new htable record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/htable",
+					"Inactive": false,
+					"Description": "search htable records"
+				}
+			]
+		},
+		{
+			"Name": "mtree",
+			"Title": "MTree Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/mtree",
+					"Inactive": false,
+					"Description": "list all mtree records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/mtree",
+					"Inactive": false,
+					"Description": "create new mtree record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/mtree",
+					"Inactive": false,
+					"Description": "search mtree records"
+				}
+			]
+		},
+		{
 			"Name": "version",
 			"Title": "Version Management",
 			"Inactive": false,
@@ -132,6 +209,13 @@
 					"URLPath": "new/version",
 					"Inactive": false,
 					"Description": "create new version record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/version",
+					"Inactive": false,
+					"Description": "search version records"
 				}
 			]
 		},
