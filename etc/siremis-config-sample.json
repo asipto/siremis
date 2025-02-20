@@ -2,7 +2,9 @@
 	"DefaultViewPath": "view/main",
 	"URLDir": "/siremis",
 	"PublicDir": "public",
-	"SchemaDir": "schemas",
+	"PublicDirWebPath": "public",
+	"SchemasDir": "schemas",
+	"TemplatesDir": "templates",
 	"AuthUsersFilePath": "",
 	"AuthUsers": [
 		{
