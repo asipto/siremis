@@ -201,12 +201,12 @@ func main() {
 		"loop":      GMTemplateFuncLoop,
 		"lastloop":  GMTemplateFuncLastLoop,
 		"lastindex": GMTemplateFuncLastIndex,
-	}).ParseGlob("templates/*"))
+	}).ParseGlob(GMConfigV.TemplatesDir + "/*"))
 
-	if len(GMConfigV.PublicDir) > 0 && len(GMConfigV.PublicDirPath) > 0 {
+	if len(GMConfigV.PublicDir) > 0 && len(GMConfigV.PublicDirWebPath) > 0 {
 		http.Handle(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/",
 			http.StripPrefix(strings.TrimRight(GMConfigV.URLDir+"/"+GMConfigV.PublicDir+"/", "/"),
-				http.FileServer(http.Dir(GMConfigV.PublicDirPath))))
+				http.FileServer(http.Dir(GMConfigV.PublicDirWebPath))))
 	}
 	http.HandleFunc("/", GMRequestHandler)
 	// http.HandleFunc("/show", Show)

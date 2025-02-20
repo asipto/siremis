@@ -78,8 +78,9 @@ type GMConfig struct {
 	DefaultViewPath     string              `json:"DefaultViewPath"`
 	URLDir              string              `json:"URLDir,omitempty"`
 	PublicDir           string              `json:"PublicDir,omitempty"`
-	PublicDirPath       string              `json:"PublicDirPath,omitempty"`
-	SchemaDir           string              `json:"SchemaDir"`
+	PublicDirWebPath    string              `json:"PublicDirWebPath,omitempty"`
+	SchemasDir          string              `json:"SchemasDir"`
+	TemplatesDir        string              `json:"TemplatesDir"`
 	AuthUsersFilePath   string              `json:"AuthUsersFilePath,omitempty"`
 	AuthUsers           []GMConfigAuthUser  `json:"AuthUsers,omitempty"`
 	DBData              GMConfigDB          `json:"DBData"`
@@ -179,6 +180,12 @@ func GMConfigLoad() {
 		os.Exit(1)
 	}
 
+	if len(GMConfigV.TemplatesDir) == 0 {
+		GMConfigV.TemplatesDir = "templates"
+	}
+	if len(GMConfigV.SchemasDir) == 0 {
+		GMConfigV.SchemasDir = "schemas"
+	}
 	if len(GMConfigV.Menu) == 0 {
 		if len(GMConfigV.MenuFilePath) == 0 {
 			log.Printf("no menu in config file %s\n", GMCLIOptionsV.config)

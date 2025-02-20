@@ -87,7 +87,7 @@ type GMDBField struct {
 }
 
 func GMGetSchema(w http.ResponseWriter, r *http.Request, schemaName string) (*GMSchema, bool) {
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
+	schemaFile := GMConfigV.SchemasDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
 		log.Printf("unavailable schema file %s\n", schemaFile)
@@ -109,7 +109,7 @@ func GMGetSchema(w http.ResponseWriter, r *http.Request, schemaName string) (*GM
 }
 
 func GMLoadSchema(schemaName string) (*GMSchema, bool) {
-	schemaFile := GMConfigV.SchemaDir + "/" + schemaName + ".json"
+	schemaFile := GMConfigV.SchemasDir + "/" + schemaName + ".json"
 	schemaBytes, err := os.ReadFile(schemaFile)
 	if err != nil {
 		log.Printf("unavailable schema file %s\n", schemaFile)
