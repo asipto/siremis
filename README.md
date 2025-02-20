@@ -54,6 +54,22 @@ Go with a modern web browser to:
 See `siremis -h` for options to set the IP and port to listen on, or the domain
 and certificates for HTTPS.
 
+The application can be run on a different folder, not only from the source tree,
+in such case the directories `etc/`, `public/`, `schemas/` and `templates/` have
+to be copied over, or pointed to them via configuration file.
+
+### DB Table Schema
+
+The `schemas/` folder contains the description of database tables, each on in a
+JSON file. New tables can be managed with `Siremis` by creating the corresponding
+JSON files.
+
+### Web Template
+
+The `templates/` folder contains the html templates. They can be changed to
+suit better own usage of `Siremis`. The template files are loaded and compiled
+at start up, any changes to them require a restart to become active.
+
 ## Version Policy
 
 The version string is composed of three numbers, the format is:
