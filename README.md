@@ -22,6 +22,16 @@ Some screenshots can be seen at:
 
 ## Usage
 
+### Download Binary
+
+Download the archive with the binary release from:
+
+* https://github.com/asipto/siremis/releases
+
+Untar or unzip the archive.
+
+### Download Sources
+
 Clone the repository:
 
 ```
@@ -34,6 +44,8 @@ Build the application:
 cd siremis
 go build .
 ```
+
+### Run Siremis
 
 Copy `etc/config-sample.json` to `etc/config.json`. Edit `etc/config.json` and
 update database access and authentication users.
