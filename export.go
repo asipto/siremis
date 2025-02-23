@@ -104,6 +104,11 @@ func GMFuncFloat2D(params []any) string {
 	return fmt.Sprintf("%.2f", params[0].(float64))
 }
 
+func GMFuncTimeStampUTCDate(params []any) string {
+	tv := time.Unix(params[0].(int64), 0)
+	return tv.Format(time.RFC3339)
+}
+
 func GMFuncListBitFlags(params []any) string {
 	fv := params[0].(int64)
 	if fv == 0 {

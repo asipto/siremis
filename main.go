@@ -185,6 +185,7 @@ func main() {
 
 	GMFuncMap["Float2D"] = GMFuncFloat2D
 	GMFuncMap["ListBitFlags"] = GMFuncListBitFlags
+	GMFuncMap["TimeStampUTCDate"] = GMFuncTimeStampUTCDate
 
 	GMFuncMap["DBColumnValues"] = GMFuncDBColumnValues
 	GMFuncMap["ParamValues"] = GMFuncParamValues
