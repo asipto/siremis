@@ -54,6 +54,7 @@ type GMSchema struct {
 	Name            string                  `json:"Name"`
 	Title           string                  `json:"Title"`
 	Table           string                  `json:"Table"`
+	MenuGroup       string                  `json:"MenuGroup,omitempty"`
 	InactiveActions GMSchemaInactiveActions `json:"InactiveActions,omitempty"`
 	Query           GMSchemaQuery           `json:"Query"`
 	Fields          []GMSchemaField         `json:"Fields"`
