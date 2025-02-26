@@ -601,7 +601,11 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 	}
 	insForm.Exec(dbVals...)
 	GMAuthRefresh(w, r)
-	GMSMenuPage(w, r, schemaName)
+	if len(schemaV.MenuGroup) > 0 {
+		GMSMenuPage(w, r, schemaV.MenuGroup)
+	} else {
+		GMSMenuPage(w, r, schemaName)
+	}
 }
 
 func GMEdit(w http.ResponseWriter, r *http.Request, schemaName string, sId string) {
@@ -753,7 +757,11 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	}
 	delForm.Exec(vId)
 	GMAuthRefresh(w, r)
-	GMSMenuPage(w, r, schemaName)
+	if len(schemaV.MenuGroup) > 0 {
+		GMSMenuPage(w, r, schemaV.MenuGroup)
+	} else {
+		GMSMenuPage(w, r, schemaName)
+	}
 }
 
 func GMSearch(w http.ResponseWriter, r *http.Request, schemaName string) {
