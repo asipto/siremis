@@ -1,0 +1,109 @@
+{
+	"Name": "trusted",
+	"Title": "Trusted",
+	"Table": "trusted",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Src IP",
+			"Column": "src_ip",
+			"Name": "src_ip",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Proto",
+			"Column": "proto",
+			"Name": "proto",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			},
+			"InputForm": {
+				"Type": "radio",
+				"OptionValues": {
+					"Func": "ParamVN",
+					"Params": [ "udp", "UDP", "tcp", "TCP", "tls", "TLS" ]
+				}
+			}
+		},
+		{
+			"Title": "From Pattern",
+			"Column": "from_pattern",
+			"Name": "from_pattern",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "RURI Pattern",
+			"Column": "ruri_pattern",
+			"Name": "ruri_pattern",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Tag",
+			"Column": "tag",
+			"Name": "tag",
+			"Type": "str",
+			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Priority",
+			"Column": "priority",
+			"Name": "priority",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		}
+	]
+}
