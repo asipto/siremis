@@ -2,6 +2,7 @@
 	"Name": "trusted",
 	"Title": "Trusted",
 	"Table": "trusted",
+	"MenuGroup": "permissions",
 	"Query": {
 		"IdField": "id",
 		"Limit": 0

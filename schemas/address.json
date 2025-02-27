@@ -2,6 +2,7 @@
 	"Name": "address",
 	"Title": "Address",
 	"Table": "address",
+	"MenuGroup": "permissions",
 	"Query": {
 		"IdField": "id",
 		"Limit": 0
