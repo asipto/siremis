@@ -1,0 +1,185 @@
+{
+	"Name": "acc",
+	"Title": "Accounting Records",
+	"Table": "acc",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"InactiveActions": {
+		"Insert": true,
+		"Edit": true,
+		"Delete": true
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Method",
+			"Column": "method",
+			"Name": "method",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "From Tag",
+			"Column": "from_tag",
+			"Name": "from_tag",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "To Tag",
+			"Column": "to_tag",
+			"Name": "to_tag",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Call ID",
+			"Column": "callid",
+			"Name": "callid",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "SIP Code",
+			"Column": "sip_code",
+			"Name": "sip_code",
+			"Type": "char",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "SIP Reason",
+			"Column": "sip_reason",
+			"Name": "sip_reason",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Time",
+			"Column": "time",
+			"Name": "time",
+			"Type": "datetime",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Source IP",
+			"Column": "src_ip",
+			"Name": "src_ip",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Destination User",
+			"Column": "dst_ouser",
+			"Name": "dst_ouser",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Destination User Domain",
+			"Column": "dst_domain",
+			"Name": "dst_domain",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Source User Domain",
+			"Column": "src_domain",
+			"Name": "src_domain",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "CDR Id",
+			"Column": "cdr_id",
+			"Name": "cdr_id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		}
+	]
+}
