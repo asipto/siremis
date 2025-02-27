@@ -159,9 +159,9 @@ func GMConfigEvalVals() {
 	}
 }
 
-func GMConfigGetMenu(menuName string) *GMConfigMenuGroup {
+func GMConfigGetMenu(schemaName string, menuName string) *GMConfigMenuGroup {
 	for i, v := range GMConfigV.Menu {
-		if menuName == v.Name {
+		if schemaName == v.Name || menuName == v.Name {
 			return &GMConfigV.Menu[i]
 		}
 	}
