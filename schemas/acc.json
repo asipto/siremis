@@ -44,7 +44,7 @@
 			"Name": "from_tag",
 			"Type": "str",
 			"Enable": {
-				"List": true,
+				"List": false,
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
@@ -57,7 +57,7 @@
 			"Name": "to_tag",
 			"Type": "str",
 			"Enable": {
-				"List": true,
+				"List": false,
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
@@ -96,7 +96,7 @@
 			"Name": "sip_reason",
 			"Type": "str",
 			"Enable": {
-				"List": true,
+				"List": false,
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
@@ -122,7 +122,20 @@
 			"Name": "src_ip",
 			"Type": "str",
 			"Enable": {
-				"List": true,
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Destination Original User",
+			"Column": "dst_ouser",
+			"Name": "dst_ouser",
+			"Type": "str",
+			"Enable": {
+				"List": false,
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
@@ -131,8 +144,8 @@
 		},
 		{
 			"Title": "Destination User",
-			"Column": "dst_ouser",
-			"Name": "dst_ouser",
+			"Column": "dst_user",
+			"Name": "dst_user",
 			"Type": "str",
 			"Enable": {
 				"List": true,
@@ -143,11 +156,24 @@
 			}
 		},
 		{
-			"Title": "Destination User Domain",
+			"Title": "Destination Domain",
 			"Column": "dst_domain",
 			"Name": "dst_domain",
 			"Type": "str",
 			"Enable": {
+				"List": false,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Source User",
+			"Column": "src_user",
+			"Name": "src_user",
+			"Type": "str",
+			"Enable": {
 				"List": true,
 				"Insert": true,
 				"Edit": true,
@@ -156,12 +182,12 @@
 			}
 		},
 		{
-			"Title": "Source User Domain",
+			"Title": "Source Domain",
 			"Column": "src_domain",
 			"Name": "src_domain",
 			"Type": "str",
 			"Enable": {
-				"List": true,
+				"List": false,
 				"Insert": true,
 				"Edit": true,
 				"Show": true,
