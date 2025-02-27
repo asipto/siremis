@@ -1,0 +1,77 @@
+{
+    "Name": "billing_rates",
+    "Title": "Billing Rates",
+    "Table": "billing_rates",
+    "MenuGroup": "",
+    "Query": {
+        "IdField": "rate_id",
+        "Limit": 0
+    },
+    "Fields": [
+        {
+            "Title": "Rate ID",
+            "Column": "rate_id",
+            "Name": "rate_id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Rate Group",
+            "Column": "rate_group",
+            "Name": "rate_group",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Prefix",
+            "Column": "prefix",
+            "Name": "prefix",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Rate Unit",
+            "Column": "rate_unit",
+            "Name": "rate_unit",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Time Unit",
+            "Column": "time_unit",
+            "Name": "time_unit",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
