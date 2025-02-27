@@ -1,0 +1,77 @@
+{
+	"Name": "alias_db",
+	"Title": "DB Aliases",
+	"Table": "dbaliases",
+	"MenuGroup": "alias_db",
+	"Query": {
+		"IdField": "id",
+		"Limit": 0
+	},
+	"Fields": [
+		{
+			"Title": "Id",
+			"Column": "id",
+			"Name": "id",
+			"Type": "int",
+			"Enable": {
+				"List": true,
+				"Insert": false,
+				"Edit": false,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Alias Username",
+			"Column": "alias_username",
+			"Name": "alias_username",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Alias Domain",
+			"Column": "alias_domain",
+			"Name": "alias_domain",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Username",
+			"Column": "username",
+			"Name": "username",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		},
+		{
+			"Title": "Domain",
+			"Column": "domain",
+			"Name": "domain",
+			"Type": "str",
+			"Enable": {
+				"List": true,
+				"Insert": true,
+				"Edit": true,
+				"Show": true,
+				"Search": true
+			}
+		}
+	]
+}
