@@ -46,9 +46,11 @@
       </li>
       {{ if $.Context.SchemaMenu }}
       {{ range $i, $v := $.Context.SchemaMenu.Items }}
+      {{ if and (not $v.Inactive) (not $v.MenuTopSkip) }}
       <li class="nav-item {{ if eq $v.Name $.Context.Action }} active {{ end }}">
         <a class="nav-link" href="{{ $.Config.URLDir }}/{{ $v.URLPath }}">{{ $v.Title }}</a>
       </li>
+      {{ end }}
       {{ end }}
       {{ end }}
       {{ else }}

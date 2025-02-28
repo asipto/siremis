@@ -34,6 +34,7 @@ type GMConfigMenuItem struct {
 	Name        string `json:"Name"`
 	Title       string `json:"Title"`
 	Inactive    bool   `json:"Inactive,omitempty"`
+	MenuTopSkip bool   `json:"MenuTopSkip,omitempty"`
 	URLPath     string `json:"URLPath"`
 	Description string `json:"Description,omitempty"`
 }
