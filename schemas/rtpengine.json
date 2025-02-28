@@ -1,0 +1,90 @@
+{
+    "Name": "rtpengine",
+    "Title": "RTP Engine",
+    "Table": "rtpengine",
+    "MenuGroup": "",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Set ID",
+            "Column": "setid",
+            "Name": "setid",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "URL",
+            "Column": "url",
+            "Name": "url",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Weight",
+            "Column": "weight",
+            "Name": "weight",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Disabled",
+            "Column": "disabled",
+            "Name": "disabled",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Stamp",
+            "Column": "stamp",
+            "Name": "stamp",
+            "Type": "datetime",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
