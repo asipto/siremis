@@ -1,0 +1,220 @@
+{
+    "Name": "uacreg",
+    "Title": "UAC Reg",
+    "Table": "uacreg",
+    "MenuGroup": "",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "L UUID",
+            "Column": "l_uuid",
+            "Name": "l_uuid",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "L Username",
+            "Column": "l_username",
+            "Name": "l_username",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "L Domain",
+            "Column": "l_domain",
+            "Name": "l_domain",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "R Username",
+            "Column": "r_username",
+            "Name": "r_username",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "R Domain",
+            "Column": "r_domain",
+            "Name": "r_domain",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Realm",
+            "Column": "realm",
+            "Name": "realm",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Auth Username",
+            "Column": "auth_username",
+            "Name": "auth_username",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Auth Password",
+            "Column": "auth_password",
+            "Name": "auth_password",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Auth HA1",
+            "Column": "auth_ha1",
+            "Name": "auth_ha1",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Auth Proxy",
+            "Column": "auth_proxy",
+            "Name": "auth_proxy",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Expires",
+            "Column": "expires",
+            "Name": "expires",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Flags",
+            "Column": "flags",
+            "Name": "flags",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Reg Delay",
+            "Column": "reg_delay",
+            "Name": "reg_delay",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Contact Addr",
+            "Column": "contact_addr",
+            "Name": "contact_addr",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Socket",
+            "Column": "socket",
+            "Name": "socket",
+            "Type": "str",
+            "Enable": {
+                "List": "false",
+                "Insert": "true",
+                "Edit": "true",
+                "Show": "true",
+                "Search": "true"
+            }
+        }
+    ]
+}
