@@ -73,23 +73,53 @@
 			]
 		},
 		{
-			"Name": "address",
-			"Title": "Address Management",
+			"Name": "permissions",
+			"Title": "Permissions Management",
 			"Inactive": false,
 			"Items": [
 				{
-					"Name": "list",
-					"Title": "List",
+					"Name": "address_list",
+					"Title": "Address - List",
 					"URLPath": "list/address",
 					"Inactive": false,
 					"Description": "list all address records"
 				},
 				{
-					"Name": "new",
-					"Title": "New",
+					"Name": "address_new",
+					"Title": "Address - New",
 					"URLPath": "new/address",
 					"Inactive": false,
 					"Description": "create new address record"
+				},
+				{
+					"Name": "address_search",
+					"Title": "Address - Search",
+					"URLPath": "search/address",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search address records"
+				},
+				{
+					"Name": "trusted_list",
+					"Title": "Trusted - List",
+					"URLPath": "list/trusted",
+					"Inactive": false,
+					"Description": "list all trusted records"
+				},
+				{
+					"Name": "trusted_new",
+					"Title": "Trusted - New",
+					"URLPath": "new/trusted",
+					"Inactive": false,
+					"Description": "create new trusted record"
+				},
+				{
+					"Name": "trusted_search",
+					"Title": "Trusted - Search",
+					"URLPath": "search/trusted",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search trusted records"
 				}
 			]
 		},
@@ -111,6 +141,13 @@
 					"URLPath": "new/dispatcher",
 					"Inactive": false,
 					"Description": "create new dispatcher record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/dispatcher",
+					"Inactive": false,
+					"Description": "search dispatcher records"
 				}
 			]
 		},
@@ -132,6 +169,13 @@
 					"URLPath": "new/group",
 					"Inactive": false,
 					"Description": "create new group record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/group",
+					"Inactive": false,
+					"Description": "search group records"
 				}
 			]
 		},
