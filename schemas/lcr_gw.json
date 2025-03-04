@@ -1,0 +1,194 @@
+{
+    "Name": "lcr_gw",
+    "Title": "LCR Gateway",
+    "Table": "lcr_gw",
+    "MenuGroup": "",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "LCR ID",
+            "Column": "lcr_id",
+            "Name": "lcr_id",
+            "Type": "smallint",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Gateway Name",
+            "Column": "gw_name",
+            "Name": "gw_name",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "IP Address",
+            "Column": "ip_addr",
+            "Name": "ip_addr",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Hostname",
+            "Column": "hostname",
+            "Name": "hostname",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Port",
+            "Column": "port",
+            "Name": "port",
+            "Type": "smallint",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Params",
+            "Column": "params",
+            "Name": "params",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "URI Scheme",
+            "Column": "uri_scheme",
+            "Name": "uri_scheme",
+            "Type": "tinyint",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Transport",
+            "Column": "transport",
+            "Name": "transport",
+            "Type": "tinyint",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Strip",
+            "Column": "strip",
+            "Name": "strip",
+            "Type": "tinyint",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Prefix",
+            "Column": "prefix",
+            "Name": "prefix",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Tag",
+            "Column": "tag",
+            "Name": "tag",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Flags",
+            "Column": "flags",
+            "Name": "flags",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Defunct",
+            "Column": "defunct",
+            "Name": "defunct",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
