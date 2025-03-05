@@ -61,7 +61,7 @@ Run the application:
 
 Go with a modern web browser to:
 
-* [http://local.ip:8284/w/](http://local.ip:8284/w/)
+* [http://local.ip:8284/siremis/](http://local.ip:8284/siremis/)
 
 See `siremis -h` for options to set the IP and port to listen on, or the domain
 and certificates for HTTPS.
