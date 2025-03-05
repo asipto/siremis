@@ -45,6 +45,17 @@ cd siremis
 go build .
 ```
 
+### Kamailio Database Setup
+
+It is required that `Kamailio` is installed and its database is created. For now
+`Siremis` supports only MySQL/MariaDB database type. If you want to have accounting
+and statistics, the corresponding tables have to be created -- the SQL statements
+can be taken from:
+
+  - [https://github.com/asipto/siremis-php/blob/master/siremis/modules/sipadmin/mod.install.siremis.sql](https://github.com/asipto/siremis-php/blob/master/siremis/modules/sipadmin/mod.install.siremis.sql)
+
+Or `kamcli` can be used to create the tables and store procedures.
+
 ### Run Siremis
 
 Copy `etc/config-sample.json` to `etc/config.json`. Edit `etc/config.json` and
@@ -62,6 +73,9 @@ Run the application:
 Go with a modern web browser to:
 
 * [http://local.ip:8284/siremis/](http://local.ip:8284/siremis/)
+
+Replace `local.ip` with `127.0.0.1`, or your local IP address, or the domain name
+if you have set up a DNS entry for it.
 
 See `siremis -h` for options to set the IP and port to listen on, or the domain
 and certificates for HTTPS.
