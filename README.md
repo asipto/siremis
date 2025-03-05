@@ -52,9 +52,9 @@ It is required that `Kamailio` is installed and its database is created. For now
 and statistics, the corresponding tables have to be created -- the SQL statements
 can be taken from:
 
-  - [https://github.com/asipto/siremis-php/blob/master/siremis/modules/sipadmin/mod.install.siremis.sql](https://github.com/asipto/siremis-php/blob/master/siremis/modules/sipadmin/mod.install.siremis.sql)
+  - [docs/database.md](docs/database.md)
 
-Or `kamcli` can be used to create the tables and store procedures.
+Alternatively, `kamcli` can be used to create the tables and store procedures.
 
 ### Run Siremis
 
