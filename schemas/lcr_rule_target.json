@@ -1,0 +1,90 @@
+{
+    "Name": "lcr_rule_target",
+    "Title": "LCR Rule Target",
+    "Table": "lcr_rule_target",
+    "MenuGroup": "administration",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "LCR ID",
+            "Column": "lcr_id",
+            "Name": "lcr_id",
+            "Type": "smallint",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Rule ID",
+            "Column": "rule_id",
+            "Name": "rule_id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "GW ID",
+            "Column": "gw_id",
+            "Name": "gw_id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Priority",
+            "Column": "priority",
+            "Name": "priority",
+            "Type": "tinyint",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Weight",
+            "Column": "weight",
+            "Name": "weight",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
