@@ -1,0 +1,116 @@
+{
+    "Name": "lcr_rule",
+    "Title": "LCR Rule",
+    "Table": "lcr_rule",
+    "MenuGroup": "",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "LCR ID",
+            "Column": "lcr_id",
+            "Name": "lcr_id",
+            "Type": "smallint",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Prefix",
+            "Column": "prefix",
+            "Name": "prefix",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "From URI",
+            "Column": "from_uri",
+            "Name": "from_uri",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Request URI",
+            "Column": "request_uri",
+            "Name": "request_uri",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "MT TValue",
+            "Column": "mt_tvalue",
+            "Name": "mt_tvalue",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Stopper",
+            "Column": "stopper",
+            "Name": "stopper",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Enabled",
+            "Column": "enabled",
+            "Name": "enabled",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
