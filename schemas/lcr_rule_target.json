@@ -2,7 +2,7 @@
     "Name": "lcr_rule_target",
     "Title": "LCR Rule Target",
     "Table": "lcr_rule_target",
-    "MenuGroup": "administration",
+    "MenuGroup": "lcr",
     "Query": {
         "IdField": "id",
         "Limit": 0

@@ -2,7 +2,7 @@
     "Name": "lcr_gw",
     "Title": "LCR Gateway",
     "Table": "lcr_gw",
-    "MenuGroup": "",
+    "MenuGroup": "lcr",
     "Query": {
         "IdField": "id",
         "Limit": 0
