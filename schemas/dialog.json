@@ -1,0 +1,329 @@
+{
+    "Name": "dialog",
+    "Title": "Dialog",
+    "Table": "dialog",
+    "MenuGroup": "dialog",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+	"InactiveActions": {
+		"Insert": true,
+		"Edit": true,
+		"Delete": true
+	},
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Hash Entry",
+            "Column": "hash_entry",
+            "Name": "hash_entry",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Hash ID",
+            "Column": "hash_id",
+            "Name": "hash_id",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Call ID",
+            "Column": "callid",
+            "Name": "callid",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "From URI",
+            "Column": "from_uri",
+            "Name": "from_uri",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "From Tag",
+            "Column": "from_tag",
+            "Name": "from_tag",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "To URI",
+            "Column": "to_uri",
+            "Name": "to_uri",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "To Tag",
+            "Column": "to_tag",
+            "Name": "to_tag",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Caller CSeq",
+            "Column": "caller_cseq",
+            "Name": "caller_cseq",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Callee CSeq",
+            "Column": "callee_cseq",
+            "Name": "callee_cseq",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Caller Route Set",
+            "Column": "caller_route_set",
+            "Name": "caller_route_set",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Callee Route Set",
+            "Column": "callee_route_set",
+            "Name": "callee_route_set",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Caller Contact",
+            "Column": "caller_contact",
+            "Name": "caller_contact",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Callee Contact",
+            "Column": "callee_contact",
+            "Name": "callee_contact",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Caller Sock",
+            "Column": "caller_sock",
+            "Name": "caller_sock",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Callee Sock",
+            "Column": "callee_sock",
+            "Name": "callee_sock",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "State",
+            "Column": "state",
+            "Name": "state",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Start Time",
+            "Column": "start_time",
+            "Name": "start_time",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Timeout",
+            "Column": "timeout",
+            "Name": "timeout",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "SFlags",
+            "Column": "sflags",
+            "Name": "sflags",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "IFlags",
+            "Column": "iflags",
+            "Name": "iflags",
+            "Type": "int",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "To Route Name",
+            "Column": "toroute_name",
+            "Name": "toroute_name",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Req URI",
+            "Column": "req_uri",
+            "Name": "req_uri",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "XData",
+            "Column": "xdata",
+            "Name": "xdata",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
