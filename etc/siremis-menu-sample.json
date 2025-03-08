@@ -236,6 +236,79 @@
 			]
 		},
 		{
+			"Name": "lcr",
+			"Title": "LCR Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "lcr_gw_list",
+					"Title": "GW - List",
+					"URLPath": "list/lcr_gw",
+					"Inactive": false,
+					"Description": "list all GW records"
+				},
+				{
+					"Name": "lcr_gw_new",
+					"Title": "GW - New",
+					"URLPath": "new/addlcr_gwress",
+					"Inactive": false,
+					"Description": "create new gw record"
+				},
+				{
+					"Name": "lcr_gw_search",
+					"Title": "GW - Search",
+					"URLPath": "search/lcr_gw",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search gw records"
+				},
+				{
+					"Name": "lcr_rule_list",
+					"Title": "Rule - List",
+					"URLPath": "list/lcr_rule",
+					"Inactive": false,
+					"Description": "list all rule records"
+				},
+				{
+					"Name": "lcr_rule_new",
+					"Title": "Rule - New",
+					"URLPath": "new/lcr_rule",
+					"Inactive": false,
+					"Description": "create new rule record"
+				},
+				{
+					"Name": "lcr_rule_search",
+					"Title": "Rule - Search",
+					"URLPath": "search/lcr_rule",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search rule records"
+				},
+				{
+					"Name": "lcr_rule_target_list",
+					"Title": "Rule Target - List",
+					"URLPath": "list/lcr_rule_target",
+					"Inactive": false,
+					"Description": "list all rule target records"
+				},
+				{
+					"Name": "lcr_rule_target_new",
+					"Title": "Rule Target - New",
+					"URLPath": "new/lcr_rule_target",
+					"Inactive": false,
+					"Description": "create new rule target record"
+				},
+				{
+					"Name": "lcr_rule_target search",
+					"Title": "Rule Target - Search",
+					"URLPath": "search/lcr_rule_target",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search rule target records"
+				}
+			]
+		},
+		{
 			"Name": "version",
 			"Title": "Version Management",
 			"Inactive": false,
