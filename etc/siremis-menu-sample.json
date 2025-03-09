@@ -236,6 +236,34 @@
 			]
 		},
 		{
+			"Name": "pipelimit",
+			"Title": "Pipelimit Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/pl_pipes",
+					"Inactive": false,
+					"Description": "list all pipelimit records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/pl_pipes",
+					"Inactive": false,
+					"Description": "create new pipelimit record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/pl_pipes",
+					"Inactive": false,
+					"Description": "search pipelimit records"
+				}
+			]
+		},
+		{
 			"Name": "lcr",
 			"Title": "LCR Management",
 			"Inactive": false,
