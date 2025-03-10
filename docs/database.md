@@ -216,3 +216,68 @@ IMPORTANT: the above SQL statements **drop** the existing `acc` and `missed_call
   ALTER TABLE missed_calls ADD COLUMN dst_domain VARCHAR(128) NOT NULL DEFAULT '';
   ALTER TABLE missed_calls ADD COLUMN cdr_id integer NOT NULL default '0';
 ```
+
+The statistics table has to be filled by Kamailio via its configuration file. Next
+is a snipped to do that.
+
+```shell
+loadmodule "rtimer.so"
+loadmodule "sqlops.so"
+loadmodule "htable.so"
+
+...
+
+modparam("rtimer", "timer", "name=tst;interval=300;mode=1;")
+modparam("rtimer", "exec", "timer=tst;route=STATS")
+
+modparam("sqlops","sqlcon",
+         "ca=>mysql://kamailio:kamailiorw@localhost/kamailio")
+
+modparam("htable", "htable", "stats=>size=6;")
+
+...
+
+route[STATS] {
+
+	# clean very old records
+	$var(tmc) = $var(tmc) + 1;
+	$var(x) = $var(tmc) mod 144;
+	if($var(x) == 0)
+	    sql_query("ca",
+			"delete from statistics where time_stamp<$Ts - 864000",
+			"ra");
+
+	# insert values for Kamailio internal statistics
+	sql_query("ca",
+		"insert into statistics (time_stamp,shm_used_size,"
+		"shm_real_used_size,shm_max_used_size,shm_free_used_size,"
+		"ul_users,ul_contacts) values ($Ts,$stat(used_size),"
+		"$stat(real_used_size),$stat(max_used_size),$stat(free_size),"
+		"$stat(location-users),$stat(location-contacts))",
+		"ra");
+
+	# init the values for first execution, compute the diff for the rest
+	if($var(tmc)==1)
+	{
+		$var(rcv_req_diff) = $stat(rcv_requests);
+		$var(fwd_req_diff) = $stat(fwd_requests);
+		$var(2xx_trans_diff) = $stat(2xx_transactions);
+	} else {
+		$var(rcv_req_diff) = $stat(rcv_requests) - $sht(stats=>last_rcv_req);
+		$var(fwd_req_diff) = $stat(fwd_requests) - $sht(stats=>last_fwd_req);
+		$var(2xx_trans_diff) = $stat(2xx_transactions)
+									- $sht(stats=>last_2xx_trans);
+	}
+	# update the values for stats stored in cache (htable)
+	$sht(stats=>last_rcv_req) = $stat(rcv_requests);
+	$sht(stats=>last_fwd_req) = $stat(fwd_requests);
+	$sht(stats=>last_2xx_trans) = $stat(2xx_transactions);
+
+	# insert values for stats computed in config
+	sql_query("ca",
+		"update statistics set tm_active=$stat(inuse_transactions),"
+		"rcv_req_diff=$var(rcv_req_diff),fwd_req_diff=$var(fwd_req_diff),"
+		"2xx_trans_diff=$var(2xx_trans_diff) where time_stamp=$Ts",
+		"ra");
+}
+```
