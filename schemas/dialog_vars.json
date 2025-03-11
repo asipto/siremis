@@ -1,0 +1,77 @@
+{
+    "Name": "dialog_vars",
+    "Title": "Dialog Variables",
+    "Table": "dialog_vars",
+    "MenuGroup": "dialog",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Hash Entry",
+            "Column": "hash_entry",
+            "Name": "hash_entry",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Hash ID",
+            "Column": "hash_id",
+            "Name": "hash_id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Dialog Key",
+            "Column": "dialog_key",
+            "Name": "dialog_key",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Dialog Value",
+            "Column": "dialog_value",
+            "Name": "dialog_value",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
