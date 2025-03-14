@@ -264,6 +264,58 @@
 			]
 		},
 		{
+			"Name": "dialog",
+			"Title": "Dialog Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list_dialog",
+					"Title": "Dialog - List",
+					"URLPath": "list/dialog",
+					"Inactive": false,
+					"Description": "list all dialog records"
+				},
+				{
+					"Name": "new_dialog",
+					"Title": "Dialog - New",
+					"URLPath": "new/dialog",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "create new dialog record"
+				},
+				{
+					"Name": "search_dialog",
+					"Title": "Dialog - Search",
+					"URLPath": "search/dialog",
+					"Inactive": false,
+					"Description": "search dialog records"
+				},
+				{
+					"Name": "list_dialog_vars",
+					"Title": "Dialog Vars - List",
+					"URLPath": "list/dialog_vars",
+					"Inactive": false,
+					"Description": "list all dialog vars records"
+				},
+				{
+					"Name": "new_dialog_vars",
+					"Title": "Dialog Vars - New",
+					"URLPath": "new/dialog_vars",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "create new dialog vars record"
+				},
+				{
+					"Name": "search_dialog_vars",
+					"Title": "Dialog Vars - Search",
+					"URLPath": "search/dialog_vars",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search dialog vars records"
+				}
+			]
+		},
+		{
 			"Name": "lcr",
 			"Title": "LCR Management",
 			"Inactive": false,
