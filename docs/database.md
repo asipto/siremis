@@ -195,6 +195,7 @@ CREATE TABLE `statistics` (
   PRIMARY KEY  (`id`)
 );
 
+-- insert a default domain
 INSERT INTO domain (domain, did) VALUES ('127.0.0.1', 'default');
 ```
 
