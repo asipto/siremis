@@ -19,8 +19,11 @@ See more details in the Kamailio installation guidelines:
 
 ## Kamailio Database
 
-For accounting, CDRs and statistics, the Kamailio database has to be extended. Next
-are the sql statements needed for this:
+For accounting, CDRs and statistics, the Kamailio database has to be extended. It
+also adds a record to the domain table with `127.0.0.1` as local domain, just to
+have a select value for the domain fields in the input forms.
+
+Next are the sql statements needed for this:
 
 ```sql
 DROP TABLE IF EXISTS acc;
