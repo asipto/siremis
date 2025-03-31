@@ -202,7 +202,7 @@ CREATE TABLE `statistics` (
 INSERT INTO domain (domain, did) VALUES ('127.0.0.1', 'default');
 ```
 
-IMPORTANT: the above SQL statements **drop** the existing `acc` and `missed_calls` tables before creating them again. Do not use this script if you have data in those tables that you want to keep, instead you can use `ALTER TABLE` statements to add the new columns.
+IMPORTANT: the above SQL statements **drop** the existing `acc` and `missed_calls` tables before creating them again. Do not use the above script if you have data in those tables that you want to keep, instead you can use the next `ALTER TABLE` statements to add the new columns.
 
 ```sql
   ALTER TABLE acc ADD COLUMN src_user VARCHAR(64) NOT NULL DEFAULT '';
