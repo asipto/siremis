@@ -209,11 +209,11 @@
             "Name": "socket",
             "Type": "str",
             "Enable": {
-                "List": "false",
-                "Insert": "true",
-                "Edit": "true",
-                "Show": "true",
-                "Search": "true"
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
             }
         }
     ]
