@@ -103,15 +103,35 @@ func GMGetSchema(w http.ResponseWriter, r *http.Request, schemaName string) (*GM
 		return nil, false
 	}
 	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
+	decoder := json.NewDecoder(strings.NewReader(string(schemaBytes)))
+	decoder.UseNumber()
+	err = decoder.Decode(&schemaV)
 	if err != nil {
 		log.Printf("invalid content in schema file %s\n", schemaFile)
+		// Try to extract line/offset info
+		var errMsg string
+		if se, ok := err.(*json.SyntaxError); ok {
+			offset := se.Offset
+			errMsg = fmt.Sprintf("Syntax error at byte offset %d: %v", offset, se.Error())
+			// Show a snippet around the error
+			start := offset - 40
+			end := offset + 40
+			if start < 0 {
+				start = 0
+			}
+			if end > int64(len(schemaBytes)) {
+				end = int64(len(schemaBytes))
+			}
+			snippet := schemaBytes[start:end]
+			errMsg += "\nAround error:\n" + string(snippet)
+		} else {
+			errMsg = err.Error()
+		}
 		GMAlertView(w, r,
 			schemaName, strings.ToUpper(schemaName[:1])+strings.ToLower(schemaName[1:]),
-			"Invalid content in schema file for: "+schemaName)
+			"Invalid content in schema file for: "+schemaName+"\n"+errMsg)
 		return nil, false
 	}
-
 	return &schemaV, true
 }
 
@@ -123,12 +143,31 @@ func GMLoadSchema(schemaName string) (*GMSchema, bool) {
 		return nil, false
 	}
 	var schemaV = GMSchema{}
-	err = json.Unmarshal(schemaBytes, &schemaV)
+	decoder := json.NewDecoder(strings.NewReader(string(schemaBytes)))
+	decoder.UseNumber()
+	err = decoder.Decode(&schemaV)
 	if err != nil {
 		log.Printf("invalid content in schema file %s\n", schemaFile)
+		var errMsg string
+		if se, ok := err.(*json.SyntaxError); ok {
+			offset := se.Offset
+			errMsg = fmt.Sprintf("Syntax error at byte offset %d: %v", offset, se.Error())
+			start := offset - 40
+			end := offset + 40
+			if start < 0 {
+				start = 0
+			}
+			if end > int64(len(schemaBytes)) {
+				end = int64(len(schemaBytes))
+			}
+			snippet := schemaBytes[start:end]
+			errMsg += "\nAround error:\n" + string(snippet)
+		} else {
+			errMsg = err.Error()
+		}
+		log.Printf("Error details: %s\n", errMsg)
 		return nil, false
 	}
-
 	return &schemaV, true
 }
 
