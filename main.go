@@ -66,9 +66,9 @@ func startHTTPServices() chan error {
 	if len(GMCLIOptionsV.httpssrv) > 0 && len(GMCLIOptionsV.httpspubkey) > 0 && len(GMCLIOptionsV.httpsprvkey) > 0 {
 		go func() {
 			if len(GMConfigV.URLDir) > 0 {
-				log.Printf("Staring HTTPS service on: https://%s%s ...", GMCLIOptionsV.httpssrv, GMConfigV.URLDir)
+				log.Printf("staring HTTPS service on: https://%s%s ...", GMCLIOptionsV.httpssrv, GMConfigV.URLDir)
 			} else {
-				log.Printf("Staring HTTPS service on: https://%s ...", GMCLIOptionsV.httpssrv)
+				log.Printf("staring HTTPS service on: https://%s ...", GMCLIOptionsV.httpssrv)
 			}
 			if len(GMCLIOptionsV.domain) > 0 {
 				dtoken := strings.Split(strings.TrimSpace(GMCLIOptionsV.httpssrv), ":")
