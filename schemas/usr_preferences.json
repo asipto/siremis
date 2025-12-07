@@ -1,0 +1,116 @@
+{
+  "Name": "usr_preferences",
+  "Title": "User Preferences",
+  "Table": "usr_preferences",
+  "MenuGroup": "avpops",
+  "Query": {
+    "IdField": "id",
+    "Limit": 0
+  },
+  "Fields": [
+    {
+      "Title": "Id",
+      "Column": "id",
+      "Name": "id",
+      "Type": "int",
+      "Enable": {
+        "List": true,
+        "Insert": false,
+        "Edit": false,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "UUID",
+      "Column": "uuid",
+      "Name": "uuid",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Username",
+      "Column": "username",
+      "Name": "username",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Domain",
+      "Column": "domain",
+      "Name": "domain",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Attribute",
+      "Column": "attribute",
+      "Name": "attribute",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Type",
+      "Column": "type",
+      "Name": "type",
+      "Type": "int",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Value",
+      "Column": "value",
+      "Name": "value",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Last Modified",
+      "Column": "last_modified",
+      "Name": "last_modified",
+      "Type": "datetime",
+      "Enable": {
+        "List": true,
+        "Insert": false,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    }
+  ]
+}
