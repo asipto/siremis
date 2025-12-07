@@ -1,0 +1,64 @@
+{
+  "Name": "pdt",
+  "Title": "Prefix-Domain Translation",
+  "Table": "pdt",
+  "MenuGroup": "pdt",
+  "Query": {
+    "IdField": "id",
+    "Limit": 0
+  },
+  "Fields": [
+    {
+      "Title": "Id",
+      "Column": "id",
+      "Name": "id",
+      "Type": "int",
+      "Enable": {
+        "List": true,
+        "Insert": false,
+        "Edit": false,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Source Domain",
+      "Column": "sdomain",
+      "Name": "sdomain",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Prefix",
+      "Column": "prefix",
+      "Name": "prefix",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    },
+    {
+      "Title": "Target Domain",
+      "Column": "domain",
+      "Name": "domain",
+      "Type": "str",
+      "Enable": {
+        "List": true,
+        "Insert": true,
+        "Edit": true,
+        "Show": true,
+        "Search": true
+      }
+    }
+  ]
+}
