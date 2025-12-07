@@ -257,7 +257,7 @@ route[STATS] {
 		"shm_real_used_size,shm_max_used_size,shm_free_used_size,"
 		"ul_users,ul_contacts) values ($Ts,$stat(used_size),"
 		"$stat(real_used_size),$stat(max_used_size),$stat(free_size),"
-		"$stat(location-users),$stat(location-contacts))",
+		"$stat(location_users),$stat(location_contacts))",
 		"ra");
 
 	# init the values for first execution, compute the diff for the rest
