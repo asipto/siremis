@@ -124,6 +124,43 @@
 			]
 		},
 		{
+			"Name": "topos",
+			"Title": "Topos Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "topos_d_list",
+					"Title": "Topos D - List",
+					"URLPath": "list/topos_d",
+					"Inactive": false,
+					"Description": "list all topos_d records"
+				},
+				{
+					"Name": "topos_d_search",
+					"Title": "Topos D - Search",
+					"URLPath": "search/topos_d",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search topos_d records"
+				},
+				{
+					"Name": "topos_t_list",
+					"Title": "Topos T - List",
+					"URLPath": "list/topos_t",
+					"Inactive": false,
+					"Description": "list all topos_t records"
+				},
+				{
+					"Name": "topos_t_search",
+					"Title": "Topos T - Search",
+					"URLPath": "search/topos_t",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search topos_t records"
+				}
+			]
+		},
+		{
 			"Name": "dispatcher",
 			"Title": "Dispatcher Management",
 			"Inactive": false,
