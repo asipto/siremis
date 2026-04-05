@@ -1,0 +1,355 @@
+{
+    "Name": "topos_t",
+    "Title": "Topology Transactions",
+    "Table": "topos_t",
+    "MenuGroup": "",
+    "Query": {
+        "IdField": "id",
+        "Limit": 0
+    },
+    "InactiveActions": {
+        "Insert": true,
+        "Edit": true,
+        "Delete": true
+    },
+    "Fields": [
+        {
+            "Title": "ID",
+            "Column": "id",
+            "Name": "id",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": false,
+                "Edit": false,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Record Time",
+            "Column": "rectime",
+            "Name": "rectime",
+            "Type": "datetime",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Context",
+            "Column": "x_context",
+            "Name": "x_context",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "SIP Method",
+            "Column": "s_method",
+            "Name": "s_method",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "SIP CSeq",
+            "Column": "s_cseq",
+            "Name": "s_cseq",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "A Call ID",
+            "Column": "a_callid",
+            "Name": "a_callid",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "A UUID",
+            "Column": "a_uuid",
+            "Name": "a_uuid",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "B UUID",
+            "Column": "b_uuid",
+            "Name": "b_uuid",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Direction",
+            "Column": "direction",
+            "Name": "direction",
+            "Type": "int",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "X Via",
+            "Column": "x_via",
+            "Name": "x_via",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "X Via Branch",
+            "Column": "x_vbranch",
+            "Name": "x_vbranch",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "X Route Record",
+            "Column": "x_rr",
+            "Name": "x_rr",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "Y Route Record",
+            "Column": "y_rr",
+            "Name": "y_rr",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "S Route Record",
+            "Column": "s_rr",
+            "Name": "s_rr",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "X URI",
+            "Column": "x_uri",
+            "Name": "x_uri",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "A Contact",
+            "Column": "a_contact",
+            "Name": "a_contact",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "B Contact",
+            "Column": "b_contact",
+            "Name": "b_contact",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "AS Contact",
+            "Column": "as_contact",
+            "Name": "as_contact",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "BS Contact",
+            "Column": "bs_contact",
+            "Name": "bs_contact",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "X Tag",
+            "Column": "x_tag",
+            "Name": "x_tag",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "A Tag",
+            "Column": "a_tag",
+            "Name": "a_tag",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "B Tag",
+            "Column": "b_tag",
+            "Name": "b_tag",
+            "Type": "str",
+            "Enable": {
+                "List": true,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "A Source Address",
+            "Column": "a_srcaddr",
+            "Name": "a_srcaddr",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "B Source Address",
+            "Column": "b_srcaddr",
+            "Name": "b_srcaddr",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "A Socket",
+            "Column": "a_socket",
+            "Name": "a_socket",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        },
+        {
+            "Title": "B Socket",
+            "Column": "b_socket",
+            "Name": "b_socket",
+            "Type": "str",
+            "Enable": {
+                "List": false,
+                "Insert": true,
+                "Edit": true,
+                "Show": true,
+                "Search": true
+            }
+        }
+    ]
+}
