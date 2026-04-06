@@ -248,6 +248,34 @@
 			]
 		},
 		{
+			"Name": "uacreg",
+			"Title": "UACReg Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/uacreg",
+					"Inactive": false,
+					"Description": "list all uacreg records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/uacreg",
+					"Inactive": false,
+					"Description": "create new uacreg record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/uacreg",
+					"Inactive": false,
+					"Description": "search uacreg records"
+				}
+			]
+		},
+		{
 			"Name": "group",
 			"Title": "Group Management",
 			"Inactive": false,
