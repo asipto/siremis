@@ -161,6 +161,65 @@
 			]
 		},
 		{
+			"Name": "accounting",
+			"Title": "Accounting Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "acc_list",
+					"Title": "ACC - List",
+					"URLPath": "list/acc",
+					"Inactive": false,
+					"Description": "list all acc records"
+				},
+				{
+					"Name": "acc_search",
+					"Title": "ACC - Search",
+					"URLPath": "search/acc",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search acc records"
+				},
+				{
+					"Name": "cdrs_list",
+					"Title": "CDRs - List",
+					"URLPath": "list/cdrs",
+					"Inactive": false,
+					"Description": "list all cdrs records"
+				},
+				{
+					"Name": "cdrs_search",
+					"Title": "CDRs - Search",
+					"URLPath": "search/cdrs",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search cdrs records"
+				},
+				{
+					"Name": "billing_rates_list",
+					"Title": "Billing Rates - List",
+					"URLPath": "list/billing_rates",
+					"Inactive": false,
+					"Description": "list all billing_rates records"
+				},
+				{
+					"Name": "billing_rates_new",
+					"Title": "Billing Rates - New",
+					"URLPath": "new/billing_rates",
+					"Inactive": false,
+					"Description": "create new billing_rates record"
+				},
+				{
+					"Name": "billing_rates_search",
+					"Title": "Billing Rates - Search",
+					"URLPath": "search/billing_rates",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search billing_rates records"
+				}
+			]
+		},
+		{
 			"Name": "dispatcher",
 			"Title": "Dispatcher Management",
 			"Inactive": false,
