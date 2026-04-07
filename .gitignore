@@ -38,4 +38,6 @@ go.work.sum
 .vscode
 
 # custom local files
-etc/config.json
+etc/siremis-config.json
+etc/siremis-charts.json
+etc/siremis-menu.json
