@@ -216,6 +216,21 @@
 					"Inactive": false,
 					"MenuTopSkip": true,
 					"Description": "search billing_rates records"
+				},
+				{
+					"Name": "missed_calls_list",
+					"Title": "Missed Calls - List",
+					"URLPath": "list/missed_calls",
+					"Inactive": false,
+					"Description": "list all missed_calls records"
+				},
+				{
+					"Name": "missed_calls_search",
+					"Title": "Missed Calls - Search",
+					"URLPath": "search/missed_calls",
+					"Inactive": false,
+					"MenuTopSkip": true,
+					"Description": "search missed_calls records"
 				}
 			]
 		},
