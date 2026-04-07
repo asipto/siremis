@@ -276,6 +276,34 @@
 			]
 		},
 		{
+			"Name": "alias_db",
+			"Title": "User Aliases Management",
+			"Inactive": false,
+			"Items": [
+				{
+					"Name": "list",
+					"Title": "List",
+					"URLPath": "list/alias_db",
+					"Inactive": false,
+					"Description": "list all alias_db records"
+				},
+				{
+					"Name": "new",
+					"Title": "New",
+					"URLPath": "new/alias_db",
+					"Inactive": false,
+					"Description": "create new alias_db record"
+				},
+				{
+					"Name": "search",
+					"Title": "Search",
+					"URLPath": "search/alias_db",
+					"Inactive": false,
+					"Description": "search alias_db records"
+				}
+			]
+		},
+		{
 			"Name": "group",
 			"Title": "Group Management",
 			"Inactive": false,
