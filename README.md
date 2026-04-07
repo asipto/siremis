@@ -117,6 +117,6 @@ under BSD license.
 
 ## License
 
-License type: AGP v3.0
+License type: AGPL v3.0
 
-Copyright: 2025 Asipto.com
+Copyright: 2025-2026 Asipto.com
