@@ -497,7 +497,7 @@
 				{
 					"Name": "lcr_gw_new",
 					"Title": "GW - New",
-					"URLPath": "new/addlcr_gwress",
+					"URLPath": "new/lcr_gw",
 					"Inactive": false,
 					"Description": "create new gw record"
 				},
