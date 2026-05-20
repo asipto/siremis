@@ -58,7 +58,7 @@ Alternatively, `kamcli` can be used to create the tables and store procedures.
 
 ### Run Siremis
 
-Copy `etc/config-sample.json` to `etc/config.json`. Edit `etc/config.json` and
+Copy `etc/siremis-config-sample.json` to `etc/siremis-config.json`. Edit `etc/siremis-config.json` and
 update database access and authentication users.
 
 Copy `etc/siremis-menu-sample.json` to `etc/siremis-menu.json`, and
