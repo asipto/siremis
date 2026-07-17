@@ -147,7 +147,7 @@ Optional flags used to disable actions in the UI.
 - Common for runtime-managed or read-only tables such as `location`, `acc`, `cdrs`,
   `dialog`, `topos_d`, and `topos_t`
 
-Supported keys seen in the repository:
+Among supported action keys:
 
 - `Insert`
 - `Edit`
