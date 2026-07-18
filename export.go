@@ -89,14 +89,12 @@ func GMFuncParamValues(params []any) []GMOptionValue {
 
 func GMFuncParamVN(params []any) []GMOptionValue {
 	lRes := make([]GMOptionValue, 0)
-	for i, v := range params {
-		var oVal = GMOptionValue{}
-		if i%2 == 1 {
-			oVal.Title = v.(string)
-			lRes = append(lRes, oVal)
-		} else {
-			oVal.Value = v.(string)
+	for i := 0; i+1 < len(params); i += 2 {
+		oVal := GMOptionValue{
+			Value: params[i].(string),
+			Title: params[i+1].(string),
 		}
+		lRes = append(lRes, oVal)
 	}
 	return lRes
 }
