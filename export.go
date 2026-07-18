@@ -51,13 +51,14 @@ func GMFuncDBColumnValues(params []any) []GMOptionValue {
 	}
 
 	db := dbConn()
+	defer db.Close()
 	selDB, err := db.Query("SELECT " + params[1].(string) + " FROM " + params[0].(string) +
 		" ORDER BY " + params[1].(string) + " ASC")
 	if err != nil {
 		log.Printf("error [%s]\n", err.Error())
 		return []GMOptionValue{}
 	}
-	defer db.Close()
+	defer selDB.Close()
 	dbRes := make([]GMOptionValue, 0)
 
 	for selDB.Next() {
