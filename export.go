@@ -72,6 +72,10 @@ func GMFuncDBColumnValues(params []any) []GMOptionValue {
 		log.Println("adding option value: " + oVal.Value)
 		dbRes = append(dbRes, oVal)
 	}
+	if err := selDB.Err(); err != nil {
+		log.Printf("error [%s]\n", err.Error())
+		return []GMOptionValue{}
+	}
 
 	return dbRes
 }
