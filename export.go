@@ -19,12 +19,63 @@ type GMOptionValue struct {
 
 var GMFuncMap = make(map[string]any)
 
+func GMParamString(params []any, idx int) (string, bool) {
+	if idx < 0 || idx >= len(params) {
+		log.Printf("invalid parameter index %d\n", idx)
+		return "", false
+	}
+	val, ok := params[idx].(string)
+	if !ok {
+		log.Printf("invalid parameter type at index %d\n", idx)
+		return "", false
+	}
+	return val, true
+}
+
+func GMParamFloat64(params []any, idx int) (float64, bool) {
+	if idx < 0 || idx >= len(params) {
+		log.Printf("invalid parameter index %d\n", idx)
+		return 0, false
+	}
+	val, ok := params[idx].(float64)
+	if !ok {
+		log.Printf("invalid parameter type at index %d\n", idx)
+		return 0, false
+	}
+	return val, true
+}
+
+func GMParamInt64(params []any, idx int) (int64, bool) {
+	if idx < 0 || idx >= len(params) {
+		log.Printf("invalid parameter index %d\n", idx)
+		return 0, false
+	}
+	val, ok := params[idx].(int64)
+	if !ok {
+		log.Printf("invalid parameter type at index %d\n", idx)
+		return 0, false
+	}
+	return val, true
+}
+
 func GMFuncHA1(params []any) string {
 	if len(params) != 3 {
 		log.Printf("invalid number of parameters\n")
 		return ""
 	}
-	text := params[0].(string) + ":" + params[1].(string) + ":" + params[2].(string)
+	p0, ok := GMParamString(params, 0)
+	if !ok {
+		return ""
+	}
+	p1, ok := GMParamString(params, 1)
+	if !ok {
+		return ""
+	}
+	p2, ok := GMParamString(params, 2)
+	if !ok {
+		return ""
+	}
+	text := p0 + ":" + p1 + ":" + p2
 	hash := md5.Sum([]byte(text))
 	return hex.EncodeToString(hash[:])
 }
@@ -34,8 +85,19 @@ func GMFuncHA1B(params []any) string {
 		log.Printf("invalid number of parameters\n")
 		return ""
 	}
-	text := params[0].(string) + "@" + params[1].(string) + ":" +
-		params[1].(string) + ":" + params[2].(string)
+	p0, ok := GMParamString(params, 0)
+	if !ok {
+		return ""
+	}
+	p1, ok := GMParamString(params, 1)
+	if !ok {
+		return ""
+	}
+	p2, ok := GMParamString(params, 2)
+	if !ok {
+		return ""
+	}
+	text := p0 + "@" + p1 + ":" + p1 + ":" + p2
 	hash := md5.Sum([]byte(text))
 	return hex.EncodeToString(hash[:])
 }
@@ -52,8 +114,16 @@ func GMFuncDBColumnValues(params []any) []GMOptionValue {
 
 	db := dbConn()
 	defer db.Close()
-	selDB, err := db.Query("SELECT " + params[1].(string) + " FROM " + params[0].(string) +
-		" ORDER BY " + params[1].(string) + " ASC")
+	tableName, ok := GMParamString(params, 0)
+	if !ok {
+		return []GMOptionValue{}
+	}
+	columnName, ok := GMParamString(params, 1)
+	if !ok {
+		return []GMOptionValue{}
+	}
+	selDB, err := db.Query("SELECT " + columnName + " FROM " + tableName +
+		" ORDER BY " + columnName + " ASC")
 	if err != nil {
 		log.Printf("error [%s]\n", err.Error())
 		return []GMOptionValue{}
@@ -82,9 +152,13 @@ func GMFuncDBColumnValues(params []any) []GMOptionValue {
 
 func GMFuncParamValues(params []any) []GMOptionValue {
 	lRes := make([]GMOptionValue, 0)
-	for _, v := range params {
+	for i := range params {
+		value, ok := GMParamString(params, i)
+		if !ok {
+			return []GMOptionValue{}
+		}
 		var oVal = GMOptionValue{}
-		oVal.Value = v.(string)
+		oVal.Value = value
 		oVal.Title = oVal.Value
 		lRes = append(lRes, oVal)
 	}
@@ -94,9 +168,17 @@ func GMFuncParamValues(params []any) []GMOptionValue {
 func GMFuncParamVN(params []any) []GMOptionValue {
 	lRes := make([]GMOptionValue, 0)
 	for i := 0; i+1 < len(params); i += 2 {
+		value, ok := GMParamString(params, i)
+		if !ok {
+			return []GMOptionValue{}
+		}
+		title, ok := GMParamString(params, i+1)
+		if !ok {
+			return []GMOptionValue{}
+		}
 		oVal := GMOptionValue{
-			Value: params[i].(string),
-			Title: params[i+1].(string),
+			Value: value,
+			Title: title,
 		}
 		lRes = append(lRes, oVal)
 	}
@@ -104,16 +186,27 @@ func GMFuncParamVN(params []any) []GMOptionValue {
 }
 
 func GMFuncFloat2D(params []any) string {
-	return fmt.Sprintf("%.2f", params[0].(float64))
+	val, ok := GMParamFloat64(params, 0)
+	if !ok {
+		return ""
+	}
+	return fmt.Sprintf("%.2f", val)
 }
 
 func GMFuncTimeStampUTCDate(params []any) string {
-	tv := time.Unix(params[0].(int64), 0)
+	val, ok := GMParamInt64(params, 0)
+	if !ok {
+		return ""
+	}
+	tv := time.Unix(val, 0)
 	return tv.Format(time.RFC3339)
 }
 
 func GMFuncListBitFlags(params []any) string {
-	fv := params[0].(int64)
+	fv, ok := GMParamInt64(params, 0)
+	if !ok {
+		return ""
+	}
 	if fv == 0 {
 		return "0"
 	}
@@ -123,7 +216,10 @@ func GMFuncListBitFlags(params []any) string {
 	}
 	sv += " [ "
 	for i := 1; i < len(params); i++ {
-		sPm := params[i].(string)
+		sPm, ok := GMParamString(params, i)
+		if !ok {
+			return ""
+		}
 		vFN := strings.Split(sPm, ":")
 		if len(vFN) == 2 {
 			fl, _ := strconv.Atoi(vFN[0])
