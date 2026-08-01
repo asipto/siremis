@@ -752,7 +752,7 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	}
 	dbVals = append(dbVals, vId)
 
-	strQuery += " WHERE id=?"
+		strQuery += " WHERE " + dbColumnQuoted(idField.Column) + "=?"
 	log.Printf("prepare query [%s]\n", strQuery)
 	insForm, err := db.Prepare(strQuery)
 	if err != nil {
