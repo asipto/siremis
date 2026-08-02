@@ -752,7 +752,7 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	}
 	dbVals = append(dbVals, vId)
 
-		strQuery += " WHERE " + dbColumnQuoted(idField.Column) + "=?"
+	strQuery += " WHERE " + dbColumnQuoted(idField.Column) + "=?"
 	log.Printf("prepare query [%s]\n", strQuery)
 	insForm, err := db.Prepare(strQuery)
 	if err != nil {
@@ -884,8 +884,7 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 				if v.Type == "int" {
 					vField.Value, _ = strconv.Atoi(sVal)
 				} else if v.Type == "float" {
-					vField.Value, _ = strconv.Atoi(sVal)
-					strconv.ParseFloat(sVal, 32)
+					vField.Value, _ = strconv.ParseFloat(sVal, 64)
 				} else {
 					vField.Value = sVal
 				}
