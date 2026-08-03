@@ -1097,6 +1097,10 @@ func GMSMenuPage(w http.ResponseWriter, r *http.Request, menuName string) {
 	}
 
 	viewData.Context.SchemaMenu = GMConfigGetMenu(menuName, viewData.Schema.MenuGroup)
+	if viewData.Context.SchemaMenu == nil {
+		GMAlertView(w, r, menuName, "Menu", "Menu group "+menuName+" not found")
+		return
+	}
 	viewData.Context.SchemaName = viewData.Context.SchemaMenu.Name
 	viewData.Context.SchemaTitle = viewData.Context.SchemaMenu.Title
 
