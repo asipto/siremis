@@ -249,8 +249,10 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 	db := dbConn()
 	selDB, err := db.Query(strQuery)
 	if err != nil {
-		log.Printf("query failed [[%s]]\n", strQuery)
-		panic(err.Error())
+		log.Printf("query failed [[%s]]: %v\n", strQuery, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"List query failed for: "+schemaV.Name+"\n"+err.Error())
+		return
 	}
 	defer db.Close()
 	dbRes := make([]any, 0)
@@ -270,7 +272,10 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 		}
 		err := selDB.Scan(dbRow...)
 		if err != nil {
-			panic(err.Error())
+			log.Printf("scan failed [[%s]]: %v\n", strQuery, err)
+			GMAlertView(w, r, schemaV.Name, schemaV.Title,
+				"List result processing failed for: "+schemaV.Name+"\n"+err.Error())
+			return
 		}
 		dbVals := make([]any, len(selFields))
 		for i := range dbRow {
@@ -407,8 +412,10 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 	}
 	selDB, err := db.Query(strQuery, vId)
 	if err != nil {
-		log.Printf("failed query [[%s]] (%v)\n", strQuery, vId)
-		panic(err.Error())
+		log.Printf("failed query [[%s]] (%v): %v\n", strQuery, vId, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Form query failed for: "+schemaV.Name+"\n"+err.Error())
+		return
 	}
 
 	for selDB.Next() {
@@ -426,7 +433,10 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 		}
 		err := selDB.Scan(dbRow...)
 		if err != nil {
-			panic(err.Error())
+			log.Printf("scan failed [[%s]] (%v): %v\n", strQuery, vId, err)
+			GMAlertView(w, r, schemaV.Name, schemaV.Title,
+				"Form result processing failed for: "+schemaV.Name+"\n"+err.Error())
+			return
 		}
 		log.Println("listing row: id: " + strconv.FormatInt((*(dbRow[0].(*sql.NullInt64))).Int64, 10))
 
@@ -643,7 +653,10 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 	}
 	insForm, err := db.Prepare("INSERT INTO " + schemaV.Table + " (" + strQCols + ") VALUES (" + strQValQ + ")")
 	if err != nil {
-		panic(err.Error())
+		log.Printf("insert prepare failed [%s]: %v\n", schemaV.Name, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Insert failed for: "+schemaV.Name+"\n"+err.Error())
+		return
 	}
 	insForm.Exec(dbVals...)
 	GMAuthRefresh(w, r)
@@ -756,7 +769,10 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	log.Printf("prepare query [%s]\n", strQuery)
 	insForm, err := db.Prepare(strQuery)
 	if err != nil {
-		panic(err.Error())
+		log.Printf("update prepare failed [%s]: %v\n", schemaV.Name, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Update failed for: "+schemaV.Name+"\n"+err.Error())
+		return
 	}
 	insForm.Exec(dbVals...)
 
@@ -799,7 +815,10 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 	defer db.Close()
 	delForm, err := db.Prepare(strQuery)
 	if err != nil {
-		panic(err.Error())
+		log.Printf("delete prepare failed [%s]: %v\n", schemaV.Name, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Delete failed for: "+schemaV.Name+"\n"+err.Error())
+		return
 	}
 	delForm.Exec(vId)
 	GMAuthRefresh(w, r)
@@ -959,7 +978,10 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 	db := dbConn()
 	selDB, err := db.Query(strQuery, selVals...)
 	if err != nil {
-		panic(err.Error())
+		log.Printf("search query failed [[%s]]: %v\n", strQuery, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Search query failed for: "+schemaV.Name+"\n"+err.Error())
+		return
 	}
 	defer db.Close()
 	dbRes := make([]any, 0)
@@ -979,7 +1001,10 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 		}
 		err := selDB.Scan(dbRow...)
 		if err != nil {
-			panic(err.Error())
+			log.Printf("search scan failed [[%s]]: %v\n", strQuery, err)
+			GMAlertView(w, r, schemaV.Name, schemaV.Title,
+				"Search result processing failed for: "+schemaV.Name+"\n"+err.Error())
+			return
 		}
 		//log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
 		dbRes = append(dbRes, dbRow)
