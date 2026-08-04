@@ -255,6 +255,7 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 		return
 	}
 	defer db.Close()
+	defer selDB.Close()
 	dbRes := make([]any, 0)
 
 	for selDB.Next() {
@@ -417,6 +418,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			"Form query failed for: "+schemaV.Name+"\n"+err.Error())
 		return
 	}
+	defer selDB.Close()
 
 	for selDB.Next() {
 		dbRow := make([]any, len(formFields))
@@ -984,6 +986,7 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 		return
 	}
 	defer db.Close()
+	defer selDB.Close()
 	dbRes := make([]any, 0)
 
 	for selDB.Next() {
