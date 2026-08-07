@@ -306,6 +306,12 @@ func GMList(w http.ResponseWriter, r *http.Request, schemaName string,
 		//log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
 		dbRes = append(dbRes, dbVals)
 	}
+	if err := selDB.Err(); err != nil {
+		log.Printf("row iteration failed [[%s]]: %v\n", strQuery, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"List result iteration failed for: "+schemaV.Name+"\n"+err.Error())
+		return
+	}
 
 	GMAuthRefresh(w, r)
 
@@ -502,6 +508,12 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			}
 		}
 	}
+	if err := selDB.Err(); err != nil {
+		log.Printf("row iteration failed [[%s]] (%v): %v\n", strQuery, vId, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Form result iteration failed for: "+schemaV.Name+"\n"+err.Error())
+		return
+	}
 
 	GMAuthRefresh(w, r)
 	var viewData = GMViewData{}
@@ -660,7 +672,12 @@ func GMInsert(w http.ResponseWriter, r *http.Request, schemaName string) {
 			"Insert failed for: "+schemaV.Name+"\n"+err.Error())
 		return
 	}
-	insForm.Exec(dbVals...)
+	if _, err = insForm.Exec(dbVals...); err != nil {
+		log.Printf("insert exec failed [%s]: %v\n", schemaV.Name, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Insert failed for: "+schemaV.Name+"\n"+err.Error())
+		return
+	}
 	GMAuthRefresh(w, r)
 	if len(schemaV.MenuGroup) > 0 {
 		GMSMenuPage(w, r, schemaV.MenuGroup)
@@ -776,7 +793,12 @@ func GMUpdate(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 			"Update failed for: "+schemaV.Name+"\n"+err.Error())
 		return
 	}
-	insForm.Exec(dbVals...)
+	if _, err = insForm.Exec(dbVals...); err != nil {
+		log.Printf("update exec failed [%s]: %v\n", schemaV.Name, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Update failed for: "+schemaV.Name+"\n"+err.Error())
+		return
+	}
 
 	GMAuthRefresh(w, r)
 	GMFormView(w, r, schemaName, sId, "Show", "show", "show")
@@ -822,7 +844,12 @@ func GMRemove(w http.ResponseWriter, r *http.Request, schemaName string, sId str
 			"Delete failed for: "+schemaV.Name+"\n"+err.Error())
 		return
 	}
-	delForm.Exec(vId)
+	if _, err = delForm.Exec(vId); err != nil {
+		log.Printf("delete exec failed [%s]: %v\n", schemaV.Name, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Delete failed for: "+schemaV.Name+"\n"+err.Error())
+		return
+	}
 	GMAuthRefresh(w, r)
 	if len(schemaV.MenuGroup) > 0 {
 		GMSMenuPage(w, r, schemaV.MenuGroup)
@@ -1011,6 +1038,12 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 		}
 		//log.Println("listing row: id: " + strconv.Itoa(*dbRow[0].(*int)))
 		dbRes = append(dbRes, dbRow)
+	}
+	if err := selDB.Err(); err != nil {
+		log.Printf("search row iteration failed [[%s]]: %v\n", strQuery, err)
+		GMAlertView(w, r, schemaV.Name, schemaV.Title,
+			"Search result iteration failed for: "+schemaV.Name+"\n"+err.Error())
+		return
 	}
 
 	GMAuthRefresh(w, r)
