@@ -986,7 +986,7 @@ func GMFind(w http.ResponseWriter, r *http.Request, schemaName string) {
 		} else {
 			sNext = true
 		}
-		strQuery += v.Column + " " + v.Op + " ?"
+		strQuery += dbColumnQuoted(v.Column) + " " + v.Op + " ?"
 		selVals = append(selVals, v.Value)
 	}
 
