@@ -406,7 +406,7 @@ func GMFormView(w http.ResponseWriter, r *http.Request, schemaName string, sId s
 			strQuery += ", " + dbColumnQuoted(v.Field.Column)
 		}
 	}
-	strQuery += " FROM " + schemaV.Table + " WHERE " + formFields[0].Field.Column + " = ?"
+	strQuery += " FROM " + schemaV.Table + " WHERE " + dbColumnQuoted(formFields[0].Field.Column) + " = ?"
 	db := dbConn()
 	defer db.Close()
 	var vId any
