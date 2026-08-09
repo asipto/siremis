@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io"
 	"log"
 	"math/rand"
 	"net"
@@ -78,14 +77,23 @@ func GMJSONRPCExec(sCommand string) (string, bool) {
 			log.Printf("failed to connect to udp remote address: '%s'\n", GMConfigV.JSONRPC.RAddress)
 			return "", false
 		}
-		conn.Write(bCmd)
 		defer conn.Close()
-		bRes, err := io.ReadAll(conn)
+		conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
+		conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+		_, err = conn.Write(bCmd)
 		if err != nil {
-			log.Printf("failed to read from udp remote address: '%s'\n", GMConfigV.JSONRPC.RAddress)
+			log.Printf("failed to write to udp remote address: '%s' (%v)\n",
+				GMConfigV.JSONRPC.RAddress, err)
 			return "", false
 		}
-		return string(bRes), true
+		bRes := make([]byte, 64*1024)
+		n, err := conn.Read(bRes)
+		if err != nil {
+			log.Printf("failed to read from udp remote address: '%s' (%v)\n",
+				GMConfigV.JSONRPC.RAddress, err)
+			return "", false
+		}
+		return string(bRes[:n]), true
 	} else if GMConfigV.JSONRPC.Protocol == "unixgram" {
 		log.Printf("unixgram - jsonrpc command: '%s'\n", sMethod)
 		// remove any existing local socket
