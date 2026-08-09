@@ -16,7 +16,7 @@ import (
 type GMJSONRPCMethod struct {
 	JSONRPC string `json:"jsonrpc"`
 	Method  string `json:"method"`
-	Params  []any  `json:"Params,omitempty"`
+	Params  []any  `json:"params,omitempty"`
 	Id      int    `json:"id"`
 }
 
