@@ -127,14 +127,14 @@ func GMJSONRPCExec(sCommand string) (string, bool) {
 				GMConfigV.JSONRPC.RAddress, err)
 			return "", false
 		}
-		bRes := make([]byte, 8*1024)
-		_, err = rConn.Read(bRes)
+		bRes := make([]byte, 64*1024)
+		n, err := rConn.Read(bRes)
 		if err != nil {
 			log.Printf("failed to read from unixgram remote address: '%s' (%v)\n",
 				GMConfigV.JSONRPC.RAddress, err)
 			return "", false
 		}
-		return string(bRes), true
+		return string(bRes[:n]), true
 	}
 	return "", false
 }
