@@ -34,7 +34,7 @@ func GMJSONRPCExec(sCommand string) (string, bool) {
 	jCmd.Method = sMethod
 	jCmd.Id = 1 + rand.Intn(1000000)
 	if len(sParams) > 0 {
-		pTokens := strings.Split(sParams, " ")
+		pTokens := strings.Fields(sParams)
 		if len(pTokens) > 0 {
 			for _, v := range pTokens {
 				if strings.HasPrefix(v, "i:") || strings.HasPrefix(v, "n:") {
