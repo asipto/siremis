@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
@@ -23,6 +24,7 @@ func (s GMSession) IsExpired() bool {
 }
 
 var GMSessions = map[string]GMSession{}
+var GMSessionsMu sync.RWMutex
 
 func GMCheckPasswords(cfgPassword string, valPassword string) bool {
 	if strings.HasPrefix(cfgPassword, "sha256:") {
@@ -59,13 +61,17 @@ func GMSessionAuthCheck(w http.ResponseWriter, r *http.Request) int {
 	}
 	sessionToken := c.Value
 
+	GMSessionsMu.RLock()
 	userSession, exists := GMSessions[sessionToken]
+	GMSessionsMu.RUnlock()
 	if !exists {
 		// w.WriteHeader(http.StatusUnauthorized)
 		return -3
 	}
 	if userSession.IsExpired() {
+		GMSessionsMu.Lock()
 		delete(GMSessions, sessionToken)
+		GMSessionsMu.Unlock()
 		// w.WriteHeader(http.StatusUnauthorized)
 		return -4
 	}
@@ -82,12 +88,16 @@ func GMSessionAuthActive(w http.ResponseWriter, r *http.Request) bool {
 	}
 	sessionToken := c.Value
 
+	GMSessionsMu.RLock()
 	userSession, exists := GMSessions[sessionToken]
+	GMSessionsMu.RUnlock()
 	if !exists {
 		return false
 	}
 	if userSession.IsExpired() {
+		GMSessionsMu.Lock()
 		delete(GMSessions, sessionToken)
+		GMSessionsMu.Unlock()
 		return false
 	}
 	return true
@@ -105,14 +115,18 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 	}
 	sessionToken := c.Value
 
+	GMSessionsMu.RLock()
 	userSession, exists := GMSessions[sessionToken]
+	GMSessionsMu.RUnlock()
 	if !exists {
 		// w.WriteHeader(http.StatusUnauthorized)
 		return -3
 	}
 	if userSession.IsExpired() {
 		log.Printf("session expired - token: %s\n", sessionToken)
+		GMSessionsMu.Lock()
 		delete(GMSessions, sessionToken)
+		GMSessionsMu.Unlock()
 		// w.WriteHeader(http.StatusUnauthorized)
 		return -4
 	}
@@ -128,12 +142,14 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 
 	expiresAt := time.Now().Add(300 * time.Second)
 
+	GMSessionsMu.Lock()
 	GMSessions[newSessionToken] = GMSession{
 		username: userSession.username,
 		expiry:   expiresAt,
 	}
 
 	delete(GMSessions, sessionToken)
+	GMSessionsMu.Unlock()
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
@@ -166,10 +182,12 @@ func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
 	sessionToken := uuid.NewString()
 	expiresAt := time.Now().Add(300 * time.Second)
 
+	GMSessionsMu.Lock()
 	GMSessions[sessionToken] = GMSession{
 		username: username,
 		expiry:   expiresAt,
 	}
+	GMSessionsMu.Unlock()
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
