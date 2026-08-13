@@ -23,6 +23,11 @@ func GMJSONRPCExec(sCommand string) (string, bool) {
 	if len(GMConfigV.JSONRPC.Protocol) == 0 {
 		return "", false
 	}
+	sCommand = strings.TrimSpace(sCommand)
+	if len(sCommand) == 0 {
+		log.Printf("empty jsonrpc command\n")
+		return "", false
+	}
 	sArr := strings.SplitN(sCommand, " ", 2)
 	sMethod := sArr[0]
 	sParams := ""
