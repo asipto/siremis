@@ -117,7 +117,7 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 		return -4
 	}
 
-	if userSession.expiry.After(time.Now().Add(-60 * time.Second)) {
+	if userSession.expiry.After(time.Now().Add(60 * time.Second)) {
 		// not yet close to expire
 		log.Printf("session active - token: %s\n", sessionToken)
 		return 1
