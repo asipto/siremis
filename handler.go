@@ -1101,7 +1101,9 @@ func GMLogout(w http.ResponseWriter, r *http.Request) int {
 	}
 	sessionToken := c.Value
 
+	GMSessionsMu.Lock()
 	delete(GMSessions, sessionToken)
+	GMSessionsMu.Unlock()
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
