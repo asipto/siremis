@@ -28,22 +28,19 @@ var GMSessionsMu sync.RWMutex
 
 func GMCheckPasswords(cfgPassword string, valPassword string) bool {
 	if strings.HasPrefix(cfgPassword, "sha256:") {
-		v := strings.TrimPrefix(cfgPassword, "sha256:")
-		hash := sha256.Sum256([]byte(v))
-		return (valPassword == hex.EncodeToString(hash[:]))
+		hash := sha256.Sum256([]byte(valPassword))
+		return (strings.TrimPrefix(cfgPassword, "sha256:") == hex.EncodeToString(hash[:]))
 	}
 	if strings.HasPrefix(cfgPassword, "sha1:") {
-		v := strings.TrimPrefix(cfgPassword, "sha1:")
-		hash := sha1.Sum([]byte(v))
-		return (valPassword == hex.EncodeToString(hash[:]))
+		hash := sha1.Sum([]byte(valPassword))
+		return (strings.TrimPrefix(cfgPassword, "sha1:") == hex.EncodeToString(hash[:]))
 	}
 	if strings.HasPrefix(cfgPassword, "text:") {
 		return (valPassword == strings.TrimPrefix(cfgPassword, "text:"))
 	}
 	if strings.HasPrefix(cfgPassword, "md5:") {
-		v := strings.TrimPrefix(cfgPassword, "md5:")
-		hash := md5.Sum([]byte(v))
-		return (valPassword == hex.EncodeToString(hash[:]))
+		hash := md5.Sum([]byte(valPassword))
+		return (strings.TrimPrefix(cfgPassword, "md5:") == hex.EncodeToString(hash[:]))
 	}
 
 	return (valPassword == cfgPassword)
