@@ -19,6 +19,21 @@ type GMSession struct {
 	expiry   time.Time
 }
 
+func GMSessionCookie(r *http.Request, token string, expiresAt time.Time) *http.Cookie {
+	cookie := &http.Cookie{
+		Name:     "session_token",
+		Value:    token,
+		Expires:  expiresAt,
+		Path:     "/",
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	}
+	if r != nil && r.TLS != nil {
+		cookie.Secure = true
+	}
+	return cookie
+}
+
 func (s GMSession) IsExpired() bool {
 	return s.expiry.Before(time.Now())
 }
@@ -148,12 +163,7 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 	delete(GMSessions, sessionToken)
 	GMSessionsMu.Unlock()
 
-	http.SetCookie(w, &http.Cookie{
-		Name:    "session_token",
-		Value:   newSessionToken,
-		Expires: expiresAt,
-		Path:    "/",
-	})
+	http.SetCookie(w, GMSessionCookie(r, newSessionToken, expiresAt))
 
 	return 0
 }
@@ -186,12 +196,7 @@ func GMLoginCheck(w http.ResponseWriter, r *http.Request) int {
 	}
 	GMSessionsMu.Unlock()
 
-	http.SetCookie(w, &http.Cookie{
-		Name:    "session_token",
-		Value:   sessionToken,
-		Expires: expiresAt,
-		Path:    "/",
-	})
+	http.SetCookie(w, GMSessionCookie(r, sessionToken, expiresAt))
 
 	return 0
 }
