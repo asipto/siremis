@@ -94,49 +94,27 @@ type GMConfig struct {
 
 var GMConfigV = GMConfig{}
 
+func GMConfigEnvValue(sVal string) string {
+	if strings.HasPrefix(sVal, "@env:") {
+		eVal, ok := os.LookupEnv(sVal[5:])
+		if ok {
+			return eVal
+		}
+	}
+	return sVal
+}
+
 func GMConfigEvalVals() {
-	if strings.HasPrefix(GMConfigV.DBData.Database, "@env:") {
-		eVal, ok := os.LookupEnv(GMConfigV.DBData.Database[5:])
-		if ok {
-			GMConfigV.DBData.Database = eVal
-		}
-	}
-	if strings.HasPrefix(GMConfigV.DBData.Driver, "@env:") {
-		eVal, ok := os.LookupEnv(GMConfigV.DBData.Driver[5:])
-		if ok {
-			GMConfigV.DBData.Driver = eVal
-		}
-	}
-	if strings.HasPrefix(GMConfigV.DBData.Host, "@env:") {
-		eVal, ok := os.LookupEnv(GMConfigV.DBData.Host[5:])
-		if ok {
-			GMConfigV.DBData.Host = eVal
-		}
-	}
-	if strings.HasPrefix(GMConfigV.DBData.Port, "@env:") {
-		eVal, ok := os.LookupEnv(GMConfigV.DBData.Port[5:])
-		if ok {
-			GMConfigV.DBData.Port = eVal
-		}
-	}
-	if strings.HasPrefix(GMConfigV.DBData.Protocol, "@env:") {
-		eVal, ok := os.LookupEnv(GMConfigV.DBData.Protocol[5:])
-		if ok {
-			GMConfigV.DBData.Protocol = eVal
-		}
-	}
-	if strings.HasPrefix(GMConfigV.DBData.Username, "@env:") {
-		eVal, ok := os.LookupEnv(GMConfigV.DBData.Username[5:])
-		if ok {
-			GMConfigV.DBData.Username = eVal
-		}
-	}
-	if strings.HasPrefix(GMConfigV.DBData.Password, "@env:") {
-		eVal, ok := os.LookupEnv(GMConfigV.DBData.Password[5:])
-		if ok {
-			GMConfigV.DBData.Password = eVal
-		}
-	}
+	GMConfigV.MenuFilePath = GMConfigEnvValue(GMConfigV.MenuFilePath)
+	GMConfigV.AuthUsersFilePath = GMConfigEnvValue(GMConfigV.AuthUsersFilePath)
+	GMConfigV.ChartGroupsFilePath = GMConfigEnvValue(GMConfigV.ChartGroupsFilePath)
+	GMConfigV.DBData.Database = GMConfigEnvValue(GMConfigV.DBData.Database)
+	GMConfigV.DBData.Driver = GMConfigEnvValue(GMConfigV.DBData.Driver)
+	GMConfigV.DBData.Host = GMConfigEnvValue(GMConfigV.DBData.Host)
+	GMConfigV.DBData.Port = GMConfigEnvValue(GMConfigV.DBData.Port)
+	GMConfigV.DBData.Protocol = GMConfigEnvValue(GMConfigV.DBData.Protocol)
+	GMConfigV.DBData.Username = GMConfigEnvValue(GMConfigV.DBData.Username)
+	GMConfigV.DBData.Password = GMConfigEnvValue(GMConfigV.DBData.Password)
 	if GMConfigV.DBData.ColumnQuote == "" {
 		if GMConfigV.DBData.Driver == "mysql" {
 			GMConfigV.DBData.ColumnQuote = "`"
@@ -145,18 +123,8 @@ func GMConfigEvalVals() {
 		}
 	}
 	for i, v := range GMConfigV.AuthUsers {
-		if strings.HasPrefix(v.Username, "@env:") {
-			eVal, ok := os.LookupEnv(v.Username[5:])
-			if ok {
-				GMConfigV.AuthUsers[i].Username = eVal
-			}
-		}
-		if strings.HasPrefix(v.Password, "@env:") {
-			eVal, ok := os.LookupEnv(v.Password[5:])
-			if ok {
-				GMConfigV.AuthUsers[i].Password = eVal
-			}
-		}
+		GMConfigV.AuthUsers[i].Username = GMConfigEnvValue(v.Username)
+		GMConfigV.AuthUsers[i].Password = GMConfigEnvValue(v.Password)
 	}
 }
 
@@ -180,6 +148,9 @@ func GMConfigLoad() {
 		log.Printf("invalid content in config file %s\n", GMCLIOptionsV.config)
 		os.Exit(1)
 	}
+	GMConfigV.MenuFilePath = GMConfigEnvValue(GMConfigV.MenuFilePath)
+	GMConfigV.AuthUsersFilePath = GMConfigEnvValue(GMConfigV.AuthUsersFilePath)
+	GMConfigV.ChartGroupsFilePath = GMConfigEnvValue(GMConfigV.ChartGroupsFilePath)
 
 	if len(GMConfigV.TemplatesDir) == 0 {
 		GMConfigV.TemplatesDir = "templates"
