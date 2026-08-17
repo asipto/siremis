@@ -97,9 +97,11 @@ var GMConfigV = GMConfig{}
 func GMConfigEnvValue(sVal string) string {
 	if strings.HasPrefix(sVal, "@env:") {
 		eVal, ok := os.LookupEnv(sVal[5:])
-		if ok {
-			return eVal
+		if !ok {
+			log.Printf("missing environment variable %s\n", sVal[5:])
+			os.Exit(1)
 		}
+		return eVal
 	}
 	return sVal
 }
