@@ -106,6 +106,15 @@ func GMConfigEnvValue(sVal string) string {
 	return sVal
 }
 
+func GMConfigEvalStringFields(sVals ...*string) {
+	for _, sVal := range sVals {
+		if sVal == nil {
+			continue
+		}
+		*sVal = GMConfigEnvValue(*sVal)
+	}
+}
+
 func GMConfigEvalVals() {
 	GMConfigV.MenuFilePath = GMConfigEnvValue(GMConfigV.MenuFilePath)
 	GMConfigV.AuthUsersFilePath = GMConfigEnvValue(GMConfigV.AuthUsersFilePath)
@@ -150,9 +159,11 @@ func GMConfigLoad() {
 		log.Printf("invalid content in config file %s\n", GMCLIOptionsV.config)
 		os.Exit(1)
 	}
-	GMConfigV.MenuFilePath = GMConfigEnvValue(GMConfigV.MenuFilePath)
-	GMConfigV.AuthUsersFilePath = GMConfigEnvValue(GMConfigV.AuthUsersFilePath)
-	GMConfigV.ChartGroupsFilePath = GMConfigEnvValue(GMConfigV.ChartGroupsFilePath)
+	GMConfigEvalStringFields(
+		&GMConfigV.MenuFilePath,
+		&GMConfigV.AuthUsersFilePath,
+		&GMConfigV.ChartGroupsFilePath,
+	)
 
 	if len(GMConfigV.TemplatesDir) == 0 {
 		GMConfigV.TemplatesDir = "templates"
