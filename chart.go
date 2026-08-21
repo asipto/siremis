@@ -140,6 +140,7 @@ func GMChartGetData(g *GMChartGroup, c *GMChart) (string, bool) {
 		log.Printf("error [%s]\n", err.Error())
 		return "", false
 	}
+	defer selDB.Close()
 
 	dbRes := make([][]int, c.Limit)
 	i := 0
@@ -162,6 +163,10 @@ func GMChartGetData(g *GMChartGroup, c *GMChart) (string, bool) {
 			dbRes[nrRows][j] = *(dbRow[j].(*int))
 		}
 		nrRows++
+	}
+	if err := selDB.Err(); err != nil {
+		log.Printf("error [%s]\n", err.Error())
+		return "", false
 	}
 	if nrRows == 0 {
 		log.Printf("no data in db query result\n")
