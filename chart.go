@@ -129,6 +129,11 @@ func GMChartGetData(g *GMChartGroup, c *GMChart) (string, bool) {
 	db := dbConn()
 	defer db.Close()
 
+	if c.Limit <= 0 {
+		log.Printf("invalid chart limit %d for [%s/%s]\n", c.Limit, g.Name, c.Name)
+		return "", false
+	}
+
 	sqlQuery := "SELECT " + c.XAxis.Column
 	for _, y := range c.YAxis {
 		sqlQuery += ", " + y.Column
