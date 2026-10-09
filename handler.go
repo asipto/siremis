@@ -1277,6 +1277,9 @@ func GMRequestHandler(w http.ResponseWriter, r *http.Request) {
 			GMViewGuestPage(w, r, "login")
 			return
 		}
+		// every authenticated request extends the session, including the pages
+		// that did not call GMAuthRefresh (menu, charts, jsonrpc, main)
+		GMAuthRefresh(w, r)
 	}
 	if tURL[2] == "list" {
 		if len(tURL) > 4 {
