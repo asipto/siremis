@@ -143,12 +143,11 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 		return -4
 	}
 
-	// rafraîchissement glissant : toute requête authentifiée prolonge la
-	// session. Le jeton est conservé tel quel (pas de rotation) et seule
-	// l'échéance est repoussée sous le verrou d'écriture ; le cookie de la
-	// requête reste donc valide pour les vérifications de session du même
-	// traitement, et deux requêtes concurrentes ne se révoquent plus l'une
-	// l'autre.
+	// sliding refresh: every authenticated request extends the session. The
+	// token is kept as-is (no rotation) and only the expiry is pushed forward
+	// under the write lock; the request cookie therefore stays valid for the
+	// session checks of the same request, and two concurrent requests no
+	// longer revoke each other.
 	log.Printf("session active - token: %s\n", sessionToken)
 
 	expiresAt := time.Now().Add(300 * time.Second)
