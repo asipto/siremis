@@ -143,27 +143,24 @@ func GMAuthRefresh(w http.ResponseWriter, r *http.Request) int {
 		return -4
 	}
 
-	if userSession.expiry.After(time.Now().Add(60 * time.Second)) {
-		// not yet close to expire
-		log.Printf("session active - token: %s\n", sessionToken)
-		return 1
-	}
-
-	newSessionToken := uuid.NewString()
-	log.Printf("new session token: %s\n", newSessionToken)
+	// rafraîchissement glissant : toute requête authentifiée prolonge la
+	// session. Le jeton est conservé tel quel (pas de rotation) et seule
+	// l'échéance est repoussée sous le verrou d'écriture ; le cookie de la
+	// requête reste donc valide pour les vérifications de session du même
+	// traitement, et deux requêtes concurrentes ne se révoquent plus l'une
+	// l'autre.
+	log.Printf("session active - token: %s\n", sessionToken)
 
 	expiresAt := time.Now().Add(300 * time.Second)
 
 	GMSessionsMu.Lock()
-	GMSessions[newSessionToken] = GMSession{
+	GMSessions[sessionToken] = GMSession{
 		username: userSession.username,
 		expiry:   expiresAt,
 	}
-
-	delete(GMSessions, sessionToken)
 	GMSessionsMu.Unlock()
 
-	http.SetCookie(w, GMSessionCookie(r, newSessionToken, expiresAt))
+	http.SetCookie(w, GMSessionCookie(r, sessionToken, expiresAt))
 
 	return 0
 }
